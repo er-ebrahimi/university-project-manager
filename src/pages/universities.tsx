@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import professorsData from "@/data/data.json";
 import { Professor } from "@/types/university";
-import FroceGraph from "@/components/tree/";
+import ForceGraph from "@/components/tree/Majors";
 export default function Universities() {
   const [professors, setProfessors] = useState<Professor[]>([]);
 
@@ -17,7 +17,7 @@ export default function Universities() {
         className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm"
         x-chunk="dashboard-02-chunk-1"
       >
-        {/* <ForceGraph></ForceGraph> */}
+        <ForceGraph professors={professors}></ForceGraph>
       </div>
     </>
   );
