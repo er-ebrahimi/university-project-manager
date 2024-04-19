@@ -1,24 +1,27 @@
 import { useEffect, useRef } from "react";
 import * as d3 from "d3";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Professor } from "@/types/university";
 
 function ForceGraph({ professors }: { professors: Professor[] }) {
   const svgRef = useRef();
-  const widthMain: number = 928;
-  const heightMain: number = 680;
+  const { major } = useParams(); // Extract major from URL
+  const filteredProfessors = professors.filter((p) => p.major === major);
   const navigate = useNavigate();
   useEffect(() => {
     const majors = Array.from(new Set(professors.map((p) => p.major)));
 
     // Nodes: one for the university and one for each major
-    const nodes = [{ id: "University", group: 0 }].concat(
-      majors.map((major) => ({ id: major, group: 1 }))
+    const nodes = [{ id: "PROFESSORS", group: 0 }].concat(
+      filteredProfessors.map((prof) => ({
+        id: `${prof.ProfessorFN} ${prof.ProfessorLN}`,
+        group: 1,
+      }))
     );
     // Links: between the university and each major
-    const links = majors.map((major) => ({
-      source: "University",
-      target: major,
+    const links = filteredProfessors.map((prof) => ({
+      source: `${prof.ProfessorFN} ${prof.ProfessorLN}`,
+      target: "PROFESSORS",
     }));
     // const navigate = useNavigate();
     drawForceGraph(nodes, links);
@@ -71,7 +74,7 @@ function ForceGraph({ professors }: { professors: Professor[] }) {
       .on("click", (event, d) => {
         if (d.group === 1) {
           // Assuming group 1 is for majors
-          navigate(`/professors/${d.id}`); // Use the correct path here
+          navigate(`/professor/${encodeURIComponent(d.id)}`); // Use the correct path here
         }
       })
       .classed("hover:cursor-pointer fill-current", true)
