@@ -16,7 +16,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import routes from "@/global/routes";
+import { useLocation } from "react-router-dom";
 export default function SidebarDashboard() {
+  const pathname = useLocation().pathname;
+  const selectButton = (router: string) => {
+    if (router === pathname)
+      return "flex items-center gap-3 rounded-lg bg-muted px-3 py-2 text-primary transition-all hover:text-primary";
+    else
+      return "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary";
+  };
   return (
     <div className="hidden border-r bg-muted/40 md:block">
       <div className="flex h-full max-h-screen flex-col gap-2">
@@ -33,8 +42,8 @@ export default function SidebarDashboard() {
         <div className="flex-1">
           <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
             <a
-              href="#"
-              className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+              href={routes.dashboard}
+              className={selectButton(routes.dashboard)}
             >
               <Home className="h-4 w-4" />
               Dashboard
@@ -51,7 +60,7 @@ export default function SidebarDashboard() {
             </a>
             <a
               href="#"
-              className="flex items-center gap-3 rounded-lg bg-muted px-3 py-2 text-primary transition-all hover:text-primary"
+              className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
             >
               <Package className="h-4 w-4" />
               Products{" "}
