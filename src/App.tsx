@@ -5,6 +5,7 @@ import Universities from "./pages/universities";
 import routes from "./global/routes";
 import Majors from "./pages/majors";
 import ProfessorProfile from "./pages/professor-profile";
+import MoreInfo from "./pages/more-info";
 // import Router
 export default function App() {
   return (
@@ -25,7 +26,7 @@ export default function App() {
           ></Router.Route>
           <Router.Route
             path={routes.moreInfo(":name")}
-            element={<ProfessorProfile></ProfessorProfile>}
+            element={<MoreInfo></MoreInfo>}
           ></Router.Route>
         </Router.Routes>
       </Dashboard>
