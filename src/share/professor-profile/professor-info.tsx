@@ -65,7 +65,7 @@ function ProfessorInfo({ professors }: { professors: Professor[] }) {
         className="profile-container"
         style={{ display: "flex", gap: "20px" }}
       >
-        <Card>
+        <Card dir="ltr">
           <CardContent>
             <PieChart width={400} height={400}>
               <Pie
@@ -79,6 +79,7 @@ function ProfessorInfo({ professors }: { professors: Professor[] }) {
                 label={({ name, percent }) =>
                   `${name}: ${(percent * 100).toFixed(0)}%`
                 }
+                className="text-black"
               >
                 {data.map((entry, index) => (
                   <Cell
@@ -89,7 +90,7 @@ function ProfessorInfo({ professors }: { professors: Professor[] }) {
                         ? "fill-primary"
                         : index % 3 === 1
                         ? "fill-primary-dark"
-                        : "fill-primary-light"
+                        : "fill-primary-light" + " text-black"
                     }
                   />
                 ))}
@@ -102,7 +103,7 @@ function ProfessorInfo({ professors }: { professors: Professor[] }) {
         {/* Professor's information rendering remains the same */}
         <Card className="flex flex-col justify-center">
           <CardHeader>
-            <CardTitle>Information</CardTitle>
+            <CardTitle>اطلاعات</CardTitle>
           </CardHeader>
 
           <CardContent>
@@ -110,7 +111,7 @@ function ProfessorInfo({ professors }: { professors: Professor[] }) {
               <div>
                 <div>
                   <p>
-                    <strong>First Name:</strong>
+                    <strong>اسم:</strong>
                   </p>
                 </div>
                 <div className="professor-info">
@@ -118,7 +119,7 @@ function ProfessorInfo({ professors }: { professors: Professor[] }) {
                 </div>
                 <div>
                   <p>
-                    <strong>Last Name: </strong>
+                    <strong>فامیل: </strong>
                   </p>
                 </div>
                 <div className="professor-info">
@@ -126,7 +127,7 @@ function ProfessorInfo({ professors }: { professors: Professor[] }) {
                 </div>
                 <div>
                   <p>
-                    <strong>Birth Date:</strong>{" "}
+                    <strong>تولد:</strong>{" "}
                   </p>
                 </div>
                 <div className="professor-info">
@@ -134,29 +135,28 @@ function ProfessorInfo({ professors }: { professors: Professor[] }) {
                 </div>
                 <div>
                   <p>
-                    <strong>Employment Date:</strong>{" "}
+                    <strong>استخدام:</strong>{" "}
                   </p>
                 </div>
                 <div className="professor-info">
                   <p>{`${professor.EmploymentDate}`}</p>
                 </div>
                 {/* Add more professor info as needed */}
-                <div>
+                {/* <div>
                   <p>
                     <strong>Current Date:</strong>{" "}
                   </p>
                   <div className="professor-info">
-                    {/* <CurrentDateComponent /> */}
                   </div>
-                </div>
+                </div> */}
               </div>
             ) : (
-              <p>Professor not found</p>
+              <p>استاد پیدا نشد</p>
             )}
           </CardContent>
           <CardFooter className="flex justify-between">
             <Button
-              className="mr-1"
+              className="mx-1"
               onClick={() =>
                 navigate(
                   `/more-info/${encodeURIComponent(
@@ -165,7 +165,7 @@ function ProfessorInfo({ professors }: { professors: Professor[] }) {
                 )
               }
             >
-              More Information
+              اطلاعات بیشتر
             </Button>
             <a
               href="https://www.google.com"
@@ -173,7 +173,7 @@ function ProfessorInfo({ professors }: { professors: Professor[] }) {
               rel="noopener noreferrer"
               style={{ textDecoration: "none" }}
             >
-              <Button type="button">Go to Google</Button>
+              <Button type="button">برو به google</Button>
             </a>
           </CardFooter>
         </Card>

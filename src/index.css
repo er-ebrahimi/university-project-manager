@@ -51,6 +51,11 @@
   }
 }
 
+@font-face {
+  font-family: "IranSense";
+  src: url("./fonts/IRANSansWeb.ttf") format("truetype");
+}
+
 @layer base {
   * {
     @apply border-border;

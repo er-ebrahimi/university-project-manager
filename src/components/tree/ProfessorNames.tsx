@@ -6,13 +6,14 @@ import { Professor } from "@/types/university";
 function ForceGraph({ professors }: { professors: Professor[] }) {
   const svgRef = useRef();
   const { major } = useParams(); // Extract major from URL
+  console.log("🚀 ~ ForceGraph ~ major:", major);
   const filteredProfessors = professors.filter((p) => p.major === major);
   const navigate = useNavigate();
   useEffect(() => {
     const majors = Array.from(new Set(professors.map((p) => p.major)));
 
     // Nodes: one for the university and one for each major
-    const nodes = [{ id: "PROFESSORS", group: 0 }].concat(
+    const nodes = [{ id: "استادها", group: 0 }].concat(
       filteredProfessors.map((prof) => ({
         id: `${prof.ProfessorFN} ${prof.ProfessorLN}`,
         group: 1,
@@ -21,7 +22,7 @@ function ForceGraph({ professors }: { professors: Professor[] }) {
     // Links: between the university and each major
     const links = filteredProfessors.map((prof) => ({
       source: `${prof.ProfessorFN} ${prof.ProfessorLN}`,
-      target: "PROFESSORS",
+      target: "استادها",
     }));
     // const navigate = useNavigate();
     drawForceGraph(nodes, links);
@@ -90,7 +91,6 @@ function ForceGraph({ professors }: { professors: Professor[] }) {
       .attr("dy", "1.5em")
       .attr("fill", "primary")
       .style("font-size", "12px")
-      .style("font-family", "Arial")
       .style("font-weight", "700");
 
     simulation.on("tick", () => {

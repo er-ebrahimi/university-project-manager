@@ -88,7 +88,6 @@ const CumulativeLineChart = ({ data }) => {
       .classed("stroke-primary hover:stroke-primary/90", true);
     const legends = svg
       .append("g")
-      .attr("font-family", "sans-serif")
       .attr("font-size", 10)
       .selectAll("g")
       .data([

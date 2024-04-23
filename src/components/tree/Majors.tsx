@@ -12,12 +12,12 @@ function ForceGraph({ professors }: { professors: Professor[] }) {
     const majors = Array.from(new Set(professors.map((p) => p.major)));
 
     // Nodes: one for the university and one for each major
-    const nodes = [{ id: "University", group: 0 }].concat(
+    const nodes = [{ id: "دانشگاه", group: 0 }].concat(
       majors.map((major) => ({ id: major, group: 1 }))
     );
     // Links: between the university and each major
     const links = majors.map((major) => ({
-      source: "University",
+      source: "دانشگاه",
       target: major,
     }));
     // const navigate = useNavigate();
@@ -87,7 +87,6 @@ function ForceGraph({ professors }: { professors: Professor[] }) {
       .attr("dy", "1.5em")
       .attr("fill", "primary")
       .style("font-size", "12px")
-      .style("font-family", "Arial")
       .style("font-weight", "700");
 
     simulation.on("tick", () => {

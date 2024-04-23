@@ -10,7 +10,7 @@ export default function MoreInfo() {
   return (
     <>
       <div className="flex items-center">
-        <h1 className="text-lg font-semibold md:text-2xl">More Info</h1>
+        <h1 className="text-lg font-semibold md:text-2xl">اطلاعات بیشتر</h1>
       </div>
       <div
         className=" flex-1 items-center justify-center rounded-lg  border-dashed shadow-sm"

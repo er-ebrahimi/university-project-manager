@@ -22,28 +22,28 @@ function MoreInfoCards({ professors }: { professors: Professor[] }) {
       <div style={{ display: "flex", gap: "20px" }}>
         <Card className="chart-container" style={{ width: "50%" }}>
           <CardHeader>
-            <CardTitle>Article Statistics</CardTitle>
+            <CardTitle>آمار مقاله‌ها</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent dir="ltr">
             <CumulativeLineChart data={processedData} />
           </CardContent>
         </Card>
         <Card className="info-container" style={{ width: "50%" }}>
           <CardHeader className="top-center-container">
-            <CardTitle>Researching Fields</CardTitle>
+            <CardTitle>زمینه‌های تحقیق</CardTitle>
           </CardHeader>
           <CardContent>
             {professor?.fields.map((field, index) => (
-              <>
-                <div key={index}>
+              <div key={index}>
+                <div className="my-2">
                   <p>
-                    <strong>Field {index + 1}:</strong>
+                    <strong>رشته {index + 1}:</strong>
                   </p>
                 </div>
-                <div key={index + "sec"} className="professor-info">
+                <div className="professor-info">
                   <p>{field}</p>
                 </div>
-              </>
+              </div>
             ))}
           </CardContent>
         </Card>
