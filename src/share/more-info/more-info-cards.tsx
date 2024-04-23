@@ -40,7 +40,7 @@ function MoreInfoCards({ professors }: { professors: Professor[] }) {
                     <strong>Field {index + 1}:</strong>
                   </p>
                 </div>
-                <div key={index} className="professor-info">
+                <div key={index + "sec"} className="professor-info">
                   <p>{field}</p>
                 </div>
               </>

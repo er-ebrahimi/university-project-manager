@@ -55,7 +55,7 @@ const CumulativeLineChart = ({ data }) => {
       .append("path")
       .datum(data)
       .attr("fill", "none")
-      .attr("stroke", "steelblue")
+      // .attr("stroke", "steelblue")
       .attr("stroke-width", 1.5)
       .attr(
         "d",
@@ -63,7 +63,8 @@ const CumulativeLineChart = ({ data }) => {
           .line()
           .x((d) => x(d.year))
           .y((d) => y(d.cumulativeCount))
-      );
+      )
+      .classed("stroke-primary hover:stroke-primary-secondary/90", true);
     // Generate data for the new line
     const newData = data.map((d) => ({
       year: d.year,
@@ -75,7 +76,7 @@ const CumulativeLineChart = ({ data }) => {
       .append("path")
       .datum(newData)
       .attr("fill", "none")
-      .attr("stroke", "red")
+      // .attr("stroke", "black")
       .attr("stroke-width", 1.5)
       .attr(
         "d",
@@ -83,7 +84,8 @@ const CumulativeLineChart = ({ data }) => {
           .line()
           .x((d) => x(d.year))
           .y((d) => y(d.value))
-      );
+      )
+      .classed("stroke-primary hover:stroke-primary/90", true);
     const legends = svg
       .append("g")
       .attr("font-family", "sans-serif")
@@ -91,7 +93,7 @@ const CumulativeLineChart = ({ data }) => {
       .selectAll("g")
       .data([
         { color: "steelblue", text: "Master's Article" },
-        { color: "red", text: "Optimum Artcile" },
+        { color: "purple", text: "Optimum Artcile" },
       ])
       .enter()
       .append("g")
