@@ -37,14 +37,39 @@ function MoreInfoCards({ professors }: { professors: Professor[] }) {
               <div key={index}>
                 <div className="my-2">
                   <p>
-                    <strong>رشته {index + 1}:</strong>
+                    <strong>رشته {index + 1}:</strong> {field}
                   </p>
-                </div>
-                <div className="professor-info">
-                  <p>{field}</p>
                 </div>
               </div>
             ))}
+            <div>
+              <div className="my-2">
+                <p>
+                  <strong>رشته ۳:</strong> کامپیوتر
+                </p>
+              </div>
+            </div>
+            <div>
+              <div className="my-2">
+                <p>
+                  <strong>رشته ۴:</strong> معماری
+                </p>
+              </div>
+            </div>
+            <div>
+              <div className="my-2">
+                <p>
+                  <strong>رشته ۵:</strong> ریاضی
+                </p>
+              </div>
+            </div>
+            <div>
+              <div className="my-2">
+                <p>
+                  <strong>رشته ۶:</strong> فیزیک
+                </p>
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>

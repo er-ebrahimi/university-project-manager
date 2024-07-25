@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import * as d3 from "d3";
 import { useNavigate } from "react-router-dom";
 import { Professor } from "@/types/university";
+import routes from "@/global/routes";
 
 function ForceGraph({ professors }: { professors: Professor[] }) {
   const svgRef = useRef();
@@ -71,7 +72,7 @@ function ForceGraph({ professors }: { professors: Professor[] }) {
       .on("click", (event, d) => {
         if (d.group === 1) {
           // Assuming group 1 is for majors
-          navigate(`/professors/${d.id}`); // Use the correct path here
+          navigate(routes.professor(d.id)); // Use the correct path here
         }
       })
       .classed("hover:cursor-pointer fill-current", true)

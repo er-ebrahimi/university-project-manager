@@ -34,10 +34,7 @@ export default function DashboardHeader() {
         </SheetTrigger>
         <SheetContent side="left" className="flex flex-col">
           <nav className="grid gap-2 text-lg font-medium">
-            <a
-              href="#"
-              className="flex items-center gap-2 text-lg font-semibold"
-            >
+            <a href="#" className="flex items-center gap-2 text-lg ">
               <Package2 className="h-6 w-6" />
               <span className="sr-only">Acme Inc</span>
             </a>
@@ -102,12 +99,12 @@ export default function DashboardHeader() {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuLabel>My Account</DropdownMenuLabel>
+          <DropdownMenuLabel>پروفایل</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Settings</DropdownMenuItem>
-          <DropdownMenuItem>Support</DropdownMenuItem>
+          <DropdownMenuItem>تنظیمات</DropdownMenuItem>
+          {/* <DropdownMenuItem>Support</DropdownMenuItem> */}
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Logout</DropdownMenuItem>
+          <DropdownMenuItem>خروج</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </header>

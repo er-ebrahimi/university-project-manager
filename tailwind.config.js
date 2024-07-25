@@ -30,6 +30,15 @@ module.exports = {
           light: "hsl(var(--primary-light))",
           dark: "hsl(var(--primary-dark))",
         },
+        danger: {
+          DEFAULT: "hsl(var(--danger))",
+        },
+        warning: {
+          DEFAULT: "hsl(var(--warning))",
+        },
+        success: {
+          DEFAULT: "hsl(var(--success))",
+        },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",

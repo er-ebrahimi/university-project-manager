@@ -6,7 +6,6 @@ import { Professor } from "@/types/university";
 function ForceGraph({ professors }: { professors: Professor[] }) {
   const svgRef = useRef();
   const { major } = useParams(); // Extract major from URL
-  console.log("🚀 ~ ForceGraph ~ major:", major);
   const filteredProfessors = professors.filter((p) => p.major === major);
   const navigate = useNavigate();
   useEffect(() => {

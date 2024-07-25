@@ -91,8 +91,8 @@ const CumulativeLineChart = ({ data }) => {
       .attr("font-size", 10)
       .selectAll("g")
       .data([
-        { color: "steelblue", text: "Master's Article" },
-        { color: "purple", text: "Optimum Artcile" },
+        { color: "steelblue", text: "مقاله اساتید" },
+        { color: "purple", text: "مقاله بهینه" },
       ])
       .enter()
       .append("g")

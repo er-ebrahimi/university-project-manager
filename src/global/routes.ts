@@ -3,6 +3,8 @@ const routes = {
   professor: (id: string) => `professor/${id}`,
   moreInfo: (id: string) => `more-info/${id}`,
   dashboard: "/",
+  login: "/login",
+  signup: "/signup",
 };
 
 export default routes;
