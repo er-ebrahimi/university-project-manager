@@ -48,6 +48,10 @@ export default function App() {
               element={<AppRoute></AppRoute>}
             ></Router.Route>
             <Router.Route
+              path={"/"}
+              element={<Router.Navigate to={"app/"} />}
+            ></Router.Route>
+            <Router.Route
               path={routes.login}
               element={<Login></Login>}
             ></Router.Route>
