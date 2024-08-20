@@ -14,3 +14,4 @@ export interface Professor {
   fields: string[];
   publishedAsseyDate: number[];
 }
+
