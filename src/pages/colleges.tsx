@@ -3,7 +3,8 @@ import professorsData from "@/data/data.json";
 import { Professor } from "@/types/university";
 import ProfessorInfo from "@/share/professor-profile/professor-info";
 import GraphTree from "@/components/univercitypage/GraphTree.jsx";
-export default function ProfessorProfile() {
+
+export default function Colleges() {
   const [professors, setProfessors] = useState<Professor[]>([]);
 
   useEffect(() => {
@@ -18,8 +19,8 @@ export default function ProfessorProfile() {
         className="flex flex-1 items-center justify-center rounded-lg  border-dashed shadow-sm "
         x-chunk="dashboard-02-chunk-1"
       >
-        <ProfessorInfo professors={professors}></ProfessorInfo>
-        {/* <GraphTree/> */}
+        {/* <ProfessorInfo professors={professors}></ProfessorInfo> */}
+        <GraphTree/>
       </div>
     </>
   );

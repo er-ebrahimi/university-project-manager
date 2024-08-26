@@ -72,7 +72,7 @@ function ForceGraph({ professors }: { professors: Professor[] }) {
       .on("click", (event, d) => {
         if (d.group === 1) {
           // Assuming group 1 is for majors
-          navigate(routes.professor(d.id)); // Use the correct path here
+          navigate(routes.Colleges(d.id)); // Use the correct path here
         }
       })
       .classed("hover:cursor-pointer fill-current", true)
@@ -131,7 +131,7 @@ function ForceGraph({ professors }: { professors: Professor[] }) {
   return (
     // <svg ref={svgRef} width={800} height={600} style={{ border: '1px solid black' }}></svg>
 
-    <svg ref={svgRef} width={800} height={500}></svg>
+    <svg ref={svgRef} width={800} height={450}></svg>
   );
 }
 
