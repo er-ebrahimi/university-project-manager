@@ -144,7 +144,7 @@ function ProfessorInfo({ professors }: { professors: Professor[] }) {
               className="mx-1"
               onClick={() =>
                 navigate(
-                  `/more-info/${encodeURIComponent(
+                  `/app/more-info/${encodeURIComponent(
                     `${professor?.ProfessorFN} ${professor?.ProfessorLN}`
                   )}`
                 )

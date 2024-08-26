@@ -1,0 +1,16 @@
+/* YourStylesheet.css */
+
+/* Apply right-to-left styles for Ant Design components */
+.rtl-table .ant-table-thead > tr > th,
+.rtl-table .ant-table-tbody > tr > td {
+  text-align: right;
+}
+.ant-radio-inner{
+    color: #7C3AED !important;
+}
+.ant-radio-wrapper .ant-radio-disabled .ant-radio-inner {
+    color: #7C3AED !important;
+}
+input[type="radio" i]:disabled:checked  {
+    color: #7C3AED !important;
+}

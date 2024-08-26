@@ -10,6 +10,7 @@ import MoreInfo from "./pages/more-info";
 import { DirectionProvider } from "@radix-ui/react-direction";
 import Login from "./pages/login";
 import Colleges from "./pages/colleges";
+import AdminUsers from "./pages/admin/users";
 
 function AppRoute() {
   return (
@@ -19,6 +20,10 @@ function AppRoute() {
           <Router.Route
             path="/"
             element={<Universities></Universities>}
+          ></Router.Route>
+          <Router.Route
+            path="/admin/users"
+            element={<AdminUsers/>}
           ></Router.Route>
           <Router.Route
             path={"/Colleges/:major"}

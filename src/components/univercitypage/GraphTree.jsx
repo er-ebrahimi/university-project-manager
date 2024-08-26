@@ -20,7 +20,7 @@ export default function GraphTree() {
     name: major,
     children: [
       {
-        name: "مینایی",
+        name: "قاسم اصغری",
         children: [
           { name: "پروژه 1", description: "توضیحات پروژه 1" },
           { name: "پروژه 2", description: "توضیحات پروژه 2" },
@@ -30,7 +30,7 @@ export default function GraphTree() {
         ],
       },
       {
-        name: "آشتیانی",
+        name: "امیر اکبری",
         children: [
           { name: "پروژه 1", description: "توضیحات پروژه 1" },
           { name: "پروژه 2", description: "توضیحات پروژه 2" },
@@ -39,7 +39,7 @@ export default function GraphTree() {
         ],
       },
       {
-        name: "کشوری",
+        name: "سهیله اتمدی",
         children: [
           { name: "پروژه 1", description: "توضیحات پروژه 1" },
           { name: "پروژه 2", description: "توضیحات پروژه 2" },
@@ -93,7 +93,7 @@ export default function GraphTree() {
             <div className="text-right">
               <div className="mb-4">
                 <h3 className="font-bold text-lg">صاحب پروژه</h3>
-                <p onClick={()=>handleprofesserClick()} className="text-gray-600">{selectedNode.parentName}</p>
+                <p onClick={()=>handleprofesserClick()} className="text-gray-600 cursor-pointer">{selectedNode.parentName}</p>
               </div>
               <div className="mb-4">
                 <h3 className="font-bold text-lg">نام پروژه</h3>
@@ -112,10 +112,10 @@ export default function GraphTree() {
                 ویرایش
               </button>
               <button
-                onClick={handleCloseDialog}
+                onClick={handleprofesserClick}
                 className="mt-4 ml-2 bg-primary text-white py-2 px-4 rounded"
               >
-                بستن
+                صفحه استاد
               </button>
             </DialogFooter>
           </DialogContent>
