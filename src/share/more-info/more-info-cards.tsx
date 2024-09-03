@@ -19,8 +19,8 @@ function MoreInfoCards({ professors }: { professors: Professor[] }) {
           {professor?.ProfessorFN} {professor?.ProfessorLN}
         </h1>
       </div> */}
-      <div style={{ display: "flex", gap: "20px" }}>
-        <Card className="chart-container" style={{ width: "50%" }}>
+      <div className="flex flex-row flex-wrap justify-around">
+        <Card className="chart-container w-[550px] mt-10" >
           <CardHeader>
             <CardTitle>آمار مقاله‌ها</CardTitle>
           </CardHeader>
@@ -28,7 +28,15 @@ function MoreInfoCards({ professors }: { professors: Professor[] }) {
             <CumulativeLineChart data={processedData} />
           </CardContent>
         </Card>
-        <Card className="info-container" style={{ width: "50%" }}>
+        <Card className="chart-container w-[550px] mt-10">
+          <CardHeader>
+            <CardTitle>آمار مقاله‌ها</CardTitle>
+          </CardHeader>
+          <CardContent dir="ltr">
+            <CumulativeLineChart data={processedData} />
+          </CardContent>
+        </Card>
+        <Card className="info-container mt-10" style={{ width: "50%" }}>  
           <CardHeader className="top-center-container">
             <CardTitle>زمینه‌های تحقیق</CardTitle>
           </CardHeader>
