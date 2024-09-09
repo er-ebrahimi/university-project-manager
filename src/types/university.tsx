@@ -15,3 +15,8 @@ export interface Professor {
   publishedAsseyDate: number[];
 }
 
+export interface Major {
+  name: string;
+  // Add other properties as needed
+}
+

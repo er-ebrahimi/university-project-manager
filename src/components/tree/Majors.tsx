@@ -1,29 +1,29 @@
 import { useEffect, useRef } from "react";
 import * as d3 from "d3";
 import { useNavigate } from "react-router-dom";
-import { Professor } from "@/types/university";
+import { Major } from "@/types/university";
 import routes from "@/global/routes";
 
-function ForceGraph({ professors }: { professors: Professor[] }) {
-  const svgRef = useRef();
+function ForceGraph({ majors }: { majors: Major[] }) {
+  const svgRef = useRef<SVGSVGElement>(null);
   const widthMain: number = 928;
   const heightMain: number = 680;
   const navigate = useNavigate();
-  useEffect(() => {
-    const majors = Array.from(new Set(professors.map((p) => p.major)));
 
+  useEffect(() => {
     // Nodes: one for the university and one for each major
     const nodes = [{ id: "دانشگاه", group: 0 }].concat(
-      majors.map((major) => ({ id: major, group: 1 }))
+      majors.map((major) => ({ id: major.name, group: 1 }))
     );
+
     // Links: between the university and each major
     const links = majors.map((major) => ({
       source: "دانشگاه",
-      target: major,
+      target: major.name,
     }));
-    // const navigate = useNavigate();
+
     drawForceGraph(nodes, links);
-  }, [professors]); // Redraw graph when professors data changes
+  }, [majors]); // Redraw graph when majors data changes
 
   function drawForceGraph(nodes, links) {
     const svg = d3.select(svgRef.current);
@@ -51,7 +51,7 @@ function ForceGraph({ professors }: { professors: Professor[] }) {
       .data(links, (d) => [d.source, d.target])
       .attr("stroke-opacity", 0.6)
       .join("line");
-    // const navigate = useNavigate();
+
     // Important: Group for nodes to hold both circles and texts for smoother dragging
     const nodeGroup = svg
       .append("g")
@@ -59,19 +59,13 @@ function ForceGraph({ professors }: { professors: Professor[] }) {
       .data(nodes)
       .join("g")
       .call(dragBehavior(simulation));
-    // Apply drag behavior to the group
 
     // Append circles to the group
     nodeGroup
       .append("circle")
       .attr("r", 10)
-      // .attr("fill", (d) => (d.group === 0 ? "#7c3aed" : "white"))
-      // .style("border", "1px solid black")
-      // .style("stroke", "#7c3aed")
-      .style("stroke-width", "2px")
       .on("click", (event, d) => {
         if (d.group === 1) {
-          // Assuming group 1 is for majors
           navigate(routes.Colleges(d.id)); // Use the correct path here
         }
       })
@@ -80,11 +74,12 @@ function ForceGraph({ professors }: { professors: Professor[] }) {
       .classed("text-primary hover:text-primary/90", (d) => d.group !== 0)
       .classed("text-secondary hover:text-secondary/90", (d) => d.group === 0);
 
+    // Append text labels to the group
     nodeGroup
       .append("text")
       .text((d) => d.id)
-      .attr("text-anchor", "middle") // Center horizontally
-      .attr("dominant-baseline", "central") // Center vertically
+      .attr("text-anchor", "middle")
+      .attr("dominant-baseline", "central")
       .attr("dy", "1.5em")
       .attr("fill", "primary")
       .style("font-size", "12px")
@@ -129,8 +124,6 @@ function ForceGraph({ professors }: { professors: Professor[] }) {
   };
 
   return (
-    // <svg ref={svgRef} width={800} height={600} style={{ border: '1px solid black' }}></svg>
-
     <svg ref={svgRef} width={800} height={450}></svg>
   );
 }
