@@ -15,6 +15,7 @@ function ForceGraph({ majors }: { majors: Major[] }) {
     const nodes = [{ id: "دانشگاه", group: 0 }].concat(
       majors.map((major) => ({ id: major.name, group: 1 }))
     );
+    console.log("nodes: ",nodes)
 
     // Links: between the university and each major
     const links = majors.map((major) => ({
@@ -124,7 +125,7 @@ function ForceGraph({ majors }: { majors: Major[] }) {
   };
 
   return (
-    <svg ref={svgRef} width={800} height={450}></svg>
+    <svg ref={svgRef} width={1000} height={450}></svg>
   );
 }
 

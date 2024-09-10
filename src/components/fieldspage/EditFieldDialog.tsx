@@ -12,7 +12,12 @@ import {
   import { Label } from "../ui/label";
   import { FiEdit2 } from "react-icons/fi";
   import { Dispatch, SetStateAction, useEffect, useState } from "react";
-  
+  // import { MdDelete } from "react-icons/md";
+  import { MdDeleteOutline } from "react-icons/md";
+
+  import { CiEdit } from "react-icons/ci";
+  import { IoSaveOutline } from "react-icons/io5";
+
   const EditFieldDialog = ({
     majors,
     setMajors,
@@ -29,21 +34,21 @@ import {
       setCollegeNames(Array.from(new Set(majors.map((major) => major.name))));
     }, [majors]);
   
-    const handleAddCollege = () => {
-      if (newCollegeName.trim() === "") return;
+    // const handleAddCollege = () => {
+    //   if (newCollegeName.trim() === "") return;
   
-      // Add the new college to the list
-      setCollegeNames((prev) => [...prev, newCollegeName]);
+    //   // Add the new college to the list
+    //   setCollegeNames((prev) => [...prev, newCollegeName]);
   
-      // Update majors data with the new college name
-      setMajors((prevMajors) => [
-        ...prevMajors,
-        { name: newCollegeName }, // Assuming Major only has a name property, adjust if needed
-      ]);
+    //   // Update majors data with the new college name
+    //   setMajors((prevMajors) => [
+    //     ...prevMajors,
+    //     { name: newCollegeName }, // Assuming Major only has a name property, adjust if needed
+    //   ]);
   
-      // Clear input
-      setNewCollegeName("");
-    };
+    //   // Clear input
+    //   setNewCollegeName("");
+    // };
   
     const handleEditCollege = (index: number) => {
       setEditingIndex(index); // Enable editing mode for the selected college
@@ -94,7 +99,7 @@ import {
             <DialogHeader>
               <DialogTitle className="text-right">ویرایش دانشکده ها</DialogTitle>
               <DialogDescription className="mt-10">
-                برای افزودن دانشکده و یا ویرایش آن از این قسمت استفاده کنید
+                برای ویرایش دانشکده‌ها از این قسمت استفاده کنید
               </DialogDescription>
             </DialogHeader>
   
@@ -106,24 +111,33 @@ import {
                     <input
                       type="text"
                       value={newCollegeName}
+                      // width={20}
                       onChange={(e) => setNewCollegeName(e.target.value)}
-                      className="border px-2 py-1 rounded flex-1 mr-2"
+                      className=" px-2 py-1 rounded flex-1 mx-2 border-b shadow"
                     />
                   ) : (
                     // Display college name as label
-                    <Label className="flex-1 mr-2">{college}</Label>
+                    <Label className="flex-1 mr-2 font-bold text-md">{college}</Label>
                   )}
-                  <div className="flex space-x-2 gap-2">
+                  <div className="flex space-x-2 gap-2 mt-1">
                     {editingIndex === index ? (
-                      <Button onClick={() => handleSaveEdit(index)}>ذخیره</Button>
+                      <Button className="rounded-[4px] p-0 h-8 w-20 flex flex-row justify-center gap-1 text-black hover:text-black border border-green-600 bg-green-500 hover:bg-white" onClick={() => handleSaveEdit(index)}>
+                        
+                        ذخیره
+                        <IoSaveOutline className="w-4 h-4 mr-1 mt-1"/></Button>
                     ) : (
-                      <Button onClick={() => handleEditCollege(index)}>ویرایش</Button>
+                      <Button className="rounded-[4px] p-0 h-8 w-20 flex flex-row justify-center gap-1 bg-white text-black hover:text-white border border-purple-600 hover:bg-purple-500" onClick={() => handleEditCollege(index)}> 
+                      
+                      ویرایش
+                      <CiEdit className="w-4 h-4 mr-1 mt-1"/></Button>
                     )}
                     <Button
-                      variant="destructive"
+                      // variant="destructive"
+                      className="rounded-[4px] p-0 h-8 w-20 flex flex-row justify-center gap-1 bg-white text-black hover:text-white border border-red-700 hover:bg-red-600"
                       onClick={() => handleDeleteCollege(index)}
                     >
                       حذف
+                      <MdDeleteOutline className="w-4 h-4 mr-1 mt-1"/>
                     </Button>
                   </div>
                 </div>

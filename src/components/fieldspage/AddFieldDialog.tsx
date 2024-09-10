@@ -54,7 +54,7 @@ const AddFieldDialog = ({
     setCollegeName("");
 
     // Close the dialog
-    document.activeElement?.click(); // Simulate a click outside to close the dialog
+    // document.activeElement?.click(); // Simulate a click outside to close the dialog
 
     // Show success toast
     toast({
