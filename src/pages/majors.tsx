@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import professorsData from "@/data/data.json";
 import { Professor } from "@/types/university";
 import ProfessorNames from "@/components/tree/ProfessorNames";
+import SubOrganizationSidebar from "@/components/sidebar/SubOrganizationSidebar";
 export default function Majors() {
   const [professors, setProfessors] = useState<Professor[]>([]);
 

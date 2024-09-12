@@ -16,5 +16,11 @@ export default function Dashboard({ children }: { children: ReactNode }) {
         </main>
       </div>
     </div>
+    // <div>
+    //   <DashboardHeader />
+    //   <div className="mt-4">
+    //     {children}
+    //   </div>
+    // </div>
   );
 }

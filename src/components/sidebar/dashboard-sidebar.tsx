@@ -34,10 +34,10 @@ export default function SidebarDashboard() {
             <Package2 className="h-6 w-6" />
             <span className="pl-1">مدیریت</span>
           </a>
-          <Button variant="outline" size="icon" className="ml-auto h-8 w-8">
+          {/* <Button variant="outline" size="icon" className="ml-auto h-8 w-8">
             <Bell className="h-4 w-4" />
             <span className="sr-only">تغییر پیام</span>
-          </Button>
+          </Button> */}
         </div>
         <div className="flex-1">
           <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
@@ -49,6 +49,16 @@ export default function SidebarDashboard() {
               میزکار
             </a>
             <a
+              href="/app/admin/users"
+              className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+            >
+              <Users className="h-4 w-4" />
+              کاربران
+            </a>
+          </nav>
+        </div>
+        {/* </nav> */}
+        {/* <a
               href="#"
               className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
             >
@@ -79,7 +89,6 @@ export default function SidebarDashboard() {
               <LineChart className="h-4 w-4" />
               آنالیز
             </a>
-          </nav>
         </div>
         <div className="mt-auto p-4">
           <Card x-chunk="dashboard-02-chunk-0">
@@ -93,7 +102,7 @@ export default function SidebarDashboard() {
               </Button>
             </CardContent>
           </Card>
-        </div>
+        </div> */}
       </div>
     </div>
   );

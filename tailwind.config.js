@@ -30,6 +30,11 @@ module.exports = {
           light: "hsl(var(--primary-light))",
           dark: "hsl(var(--primary-dark))",
         },
+        scrollbar: {
+          DEFAULT: '#7C3AED', // Primary Purple Color
+          thumb: '#7C3AED',   // Scrollbar Thumb Color
+          track: '#F3F4F6',   // Scrollbar Track Color (background)
+        },
         danger: {
           DEFAULT: "hsl(var(--danger))",
         },

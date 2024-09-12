@@ -16,6 +16,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { FiEdit2 } from "react-icons/fi";
 import EditFieldDialog from "@/components/fieldspage/EditFieldDialog";
+import UnivercitySidebar from "@/components/sidebar/firstpageSidebar";
 
 export default function Universities() {
   const [majors, setMajors] = useState<Major[]>([]);
@@ -28,6 +29,7 @@ export default function Universities() {
 
   return (
     <>
+      <UnivercitySidebar/>
       <div className="flex items-center">
         <h1 className="text-lg font-semibold md:text-2xl">دانشگاه‌ها</h1>
       </div>
@@ -40,7 +42,7 @@ export default function Universities() {
         <div className="flex flex-row-reverse justify-start gap-4 w-[75vw] ml-1">
           <AddFieldDialog majors={majors} setMajors={setMajors}/>
           {/* Pass the majors state and the setMajors function to EditFieldDialog */}
-          <EditFieldDialog majors={majors} setMajors={setMajors} />
+          {/* <EditFieldDialog majors={majors} setMajors={setMajors} /> */}
         </div>
       </div>
     </>
