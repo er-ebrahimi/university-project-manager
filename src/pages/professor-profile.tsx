@@ -12,7 +12,7 @@ export default function ProfessorProfile() {
   }, []);
   return (
     <>
-      <div className="flex items-center ">
+      <div className="flex items-center">
         <h1 className="text-lg font-semibold md:text-2xl ">پروژه</h1>
       </div>
       <div

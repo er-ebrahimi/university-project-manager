@@ -84,18 +84,18 @@ function MoreInfoCards({ professors }: { professors: Professor[] }) {
       setNewData2(null);
     }
   };
-
+  // console.log("data",chart1Data)
   return (
     <>
-      <div className="flex w-[750px] flex-row flex-wrap justify-around">
-        <Card className="chart-container w-[700px] mt-10">
-          <CardHeader className="flex flex-row justify-between items-start">
-            <CardTitle className="my-auto">آمار مقاله‌ها </CardTitle>
+      <div className="flex w-[650px] flex-row flex-wrap justify-around">
+        <Card className="chart-container w-[630px] mt-1">
+          <CardHeader className="flex flex-row justify-between items-start pt-3 pb-0 px-6">
+            <CardTitle className="my-auto text-lg">آمار مقاله‌ها </CardTitle>
             <Dialog>
               <DialogTrigger asChild>
                 {/* Make sure there's only a single child here */}
                 {/* <Button> */}
-                  <HiOutlinePencil className=" cursor-pointer z-50 top-2 w-10 h-10 px-1 py-2 rounded-full bg-primary text-white shadow-md" />
+                  <HiOutlinePencil className=" cursor-pointer z-50 top-2 w-6 h-6 px-0 py-1 rounded-full bg-primary text-white shadow-md" />
                 {/* </Button> */}
               </DialogTrigger>
               <DialogContent dir="rtl">
@@ -145,14 +145,14 @@ function MoreInfoCards({ professors }: { professors: Professor[] }) {
           </CardContent>
         </Card>
 
-        <Card className="chart-container w-[700px] mt-10">
-          <CardHeader className="flex flex-row justify-between items-start">
-            <CardTitle>آمار مقاله‌ها </CardTitle>
+        <Card className="chart-container w-[630px] mt-4">
+          <CardHeader className="flex flex-row justify-between items-start pt-3 pb-0 px-6">
+            <CardTitle className="my-auto text-lg">آمار مقاله‌ها </CardTitle>
             <Dialog>
               <DialogTrigger asChild>
                 {/* Make sure there's only a single child here */}
                 {/* <Button> */}
-                <HiOutlinePencil className=" cursor-pointer z-50 top-2 w-10 h-10 px-1 py-2 rounded-full bg-primary text-white shadow-md" />
+                  <HiOutlinePencil className=" cursor-pointer z-50 top-2 w-6 h-6 px-0 py-1 rounded-full bg-primary text-white shadow-md" />
                 {/* </Button> */}
               </DialogTrigger>
               <DialogContent dir="rtl">
@@ -160,7 +160,7 @@ function MoreInfoCards({ professors }: { professors: Professor[] }) {
                 {/* Set Dialog content to RTL */}
                 <DialogHeader>
                   <DialogTitle className="text-right">
-                    اضافه یا تغییر داده در نمودار 2
+                    اضافه یا تغییر داده در نمودار 1
                   </DialogTitle>
                   <DialogDescription>
                     برای اضافه کردن یا ویرایش داده‌ها ابتدا سال و سپس مقادیر
@@ -178,7 +178,6 @@ function MoreInfoCards({ professors }: { professors: Professor[] }) {
                     type="number"
                     placeholder="اولین مقدار"
                     value={newData1 || ""}
-                    className="py-0 h-10"
                     // onChange={(e) => setNewData1(parseInt(e.target.value))}
                   />
                   <Input
@@ -189,13 +188,17 @@ function MoreInfoCards({ professors }: { professors: Professor[] }) {
                   />
                 </div>
                 <DialogFooter>
-                  <Button>اضافه ویرایش</Button>
+                  <Button
+                  //  onClick={handleAddData}
+                  >
+                    اضافه یا ویرایش
+                  </Button>
                 </DialogFooter>
               </DialogContent>
             </Dialog>
           </CardHeader>
-          <CardContent dir="ltr">
-            <CumulativeLineChart  data={chart2Data} />
+          <CardContent dir="ltr" className="p-2">
+            <CumulativeLineChart data={chart1Data} />
           </CardContent>
         </Card>
       </div>

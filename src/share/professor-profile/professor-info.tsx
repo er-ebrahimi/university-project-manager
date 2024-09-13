@@ -61,22 +61,22 @@ function ProfessorInfo({ professors }: { professors: Professor[] }) {
 
   return (
     <>
-      <div className="profile-container" style={{ width:"30%",marginTop:"40px" ,display: "flex", flexDirection: "column", gap: "20px" }}>
+      <div className="profile-container" style={{ width:"37%",marginTop:"4px" ,display: "flex", flexDirection: "column", gap: "20px" }}>
         {/* PieChart Section */}
         <Card dir="rtl" className="relative">
           <FaPlus
             className="absolute cursor-pointer z-50 top-2 w-8 h-8 p-2 left-2 rounded-full bg-primary text-white shadow-md"
             onClick={() => setIsModalOpen(true)}
           />
-          <CardContent className="flex justify-center items-center">
-            <PieChart width={300} height={600}>
+          <CardContent className="flex justify-start items-center h-[525px] ">
+            <PieChart width={500} height={500}>
               <Pie
                 dataKey="value"
                 isAnimationActive={true}
                 data={data}
                 cx="50%"
                 cy="50%"
-                outerRadius={100}
+                outerRadius={130}
                 fill="#8884d8"
                 label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
               >
