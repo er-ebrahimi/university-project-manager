@@ -1,106 +1,162 @@
 import React, { useState } from "react";
+import DatePicker from "react-multi-date-picker";
+import persian from "react-date-object/calendars/persian";
+import persian_fa from "react-date-object/locales/persian_fa";
 
 const ProjectpageSidebar: React.FC = () => {
   // Define state for managing field values and edit mode
   const [isEditing, setIsEditing] = useState(false);
-  const [universityData, setUniversityData] = useState({
-    universityName: "دانشگاه علم و صنعت ایران",
-    phoneNumber: "021-۷۷۴۹۱۰۲۵",
-    postalCode: "۱۳۱۱۴-۱۶۸۴۶",
-    Nickname: "علم و صنعت",
-    address: "تهران، نارمک، دانشگاه علم و صنعت ایران ، معاونت دانشجوئی",
+  const [projectData, setProjectData] = useState({
+    name: "پروژه 1",
+    nickname: "پروژه 1",
+    startDate: new Date(),
+    endDate: new Date(),
+    realStartDate: new Date(),
+    realEndDate: new Date(),
+    externalMembers: "عضو 1, عضو 2",
     owner: "دکتر داود یونسیان",
+    budget: "100,000 USD",
   });
 
   // Handle input changes
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, field: string) => {
-    setUniversityData({ ...universityData, [field]: e.target.value });
+  const handleInputChange = (field: string, value: any) => {
+    setProjectData({ ...projectData, [field]: value });
   };
 
   return (
-    <div className="h-[530px] w-[230px] rounded-sm border border-dashed absolute right-0 bg-white mt-14 mr-6 p-4 flex flex-col">
+    <div className="h-[550px] w-[250px] rounded-sm border border-dashed absolute right-0 bg-white mt-14 mr-6 p-4 flex flex-col">
       <div className="flex-grow">
-        <div className="mb-4">
-          <h3 className="text-sm font-bold">نام دانشگاه</h3>
+        <div className="mb-2">
+          <h3 className="text-sm font-bold  text-primary-dark">نام</h3>
           {isEditing ? (
             <input
               type="text"
-              value={universityData.universityName}
-              onChange={(e) => handleInputChange(e, "universityName")}
+              value={projectData.name}
+              onChange={(e) => handleInputChange("name", e.target.value)}
               className="border p-1 rounded w-full"
             />
           ) : (
-            <p className="text-gray-600  mt-1">{universityData.universityName}</p>
+            <p className="text-gray-600 mt-1">{projectData.name}</p>
           )}
         </div>
 
-        <div className="mb-4">
-          <h3 className="text-sm font-bold">شماره تلفن</h3>
+        <div className="mb-2">
+          <h3 className="text-sm font-bold text-primary-dark">نام مستعار</h3>
           {isEditing ? (
             <input
               type="text"
-              value={universityData.phoneNumber}
-              onChange={(e) => handleInputChange(e, "phoneNumber")}
+              value={projectData.nickname}
+              onChange={(e) => handleInputChange("nickname", e.target.value)}
               className="border p-1 rounded w-full"
             />
           ) : (
-            <p className="text-gray-600  mt-1">{universityData.phoneNumber}</p> 
+            <p className="text-gray-600 mt-1">{projectData.nickname}</p>
           )}
         </div>
 
-        <div className="mb-4">
-          <h3 className="text-sm font-bold">کد پستی</h3>
+        <div className="mb-4 flex justify-between gap-2">
+          <div className="w-1/2">
+            <h3 className="text-sm font-bold text-primary-dark">تاریخ شروع</h3>
+            {isEditing ? (
+              <DatePicker
+                value={projectData.startDate}
+                onChange={(date) => handleInputChange("startDate", date)}
+                calendar={persian}
+                locale={persian_fa}
+                inputClass="border p-1 rounded w-full"
+              />
+            ) : (
+              <p className="text-gray-600 mt-1">1403/06/23</p>
+            )}
+          </div>
+
+          <div className="w-1/2">
+            <h3 className="text-sm font-bold text-primary-dark text-center">تاریخ پایان</h3>
+            {isEditing ? (
+              <DatePicker
+                value={projectData.endDate}
+                onChange={(date) => handleInputChange("endDate", date)}
+                calendar={persian}
+                locale={persian_fa}
+                inputClass="border p-1 rounded w-full"
+              />
+            ) : (
+              <p className="text-gray-600 mt-1 text-center">1403/06/23</p>
+            )}
+          </div>
+        </div>
+
+        <div className="mb-4 flex justify-between gap-2">
+          <div className="w-1/2">
+            <h3 className="text-sm font-bold text-primary-dark ">تاریخ واقعی شروع</h3>
+            {isEditing ? (
+              <DatePicker
+                value={projectData.realStartDate}
+                onChange={(date) => handleInputChange("realStartDate", date)}
+                calendar={persian}
+                locale={persian_fa}
+                inputClass="border p-1 rounded w-full"
+              />
+            ) : (
+              <p className="text-gray-600 mt-1">1403/06/23</p>
+            )}
+          </div>
+
+          <div className="w-1/2">
+            <h3 className="text-sm font-bold text-primary-dark text-center">تاریخ واقعی پایان</h3>
+            {isEditing ? (
+              <DatePicker
+                value={projectData.realEndDate}
+                onChange={(date) => handleInputChange("realEndDate", date)}
+                calendar={persian}
+                locale={persian_fa}
+                inputClass="border p-1 rounded w-full"
+              />
+            ) : (
+              <p className="text-gray-600 mt-1 text-center">1403/06/23</p>
+            )}
+          </div>
+        </div>
+
+        <div className="mb-2">
+          <h3 className="text-sm font-bold text-primary-dark">اعضای خارجی</h3>
           {isEditing ? (
             <input
               type="text"
-              value={universityData.postalCode}
-              onChange={(e) => handleInputChange(e, "postalCode")}
+              value={projectData.externalMembers}
+              onChange={(e) => handleInputChange("externalMembers", e.target.value)}
               className="border p-1 rounded w-full"
             />
           ) : (
-            <p className="text-gray-600  mt-1">{universityData.postalCode}</p>
+            <p className="text-gray-600 mt-1">{projectData.externalMembers}</p>
           )}
         </div>
 
-        <div className="mb-4">
-          <h3 className="text-sm font-bold">نام خلاصه</h3>
+        <div className="mb-2">
+          <h3 className="text-sm font-bold text-primary-dark">صاحب پروژه</h3>
           {isEditing ? (
             <input
               type="text"
-              value={universityData.Nickname}
-              onChange={(e) => handleInputChange(e, "Nickname")}
+              value={projectData.owner}
+              onChange={(e) => handleInputChange("owner", e.target.value)}
               className="border p-1 rounded w-full"
             />
           ) : (
-            <p className="text-gray-600  mt-1">{universityData.Nickname}</p>
+            <p className="text-gray-600 mt-1">{projectData.owner}</p>
           )}
         </div>
 
-        <div className="mb-4">
-          <h3 className="text-sm font-bold">آدرس</h3>
+        <div className="mb-2">
+          <h3 className="text-sm font-bold text-primary-dark">بودجه</h3>
           {isEditing ? (
             <input
               type="text"
-              value={universityData.address}
-              onChange={(e) => handleInputChange(e, "address")}
+              value={projectData.budget}
+              onChange={(e) => handleInputChange("budget", e.target.value)}
               className="border p-1 rounded w-full"
             />
           ) : (
-            <p className="text-gray-600  mt-1 text-sm">{universityData.address}</p>
-          )}
-        </div>
-
-        <div className="mb-4">
-          <h3 className="text-sm font-bold">رئیس دانشگاه</h3>
-          {isEditing ? (
-            <input
-              type="text"
-              value={universityData.owner}
-              onChange={(e) => handleInputChange(e, "owner")}
-              className="border p-1 rounded w-full"
-            />
-          ) : (
-            <p className="text-gray-600  mt-1">{universityData.owner}</p>
+            <p className="text-gray-600 mt-1">{projectData.budget}</p>
           )}
         </div>
       </div>
