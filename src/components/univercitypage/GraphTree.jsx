@@ -9,18 +9,27 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import DefaultImage from "@/assets/default.png"; // Assuming you have the image stored
+
+import UnivercityCard from "./UnivercityCard";
 
 export default function GraphTree() {
   const { major } = useParams();
   const [selectedNode, setSelectedNode] = useState(null);
+  const [selectedProfessorNode, setSelectedProfessorNode] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const navigate = useNavigate();
-
+  const [mid, setMId] = useState(null);
   const teachers = {
     name: major,
     children: [
       {
         name: "قاسم اصغری",
+        nickname:"قاسم",
+        major:"شیمی",
+        BirthDate: "1985-12-12",
+        EmploymentDate: "2020-01-30",
+
         children: [
           {
             name: "پروژه 1",
@@ -50,6 +59,11 @@ export default function GraphTree() {
       },
       {
         name: "امیر اکبری",
+        nickname:"امیر",
+
+        major:"شیمی",
+        BirthDate: "1985-12-12",
+        EmploymentDate: "2020-01-30",
         children: [
           {
             name: "پروژه 3",
@@ -79,6 +93,10 @@ export default function GraphTree() {
       },
       {
         name: "سهیله اتمدی",
+        nickname:"سهیله",
+        major:"شیمی",
+        BirthDate: "1985-12-12",
+        EmploymentDate: "2020-01-30",
         children: [
           {
             name: "پروژه 5",
@@ -96,12 +114,22 @@ export default function GraphTree() {
       },
     ],
   };
+  const kiramtofront = (node) => {
+    setSelectedProfessorNode(node);
+  };
+  const handleNodeClick = (nodeData, parentData, id) => {
+    // Set professor node and allow collapsibility for depth 1 nodes
+    // console.log(nodeData)
+    if (nodeData.__rd3t.depth === 1) {
+      kiramtofront(nodeData)
+    }
 
-  const handleNodeClick = (nodeData, parentData) => {
+    // Show the dialog for leaf nodes (no children)
     if (!nodeData.children || nodeData.children.length === 0) {
       setSelectedNode({ ...nodeData, parentName: parentData.name });
       setIsDialogOpen(true);
     }
+    console.log(nodeData);
   };
 
   const handleCloseDialog = () => {
@@ -118,12 +146,18 @@ export default function GraphTree() {
       id="treeWrapper"
       className="w-full flex justify-center overflow-auto items-center border rounded-lg border-dashed shadow-sm h-[79vh]"
     >
-      <div className="w-60">hi</div>
-
+      <div className="w-80 h-full border-l border border-dashed">
+        {!selectedProfessorNode ? (
+          <img  src={DefaultImage} alt="Default" className=" mt-14 mx-auto w-11/12 " />
+        ) : (
+          <UnivercityCard data={selectedProfessorNode} />
+        )}
+      </div>
       <Tree
         data={teachers}
+        
         collapsible={true}
-        initialDepth={1}
+        initialDepth={2}
         nodeSize={{ x: 300, y: 80 }}
         separation={{ siblings: 1, nonSiblings: 1 }}
         rootNodeClassName="node__root"
@@ -131,7 +165,7 @@ export default function GraphTree() {
         leafNodeClassName="node__leaf"
         translate={{ x: 50, y: 250 }}
         onNodeClick={(nodeData) =>
-          handleNodeClick(nodeData.data, nodeData.parent.data)
+          handleNodeClick(nodeData.data, nodeData.parent?.data)
         }
       />
 
