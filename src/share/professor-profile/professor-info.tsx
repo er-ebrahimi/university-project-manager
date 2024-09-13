@@ -24,16 +24,16 @@ function ProfessorInfo({ professors }: { professors: Professor[] }) {
   const professor = professors.find((p) => `${p.ProfessorFN} ${p.ProfessorLN}` === decodedName);
 
   const [data, setData] = useState([
-    { name: "دستیار استاد", value: 33.33 },
-    { name: "استادیار", value: 33.33 },
-    { name: "کارمند", value: 33.33 },
+    { name: "دستیار استاد", value: 33 },
+    { name: "استادیار", value: 33 },
+    { name: "کارمند", value: 34 },
   ]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [inputValues, setInputValues] = useState({
-    ta: 33.33,
-    associate: 33.33,
-    employed: 33.33,
+    ta: 33,
+    associate: 33,
+    employed: 34,
   });
   const [error, setError] = useState("");
 
@@ -105,7 +105,7 @@ function ProfessorInfo({ professors }: { professors: Professor[] }) {
         <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
           <DialogContent dir="rtl" className="space-y-4">
             <DialogHeader>
-              <DialogTitle className="text-right">ورود درصدها</DialogTitle>
+              <DialogTitle className="text-right">درصد های مورد نظر را وارد کنید</DialogTitle>
             </DialogHeader>
             <div className="space-y-3">
               <div>
@@ -149,12 +149,12 @@ function ProfessorInfo({ professors }: { professors: Professor[] }) {
               </div>
               {error && <p className="text-red-500 text-sm text-right">{error}</p>}
             </div>
-            <DialogFooter className="flex justify-between">
+            <DialogFooter className="!flex !flex-row-reverse !justify-start">
               <Button onClick={handleSubmit} className="bg-primary text-white">
                 ثبت
               </Button>
-              <Button onClick={() => setIsModalOpen(false)} variant="outline">
-                لغو
+              <Button onClick={() => setIsModalOpen(false)} variant="destructive">
+                پاک کردن داده‌ها
               </Button>
             </DialogFooter>
           </DialogContent>

@@ -138,7 +138,7 @@ export default function GraphTree() {
   };
 
   const handleprofesserClick = () => {
-    navigate(`/app/professor/${selectedNode.parentName}`);
+    navigate(`/app/more-info/${selectedNode.parentName}`);
   };
 
   return (
@@ -169,67 +169,70 @@ export default function GraphTree() {
         }
       />
 
-      {selectedNode && (
-        <Dialog open={isDialogOpen} onOpenChange={handleCloseDialog}>
-          <DialogContent className="p-6 bg-white rounded-lg shadow-lg h-5/6  overflow-y-auto scroll-smooth w-[400px] ">
-            <div className="text-right">
-              <div className="mb-4">
-                <h3 className="font-bold text-lg">صاحب پروژه</h3>
-                <p
-                  onClick={handleprofesserClick}
-                  className="text-gray-600 cursor-pointer"
-                >
-                  {selectedNode.parentName}
-                </p>
-              </div>
-              <div className="mb-4">
-                <h3 className="font-bold text-lg">نام پروژه</h3>
-                <p className="text-gray-600">{selectedNode.name}</p>
-              </div>
-              <div className="mb-4">
-                <h3 className="font-bold text-lg">نام مستعار</h3>
-                <p className="text-gray-600">{selectedNode.Nickname}</p>
-              </div>
-              <div className="mb-4">
-                <h3 className="font-bold text-lg">تاریخ شروع</h3>
-                <p className="text-gray-600">{selectedNode.Start_date}</p>
-              </div>
-              <div className="mb-4">
-                <h3 className="font-bold text-lg">تاریخ پایان</h3>
-                <p className="text-gray-600">{selectedNode.End_date}</p>
-              </div>
-              <div className="mb-4">
-                <h3 className="font-bold text-lg">تاریخ واقعی شروع</h3>
-                <p className="text-gray-600">{selectedNode.Real_start_date}</p>
-              </div>
-              <div className="mb-4">
-                <h3 className="font-bold text-lg">تاریخ واقعی پایان</h3>
-                <p className="text-gray-600">{selectedNode.Real_end_date}</p>
-              </div>
-              <div className="mb-4">
-                <h3 className="font-bold text-lg">اعضای خارجی</h3>
-                <p className="text-gray-600">{selectedNode.External_members}</p>
-              </div>
-              <div className="mb-4">
-                <h3 className="font-bold text-lg">صاحب</h3>
-                <p className="text-gray-600">{selectedNode.Owner}</p>
-              </div>
-              <div className="mb-4">
-                <h3 className="font-bold text-lg">بودجه</h3>
-                <p className="text-gray-600">{selectedNode.Budget}</p>
-              </div>
-            </div>
-            <DialogFooter className="gap-3">
-              <button
-                onClick={handleprofesserClick}
-                className="mt-4 bg-primary text-white py-2 px-4 rounded "
-              >
-                صفحه استاد
-              </button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-      )}
+{selectedNode && (
+  <Dialog open={isDialogOpen} onOpenChange={handleCloseDialog}>
+    <DialogContent className="p-6 pb-8 bg-white rounded-lg shadow-lg h-[500px] w-[700px]">
+      <div className="text-right">
+        <div className="grid grid-cols-2 gap-6  ">
+          {/* <div>
+            <h3 className="font-bold text-lg text-primary-dark">صاحب پروژه</h3>
+            <p
+              onClick={handleprofesserClick}
+              className="text-gray-600 cursor-pointer"
+            >
+              {selectedNode.parentName}
+            </p>
+          </div> */}
+          <div>
+            <h3 className="font-bold text-lg text-primary-dark">نام پروژه</h3>
+            <p className="text-gray-600">{selectedNode.name}</p>
+          </div>
+          <div>
+            <h3 className="font-bold text-lg text-primary-dark">نام مستعار</h3>
+            <p className="text-gray-600">{selectedNode.Nickname}</p>
+          </div>
+          <div>
+            <h3 className="font-bold text-lg text-primary-dark">تاریخ شروع</h3>
+            <p className="text-gray-600">{selectedNode.Start_date}</p>
+          </div>
+          <div>
+            <h3 className="font-bold text-lg text-primary-dark">تاریخ پایان</h3>
+            <p className="text-gray-600">{selectedNode.End_date}</p>
+          </div>
+          <div>
+            <h3 className="font-bold text-lg text-primary-dark">تاریخ واقعی شروع</h3>
+            <p className="text-gray-600">{selectedNode.Real_start_date}</p>
+          </div>
+          <div>
+            <h3 className="font-bold text-lg text-primary-dark">تاریخ واقعی پایان</h3>
+            <p className="text-gray-600">{selectedNode.Real_end_date}</p>
+          </div>
+          <div>
+            <h3 className="font-bold text-lg text-primary-dark">اعضای خارجی</h3>
+            <p className="text-gray-600">{selectedNode.External_members}</p>
+          </div>
+          <div>
+            <h3 className="font-bold text-lg text-primary-dark"> صاحب پروژه</h3>
+            <p className="text-gray-600">{selectedNode.Owner}</p>
+          </div>
+          <div>
+            <h3 className="font-bold text-lg text-primary-dark">بودجه</h3>
+            <p className="text-gray-600">{selectedNode.Budget}</p>
+          </div>
+        </div>
+      </div>
+      <DialogFooter>
+        <button
+          onClick={handleprofesserClick}
+          className="ml-3 bg-primary text-white py-2 px-4 rounded-md"
+        >
+          صفحه پروژه
+        </button>
+      </DialogFooter>
+    </DialogContent>
+  </Dialog>
+)}
+
     </div>
   );
 }
