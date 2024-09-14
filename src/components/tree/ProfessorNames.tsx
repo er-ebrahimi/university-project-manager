@@ -1,30 +1,31 @@
 import { useEffect, useRef } from "react";
 import * as d3 from "d3";
-import { useNavigate } from "react-router-dom";
-import { Major } from "@/types/university";
-import routes from "@/global/routes";
+import { useNavigate, useParams } from "react-router-dom";
+import { Professor } from "@/types/university";
 
-function ForceGraph({ majors }: { majors: Major[] }) {
-  const svgRef = useRef<SVGSVGElement>(null);
-  const widthMain: number = 928;
-  const heightMain: number = 680;
+function ForceGraph({ professors }: { professors: Professor[] }) {
+  const svgRef = useRef();
+  const { major } = useParams(); // Extract major from URL
+  const filteredProfessors = professors.filter((p) => p.major === major);
   const navigate = useNavigate();
-
   useEffect(() => {
+    const majors = Array.from(new Set(professors.map((p) => p.major)));
+
     // Nodes: one for the university and one for each major
-    const nodes = [{ id: "دانشگاه", group: 0 }].concat(
-      majors.map((major) => ({ id: major.name, group: 1 }))
+    const nodes = [{ id: "استادها", group: 0 }].concat(
+      filteredProfessors.map((prof) => ({
+        id: `${prof.ProfessorFN} ${prof.ProfessorLN}`,
+        group: 1,
+      }))
     );
-    console.log("nodes: ",nodes)
-
     // Links: between the university and each major
-    const links = majors.map((major) => ({
-      source: "دانشگاه",
-      target: major.name,
+    const links = filteredProfessors.map((prof) => ({
+      source: `${prof.ProfessorFN} ${prof.ProfessorLN}`,
+      target: "استادها",
     }));
-
+    // const navigate = useNavigate();
     drawForceGraph(nodes, links);
-  }, [majors]); // Redraw graph when majors data changes
+  }, [professors]); // Redraw graph when professors data changes
 
   function drawForceGraph(nodes, links) {
     const svg = d3.select(svgRef.current);
@@ -52,7 +53,7 @@ function ForceGraph({ majors }: { majors: Major[] }) {
       .data(links, (d) => [d.source, d.target])
       .attr("stroke-opacity", 0.6)
       .join("line");
-
+    // const navigate = useNavigate();
     // Important: Group for nodes to hold both circles and texts for smoother dragging
     const nodeGroup = svg
       .append("g")
@@ -60,14 +61,20 @@ function ForceGraph({ majors }: { majors: Major[] }) {
       .data(nodes)
       .join("g")
       .call(dragBehavior(simulation));
+    // Apply drag behavior to the group
 
     // Append circles to the group
     nodeGroup
       .append("circle")
       .attr("r", 10)
+      // .attr("fill", (d) => (d.group === 0 ? "#7c3aed" : "white"))
+      // .style("border", "1px solid black")
+      // .style("stroke", "#7c3aed")
+      .style("stroke-width", "2px")
       .on("click", (event, d) => {
         if (d.group === 1) {
-          navigate(routes.Colleges(d.id)); // Use the correct path here
+          // Assuming group 1 is for majors
+          navigate(`/professor/${encodeURIComponent(d.id)}`); // Use the correct path here
         }
       })
       .classed("hover:cursor-pointer fill-current", true)
@@ -75,12 +82,11 @@ function ForceGraph({ majors }: { majors: Major[] }) {
       .classed("text-primary hover:text-primary/90", (d) => d.group !== 0)
       .classed("text-secondary hover:text-secondary/90", (d) => d.group === 0);
 
-    // Append text labels to the group
     nodeGroup
       .append("text")
       .text((d) => d.id)
-      .attr("text-anchor", "middle")
-      .attr("dominant-baseline", "central")
+      .attr("text-anchor", "middle") // Center horizontally
+      .attr("dominant-baseline", "central") // Center vertically
       .attr("dy", "1.5em")
       .attr("fill", "primary")
       .style("font-size", "12px")
@@ -125,7 +131,9 @@ function ForceGraph({ majors }: { majors: Major[] }) {
   };
 
   return (
-    <svg ref={svgRef} width={1000} height={450}></svg>
+    // <svg ref={svgRef} width={800} height={600} style={{ border: '1px solid black' }}></svg>
+
+    <svg ref={svgRef} width={800} height={500}></svg>
   );
 }
 

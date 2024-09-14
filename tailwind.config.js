@@ -1,11 +1,12 @@
 /** @type {import('tailwindcss').Config} */
+/*eslint-env node*/
 module.exports = {
   darkMode: ["class"],
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
+    "./pages/**/*.{js,jsx,ts,tsx}",
+    "./components/**/*.{js,jsx,ts,tsx}",
+    "./app/**/*.{js,jsx,ts,tsx}",
+    "./src/**/*.{js,jsx,ts,tsx}",
   ],
   prefix: "",
   theme: {
@@ -26,6 +27,22 @@ module.exports = {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
+          light: "hsl(var(--primary-light))",
+          dark: "hsl(var(--primary-dark))",
+        },
+        scrollbar: {
+          DEFAULT: '#7C3AED', // Primary Purple Color
+          thumb: '#7C3AED',   // Scrollbar Thumb Color
+          track: '#F3F4F6',   // Scrollbar Track Color (background)
+        },
+        danger: {
+          DEFAULT: "hsl(var(--danger))",
+        },
+        warning: {
+          DEFAULT: "hsl(var(--warning))",
+        },
+        success: {
+          DEFAULT: "hsl(var(--success))",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -57,6 +74,10 @@ module.exports = {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      fontFamily: {
+        custom: ["IranSense", "sans-serif"],
+        IranSans: ["IranSense"],
+      },
       keyframes: {
         "accordion-down": {
           from: { height: "0" },
@@ -73,5 +94,7 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
-}
+  plugins: [
+    require("tailwindcss-animate"),
+  ],
+};

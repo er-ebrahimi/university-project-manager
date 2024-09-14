@@ -7,10 +7,16 @@ export interface Professor {
   ProfessorFN: string;
   ProfessorLN: string;
   major: string;
-  BirthDate: string;
-  TeacherAssistant: string;
-  AssociateProfessor: string;
-  EmploymentDate: string;
+  BirthDate: Date;
+  TeacherAssistant: Date;
+  AssociateProfessor: Date;
+  EmploymentDate: Date;
   fields: string[];
   publishedAsseyDate: number[];
 }
+
+export interface Major {
+  name: string;
+  // Add other properties as needed
+}
+

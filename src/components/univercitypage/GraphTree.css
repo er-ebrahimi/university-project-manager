@@ -1,0 +1,39 @@
+.node__root>circle {
+    fill: red;
+    r: 20;
+    font-size: 14px;
+}
+
+.rd3t-label__title {
+    font-size: 16px;
+    text-align: center;
+    /* margin-right: 5px; */
+    position: relative;
+}
+
+.node__branch>circle {
+    fill: white;
+    r: 10;
+    border: 2px solid red;
+}
+
+
+.node__leaf>circle {
+    fill: rgba(124, 58, 237, 1);
+    /* Let's also make the radius of leaf nodes larger */
+    r: 10;
+}
+
+/* Root node styles */
+.node__root>circle {
+    fill: rgba(124, 58, 237, 1);
+    r: 10;
+}
+
+.rd3t-label__title {
+    font-size: 16px;
+    text-align: center;
+    position: relative;
+    /* transform: translateX(10px);  */
+    transform: translate(-15px, 30px);
+}
