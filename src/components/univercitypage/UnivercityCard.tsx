@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { MdDelete } from "react-icons/md";
-import { MdModeEdit } from "react-icons/md";
-import { TiTick } from "react-icons/ti";
+import { MdDelete, MdModeEdit } from "react-icons/md";
+import { TiTick, TiCancel } from "react-icons/ti";
 import { FaPlus } from "react-icons/fa";
-import { TiCancel } from "react-icons/ti";
 import {
   Dialog,
   DialogContent,
@@ -12,10 +10,42 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-const UnivercityCard = ({ data }) => {
+interface UnivercityCardProps {
+  data: {
+    name: string;
+    nickname?: string;
+    major?: string;
+    BirthDate?: string;
+    EmploymentDate?: string;
+  };
+}
+
+interface FormData {
+  name: string;
+  nickname: string;
+  major: string;
+  BirthDate: string;
+  EmploymentDate: string;
+}
+
+interface AddFormData {
+  name: string;
+  nickname: string;
+  start_date: string;
+  end_date: string;
+  real_start_date: string;
+  real_end_date: string;
+  external_members: string;
+  owner: string;
+  budget: string;
+}
+
+const UnivercityCard: React.FC<UnivercityCardProps> = ({ data }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [isDialogOpen, setIsDialogOpen] = useState(false); // State for dialog visibility
-  const [formData, setFormData] = useState({
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  // State for the professor details form
+  const [formData, setFormData] = useState<FormData>({
     name: data.name,
     nickname: data.nickname || "",
     major: data.major || "",
@@ -23,13 +53,26 @@ const UnivercityCard = ({ data }) => {
     EmploymentDate: data.EmploymentDate || "",
   });
 
+  // State for the project form inside the modal
+  const [addFormData, setAddFormData] = useState<AddFormData>({
+    name: "",
+    nickname: "",
+    start_date: "",
+    end_date: "",
+    real_start_date: "",
+    real_end_date: "",
+    external_members: "",
+    owner: "",
+    budget: "",
+  });
+
   useEffect(() => {
     setFormData({
       name: data.name,
-      nickname: data.nickname,
-      major: data.major,
-      BirthDate: data.BirthDate,
-      EmploymentDate: data.EmploymentDate,
+      nickname: data.nickname || "",
+      major: data.major || "",
+      BirthDate: data.BirthDate || "",
+      EmploymentDate: data.EmploymentDate || "",
     });
   }, [data]);
 
@@ -41,7 +84,7 @@ const UnivercityCard = ({ data }) => {
     setIsEditing(!isEditing);
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -49,8 +92,16 @@ const UnivercityCard = ({ data }) => {
     });
   };
 
+  const handleAddFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setAddFormData({
+      ...addFormData,
+      [name]: value,
+    });
+  };
+
   const handleOpenDialog = () => {
-    setIsDialogOpen(true); // Open the dialog
+    setIsDialogOpen(true); // Open the dialog when clicked
   };
 
   const handleCloseDialog = () => {
@@ -89,7 +140,9 @@ const UnivercityCard = ({ data }) => {
             />
           </div>
           <div className="mb-2">
-            <strong className="text-primary-dark" dir="rtl">تاریخ تولد:</strong>
+            <strong className="text-primary-dark" dir="rtl">
+              تاریخ تولد:
+            </strong>
             <input
               className="ml-2 p-1 border"
               type="text"
@@ -99,7 +152,9 @@ const UnivercityCard = ({ data }) => {
             />
           </div>
           <div className="mb-2">
-            <strong className="text-primary-dark" dir="rtl">تاریخ استخدام:</strong>
+            <strong className="text-primary-dark" dir="rtl">
+              تاریخ استخدام:
+            </strong>
             <input
               className="ml-2 p-1 border"
               type="text"
@@ -152,7 +207,7 @@ const UnivercityCard = ({ data }) => {
         {!isEditing && (
           <button
             onClick={handleOpenDialog} // Open the dialog when clicked
-            className="mt-4 w-9 h-9 text-sm p-1 bg-white text-orange-500 border-2 border-orange-500 p rounded hover:bg-orange-500 hover:text-white"
+            className="mt-4 w-9 h-9 text-sm p-1 bg-white text-orange-500 border-2 border-orange-500 rounded hover:bg-orange-500 hover:text-white"
           >
             <FaPlus className="w-full h-full" />
           </button>
@@ -168,22 +223,22 @@ const UnivercityCard = ({ data }) => {
         )}
       </div>
 
-    
+      {/* Dialog for adding new project */}
       <Dialog open={isDialogOpen} onOpenChange={handleCloseDialog}>
         <DialogContent className="p-6 pb-8 bg-white rounded-lg shadow-lg h-[600px] w-[700px]">
           <DialogHeader>
-            <DialogTitle className='text-right'>افزودن پروژه جدید</DialogTitle>
+            <DialogTitle className="text-right">افزودن پروژه جدید</DialogTitle>
           </DialogHeader>
           <div className="text-right">
             <div className="grid grid-cols-2 gap-4">
               <div className="mb-2">
-                <strong className="text-primary-dark" >نام پروژه:</strong>
+                <strong className="text-primary-dark">نام پروژه:</strong>
                 <input
                   className="ml-2 p-1 border w-full mt-2"
                   type="text"
                   name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
+                  value={addFormData.name}
+                  onChange={handleAddFormChange}
                 />
               </div>
               <div className="mb-2">
@@ -192,8 +247,8 @@ const UnivercityCard = ({ data }) => {
                   className="ml-2 p-1 border w-full mt-2"
                   type="text"
                   name="nickname"
-                  value={formData.nickname}
-                  onChange={handleInputChange}
+                  value={addFormData.nickname}
+                  onChange={handleAddFormChange}
                 />
               </div>
               <div className="mb-2">
@@ -202,8 +257,8 @@ const UnivercityCard = ({ data }) => {
                   className="ml-2 p-1 border w-full mt-2"
                   type="date"
                   name="start_date"
-                  value={formData.start_date}
-                  onChange={handleInputChange}
+                  value={addFormData.start_date}
+                  onChange={handleAddFormChange}
                 />
               </div>
               <div className="mb-2">
@@ -212,8 +267,8 @@ const UnivercityCard = ({ data }) => {
                   className="ml-2 p-1 border w-full mt-2"
                   type="date"
                   name="end_date"
-                  value={formData.end_date}
-                  onChange={handleInputChange}
+                  value={addFormData.end_date}
+                  onChange={handleAddFormChange}
                 />
               </div>
               <div className="mb-2">
@@ -222,8 +277,8 @@ const UnivercityCard = ({ data }) => {
                   className="ml-2 p-1 border w-full mt-2"
                   type="date"
                   name="real_start_date"
-                  value={formData.real_start_date}
-                  onChange={handleInputChange}
+                  value={addFormData.real_start_date}
+                  onChange={handleAddFormChange}
                 />
               </div>
               <div className="mb-2">
@@ -232,8 +287,8 @@ const UnivercityCard = ({ data }) => {
                   className="ml-2 p-1 border w-full mt-2"
                   type="date"
                   name="real_end_date"
-                  value={formData.real_end_date}
-                  onChange={handleInputChange}
+                  value={addFormData.real_end_date}
+                  onChange={handleAddFormChange}
                 />
               </div>
               <div className="mb-2">
@@ -242,8 +297,8 @@ const UnivercityCard = ({ data }) => {
                   className="ml-2 p-1 border w-full mt-2"
                   type="text"
                   name="external_members"
-                  value={formData.external_members}
-                  onChange={handleInputChange}
+                  value={addFormData.external_members}
+                  onChange={handleAddFormChange}
                 />
               </div>
               <div className="mb-2">
@@ -252,8 +307,8 @@ const UnivercityCard = ({ data }) => {
                   className="ml-2 p-1 border w-full mt-2"
                   type="text"
                   name="owner"
-                  value={formData.owner}
-                  onChange={handleInputChange}
+                  value={addFormData.owner}
+                  onChange={handleAddFormChange}
                 />
               </div>
               <div className="mb-2">
@@ -262,8 +317,8 @@ const UnivercityCard = ({ data }) => {
                   className="ml-2 p-1 border w-full mt-2"
                   type="text"
                   name="budget"
-                  value={formData.budget}
-                  onChange={handleInputChange}
+                  value={addFormData.budget}
+                  onChange={handleAddFormChange}
                 />
               </div>
             </div>

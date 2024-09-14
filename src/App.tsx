@@ -4,7 +4,7 @@ import Dashboard from "./pages/final";
 import Universities from "./pages/universities";
 import routes from "./global/routes";
 import Majors from "./pages/majors";
-import ProfessorProfile from "./pages/professor-profile";
+// import ProfessorProfile from "./pages/professor-profile";
 import MoreInfo from "./pages/more-info";
 // import Router
 import { DirectionProvider } from "@radix-ui/react-direction";
@@ -33,10 +33,10 @@ function AppRoute() {
             path={"/professors/:major"}
             element={<Majors></Majors>}
           ></Router.Route>
-          <Router.Route
+          {/* <Router.Route
             path={routes.professor(":name")}
             element={<ProfessorProfile></ProfessorProfile>}
-          ></Router.Route>
+          ></Router.Route> */}
           <Router.Route
             path={routes.moreInfo(":name")}
             element={<MoreInfo></MoreInfo>}

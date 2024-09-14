@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Tree from "react-d3-tree";
 import "./GraphTree.css";
 import { useParams, useNavigate } from "react-router-dom";
@@ -6,23 +6,61 @@ import {
   Dialog,
   DialogContent,
   DialogFooter,
-  DialogHeader,
-  DialogTitle,
 } from "@/components/ui/dialog";
 import DefaultImage from "@/assets/default.png"; // Assuming you have the image stored
-import { startTransition } from "react";
 
 import UnivercityCard from "./UnivercityCard";
 
+// Define the types for the nodes and the teachers data
+interface Project {
+  name: string;
+  Nickname: string;
+  Start_date: string;
+  End_date: string;
+  Real_start_date: string;
+  Real_end_date: string;
+  External_members: string;
+  Owner: string;
+  Budget: string;
+  description: string;
+}
+
+interface Professor {
+  name: string;
+  nickname: string;
+  major: string;
+  BirthDate: string;
+  EmploymentDate: string;
+  children: Project[];
+}
+
+interface TeachersData {
+  name: string;
+  children: Professor[];
+}
+
+interface NodeData {
+  name: string;
+  Nickname?: string;
+  Start_date?: string;
+  End_date?: string;
+  Real_start_date?: string;
+  Real_end_date?: string;
+  External_members?: string;
+  Owner?: string;
+  Budget?: string;
+  children?: NodeData[];
+  parentName?:string
+}
+
 export default function GraphTree() {
-  const { major } = useParams();
-  const [selectedNode, setSelectedNode] = useState(null);
-  const [selectedProfessorNode, setSelectedProfessorNode] = useState(null);
+  const { major } = useParams<{ major: string }>(); // Type the major parameter
+  const [selectedNode, setSelectedNode] = useState<NodeData | null>(null);
+  const [selectedProfessorNode, setSelectedProfessorNode] = useState<Professor | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const navigate = useNavigate();
-  const [mid, setMId] = useState(null);
-  const teachers = {
-    name: major,
+  const teachers: TeachersData = {
+    name: major || "Unknown Major",
     children: [
       {
         name: "قاسم اصغری",
@@ -30,7 +68,6 @@ export default function GraphTree() {
         major: "شیمی",
         BirthDate: "1985-12-12",
         EmploymentDate: "2020-01-30",
-
         children: [
           {
             name: "پروژه 1",
@@ -61,7 +98,6 @@ export default function GraphTree() {
       {
         name: "امیر اکبری",
         nickname: "امیر",
-
         major: "شیمی",
         BirthDate: "1985-12-12",
         EmploymentDate: "2020-01-30",
@@ -115,30 +151,25 @@ export default function GraphTree() {
       },
     ],
   };
-  const BoxData = (node) => {
+
+  const BoxData = (node: Professor) => {
     if (selectedProfessorNode?.name !== node.name) {
       setSelectedProfessorNode(node);
     }
   };
 
-  const handleNodeClick = (nodeData, parentData) => {
-    const data = nodeData.data
+  const handleNodeClick = (nodeData: any, parentData: any) => {
+    const data = nodeData.data as NodeData;
+
     if (nodeData.depth === 1) {
-      const a = nodeData.data;
-      if (a) {
-        BoxData(a);
-      }
+      BoxData(data as Professor);
       return;
     }
 
-    // Show the dialog for leaf nodes (no children)
     if (!nodeData.data.children || nodeData.data.children.length === 0) {
-      // setSelectedNode({ ...nodeData, parentName: parentData.name });
-      setSelectedNode({ ...data, parentName: parentData.name })
-      // console.log("hi" ,selectedNode)
+      setSelectedNode({ ...data, parentName: parentData?.name });
       setIsDialogOpen(true);
     }
-    // console.log(nodeData);
   };
 
   const handleCloseDialog = () => {
@@ -146,8 +177,10 @@ export default function GraphTree() {
     setSelectedNode(null);
   };
 
-  const handleprofesserClick = () => {
-    navigate(`/app/more-info/${selectedNode.parentName}`);
+  const handleProfessorClick = () => {
+    if (selectedNode?.parentName) {
+      navigate(`/app/more-info/${selectedNode.parentName}`);
+    }
   };
 
   return (
@@ -160,7 +193,7 @@ export default function GraphTree() {
           <img
             src={DefaultImage}
             alt="Default"
-            className=" mt-14 mx-auto w-11/12 "
+            className="mt-14 mx-auto w-11/12 "
           />
         ) : (
           <UnivercityCard data={selectedProfessorNode} />
@@ -176,7 +209,7 @@ export default function GraphTree() {
         branchNodeClassName="node__branch"
         leafNodeClassName="node__leaf"
         translate={{ x: 50, y: 250 }}
-        onNodeClick={(nodeData) =>
+        onNodeClick={(nodeData: any) =>
           handleNodeClick(nodeData, nodeData.parent?.data)
         }
       />
@@ -185,67 +218,37 @@ export default function GraphTree() {
         <Dialog open={isDialogOpen} onOpenChange={handleCloseDialog}>
           <DialogContent className="p-6 pb-8 bg-white rounded-lg shadow-lg h-[500px] w-[700px]">
             <div className="text-right">
-              <div className="grid grid-cols-2 gap-6  ">
-                {/* <div>
-            <h3 className="font-bold text-lg text-primary-dark">صاحب پروژه</h3>
-            <p
-              onClick={handleprofesserClick}
-              className="text-gray-600 cursor-pointer"
-            >
-              {selectedNode.parentName}
-            </p>
-          </div> */}
+              <div className="grid grid-cols-2 gap-6">
                 <div>
-                  <h3 className="font-bold text-lg text-primary-dark">
-                    نام پروژه
-                  </h3>
+                  <h3 className="font-bold text-lg text-primary-dark">نام پروژه</h3>
                   <p className="text-gray-600">{selectedNode.name}</p>
                 </div>
                 <div>
-                  <h3 className="font-bold text-lg text-primary-dark">
-                    نام مستعار
-                  </h3>
+                  <h3 className="font-bold text-lg text-primary-dark">نام مستعار</h3>
                   <p className="text-gray-600">{selectedNode.Nickname}</p>
                 </div>
                 <div>
-                  <h3 className="font-bold text-lg text-primary-dark">
-                    تاریخ شروع
-                  </h3>
+                  <h3 className="font-bold text-lg text-primary-dark">تاریخ شروع</h3>
                   <p className="text-gray-600">{selectedNode.Start_date}</p>
                 </div>
                 <div>
-                  <h3 className="font-bold text-lg text-primary-dark">
-                    تاریخ پایان
-                  </h3>
+                  <h3 className="font-bold text-lg text-primary-dark">تاریخ پایان</h3>
                   <p className="text-gray-600">{selectedNode.End_date}</p>
                 </div>
                 <div>
-                  <h3 className="font-bold text-lg text-primary-dark">
-                    تاریخ واقعی شروع
-                  </h3>
-                  <p className="text-gray-600">
-                    {selectedNode.Real_start_date}
-                  </p>
+                  <h3 className="font-bold text-lg text-primary-dark">تاریخ واقعی شروع</h3>
+                  <p className="text-gray-600">{selectedNode.Real_start_date}</p>
                 </div>
                 <div>
-                  <h3 className="font-bold text-lg text-primary-dark">
-                    تاریخ واقعی پایان
-                  </h3>
+                  <h3 className="font-bold text-lg text-primary-dark">تاریخ واقعی پایان</h3>
                   <p className="text-gray-600">{selectedNode.Real_end_date}</p>
                 </div>
                 <div>
-                  <h3 className="font-bold text-lg text-primary-dark">
-                    اعضای خارجی
-                  </h3>
-                  <p className="text-gray-600">
-                    {selectedNode.External_members}
-                  </p>
+                  <h3 className="font-bold text-lg text-primary-dark">اعضای خارجی</h3>
+                  <p className="text-gray-600">{selectedNode.External_members}</p>
                 </div>
                 <div>
-                  <h3 className="font-bold text-lg text-primary-dark">
-                    {" "}
-                    صاحب پروژه
-                  </h3>
+                  <h3 className="font-bold text-lg text-primary-dark">صاحب پروژه</h3>
                   <p className="text-gray-600">{selectedNode.Owner}</p>
                 </div>
                 <div>
@@ -256,7 +259,7 @@ export default function GraphTree() {
             </div>
             <DialogFooter>
               <button
-                onClick={handleprofesserClick}
+                onClick={handleProfessorClick}
                 className="ml-3 bg-primary text-white py-2 px-4 rounded-md"
               >
                 صفحه پروژه

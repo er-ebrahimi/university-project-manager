@@ -8,7 +8,6 @@ import {
   Menu,
   Package,
   Package2,
-  Search,
   ShoppingCart,
   Users,
 } from "lucide-react";
@@ -20,7 +19,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 export default function DashboardHeader() {
   return (

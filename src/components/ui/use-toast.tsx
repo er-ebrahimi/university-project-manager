@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export function toast({ title, description, variant }) {
+export function toast({ title, description, variant }:{ title:string, description:string, variant:string }) {
   const [visible, setVisible] = useState(true);
 
   return (

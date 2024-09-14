@@ -1,21 +1,9 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { Major } from "@/types/university";
 import { majors as majorsData } from "@/data/major"; // Updated import to match the correct data file
 import ForceGraph from "@/components/tree/Majors";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+// 
 import AddFieldDialog from "@/components/fieldspage/AddFieldDialog";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { FiEdit2 } from "react-icons/fi";
-import EditFieldDialog from "@/components/fieldspage/EditFieldDialog";
 import UnivercitySidebar from "@/components/sidebar/firstpageSidebar";
 
 export default function Universities() {

@@ -1,17 +1,18 @@
-import React, { useEffect, useState } from "react";
-import professorsData from "@/data/data.json";
-import { Professor } from "@/types/university";
-import ProfessorInfo from "@/share/professor-profile/professor-info";
-import GraphTree from "@/components/univercitypage/GraphTree.jsx";
+// import { useEffect, useState } from "react";
+// import professorsData from "@/data/data.json";
+// import { Professor } from "@/types/university";
+// import ProfessorInfo from "@/share/professor-profile/professor-info";
+import GraphTree from "@/components/univercitypage/GraphTree.js";
+// import GraphTreee
 import SubOrganizationSidebar from "@/components/sidebar/SubOrganizationSidebar";
 import { useParams } from "react-router-dom";
 
 export default function Colleges() {
-  const [professors, setProfessors] = useState<Professor[]>([]);
+  // const [professors, setProfessors] = useState<Professor[]>([]);
 
-  useEffect(() => {
-    setProfessors(professorsData.professors as Professor[]);
-  }, []);
+  // useEffect(() => {
+  //   setProfessors(professorsData.professors as Professor[]);
+  // }, []);
   const { major } = useParams();
 
   return (

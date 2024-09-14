@@ -24,6 +24,7 @@ export default function Dashboard() {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
+  // Define mutation using typed request and response
   const mutation = useMutation<LoginResponse, Error, LoginRequest>({
     mutationFn: login,
     onSuccess: (data) => {
@@ -34,7 +35,8 @@ export default function Dashboard() {
     },
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Handle form submission
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     mutation.mutate({ username, password });
   };
@@ -57,7 +59,7 @@ export default function Dashboard() {
                 type="text"
                 placeholder="نام کاربری خود را وارد کنید"
                 value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
                 required
               />
             </div>
@@ -75,12 +77,12 @@ export default function Dashboard() {
                 id="password"
                 type="password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
                 required
               />
             </div>
-            <Button type="submit" className="w-full" disabled={mutation.isLoading}>
-              {mutation.isLoading ? 'در حال ورود...' : 'ورود'}
+            <Button type="submit" className="w-full" >
+              ورود
             </Button>
             {mutation.isError && <p className="text-red-500">ورود ناموفق بود. لطفاً دوباره تلاش کنید.</p>}
           </div>

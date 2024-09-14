@@ -6,9 +6,9 @@ import { IoDocumentAttach } from "react-icons/io5";
 import {
   Dialog,
   DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
+  // DialogFooter,
+  // DialogHeader,
+  // DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import ProjectSidebarAttachment from "../sidebaritems/ProjectSidebarAttachment";

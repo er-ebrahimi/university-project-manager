@@ -9,7 +9,7 @@ export interface Professor {
   major: string;
   BirthDate: Date;
   TeacherAssistant: Date;
-  AssociateProfessor: Date;
+  AssociateProfessor: string;
   EmploymentDate: Date;
   fields: string[];
   publishedAsseyDate: number[];

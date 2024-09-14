@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
-import { Professor } from "@/types/university";
+// import { Professor } from "@/types/university";
 import {
   Card,
   CardContent,
-  CardHeader,
-  CardTitle,
-  CardFooter,
+  // CardHeader,
+  // CardTitle,
+  // CardFooter,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -15,13 +15,13 @@ import { Input } from "@/components/ui/input";
 import { FaPlus } from "react-icons/fa";
 // import MoreInfoCards from "./MoreInfoCards";
 import "./professor-info.css";
-import MoreInfoCards from "../more-info/more-info-cards";
+// import MoreInfoCards from "../more-info/more-info-cards";
 
 // Professor Info Component with PieChart and Modal to adjust percentages
-function ProfessorInfo({ professors }: { professors: Professor[] }) {
-  const { name } = useParams();
-  const decodedName = decodeURIComponent(name || "");
-  const professor = professors.find((p) => `${p.ProfessorFN} ${p.ProfessorLN}` === decodedName);
+function ProfessorInfo() {
+  // const { name } = useParams();
+  // const decodedName = decodeURIComponent(name || "");
+  // const professor = professors.find((p) => `${p.ProfessorFN} ${p.ProfessorLN}` === decodedName);
 
   const [data, setData] = useState([
     { name: "دستیار استاد", value: 33 },
@@ -80,7 +80,7 @@ function ProfessorInfo({ professors }: { professors: Professor[] }) {
                 fill="#8884d8"
                 label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
               >
-                {data.map((entry, index) => (
+                {data.map((_, index) => (
                   <Cell
                     key={`cell-${index}`}
                     className={

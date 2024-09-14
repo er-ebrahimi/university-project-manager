@@ -4,7 +4,7 @@ import type { ColumnsType } from "antd/es/table";
 import "antd/dist/reset.css"; // Reset Ant Design styles
 import "./TableAdmin.css"; // Include your Tailwind styles here
 import { data, DataType } from "../../data/data"; // Assuming this is your data source
-import { FaUserPlus, FaEdit } from "react-icons/fa";
+import { FaUserPlus } from "react-icons/fa";
 
 // ShadCN UI Imports
 import { Button } from "@/components/ui/button"; // Button from ShadCN
@@ -20,23 +20,23 @@ import { Label } from "@/components/ui/label"; // Label from ShadCN
 import { MdDeleteOutline, MdModeEdit } from "react-icons/md";
 
 const AdminTableWithModal: React.FC = () => {
-  const [isModalVisible, setIsModalVisible] = useState(false); // State for add modal visibility
+  // const [isModalVisible, setIsModalVisible] = useState(false); // State for add modal visibility
   const [isEditModalVisible, setIsEditModalVisible] = useState(false); // State for edit modal visibility
   const [currentUser, setCurrentUser] = useState<DataType | null>(null); // State for selected user
   const [searchText, setSearchText] = useState<string>(""); // State for search text
   const [filteredData, setFilteredData] = useState<DataType[]>(data); // State for filtered data
 
-  const showModal = () => {
-    setIsModalVisible(true);
-  };
+  // const showModal = () => {
+  //   setIsModalVisible(true);
+  // };
 
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
+  // const handleCancel = () => {
+  //   setIsModalVisible(false);
+  // };
 
-  const handleEditCancel = () => {
-    setIsEditModalVisible(false);
-  };
+  // const handleEditCancel = () => {
+  //   setIsEditModalVisible(false);
+  // };
 
   // Function to handle form submission (when user is added)
   const onFinish = (values: any) => {
@@ -54,7 +54,7 @@ const AdminTableWithModal: React.FC = () => {
     };
 
     setFilteredData([...filteredData, newUser]); // Add new user to the table
-    setIsModalVisible(false); // Close the modal
+    // setIsModalVisible(false); // Close the modal
   };
 
   // Function to handle editing of a user

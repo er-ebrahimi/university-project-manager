@@ -1,4 +1,4 @@
-import React from 'react'
+// import React from 'react'
 import { FiDownload } from 'react-icons/fi'
 
 const FileItem = () => {

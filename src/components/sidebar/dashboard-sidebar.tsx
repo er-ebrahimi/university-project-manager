@@ -1,21 +1,15 @@
 import {
-  Bell,
+  // Bell,
   Home,
-  LineChart,
-  Package,
+  // LineChart,
+  // Package,
   Package2,
-  ShoppingCart,
+  // ShoppingCart,
   Users,
 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+// import { Badge } from "@/components/ui/badge";
+// import { Button } from "@/components/ui/button";
+
 import routes from "@/global/routes";
 import { useLocation } from "react-router-dom";
 export default function SidebarDashboard() {

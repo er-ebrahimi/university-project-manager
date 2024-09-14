@@ -1,4 +1,4 @@
-import { useState } from "react";
+// import { useState } from "react";
 import { useParams } from "react-router-dom";
 import processData from "./ProcessDataForLineChart";
 import CumulativeLineChart from "./CumulativeLineChart";
@@ -15,7 +15,6 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { FaPlus } from "react-icons/fa"; // Importing FaPlus icon
 import { HiOutlinePencil } from "react-icons/hi";
 
 function MoreInfoCards({ professors }: { professors: Professor[] }) {
@@ -33,57 +32,58 @@ function MoreInfoCards({ professors }: { professors: Professor[] }) {
   }
 
   // Separate state for each chart data
-  const [chart1Data, setChart1Data] = useState(processData(professor));
-  const [chart2Data, setChart2Data] = useState(processData(professor));
+  // const [chart1Data, setChart1Data] = useState(processData(professor));
+  const chart1Data = processData(professor);
+  // const [chart2Data, setChart2Data] = useState(processData(professor));
 
   // State for the modal input
-  const [newYear, setNewYear] = useState<number | null>(null);
-  const [newData1, setNewData1] = useState<number | null>(null);
-  const [newData2, setNewData2] = useState<number | null>(null);
-  const [currentChart, setCurrentChart] = useState<number | null>(null); // which chart is being edited
+  // const [newYear, setNewYear] = useState<number | null>(null);
+  // const [newData1, setNewData1] = useState<number | null>(null);
+  // const [newData2, setNewData2] = useState<number | null>(null);
+  // const [currentChart, setCurrentChart] = useState<number | null>(null); // which chart is being edited
 
-  const handleAddData = () => {
-    if (newYear && newData1 && newData2) {
-      // Prepare new data entry
-      const newData = {
-        year: newYear,
-        cumulativeCount: newData1,
-        count: newData2,
-      };
+  // const handleAddData = () => {
+  //   if (newYear && newData1 && newData2) {
+  //     // Prepare new data entry
+  //     const newData = {
+  //       year: newYear,
+  //       cumulativeCount: newData1,
+  //       count: newData2,
+  //     };
 
-      const updateChartData = (chartData: any[], setChartData: any) => {
-        const existingDataIndex = chartData.findIndex(
-          (data) => data.year === newYear
-        );
+  //     const updateChartData = (chartData: any[], setChartData: any) => {
+  //       const existingDataIndex = chartData.findIndex(
+  //         (data) => data.year === newYear
+  //       );
 
-        if (existingDataIndex !== -1) {
-          // If year exists, update its values
-          const updatedData = [...chartData];
-          updatedData[existingDataIndex] = {
-            ...updatedData[existingDataIndex],
-            cumulativeCount: newData1,
-            count: newData2,
-          };
-          setChartData(updatedData);
-        } else {
-          // If year doesn't exist, add the new data
-          setChartData([...chartData, newData]);
-        }
-      };
+  //       if (existingDataIndex !== -1) {
+  //         // If year exists, update its values
+  //         const updatedData = [...chartData];
+  //         updatedData[existingDataIndex] = {
+  //           ...updatedData[existingDataIndex],
+  //           cumulativeCount: newData1,
+  //           count: newData2,
+  //         };
+  //         setChartData(updatedData);
+  //       } else {
+  //         // If year doesn't exist, add the new data
+  //         setChartData([...chartData, newData]);
+  //       }
+  //     };
 
-      // Update the appropriate chart data
-      if (currentChart === 1) {
-        updateChartData(chart1Data, setChart1Data);
-      } else if (currentChart === 2) {
-        updateChartData(chart2Data, setChart2Data);
-      }
+  //     // Update the appropriate chart data
+  //     if (currentChart === 1) {
+  //       updateChartData(chart1Data, setChart1Data);
+  //     } else if (currentChart === 2) {
+  //       updateChartData(chart2Data, setChart2Data);
+  //     }
 
-      // Reset the input after adding/updating the data
-      setNewYear(null);
-      setNewData1(null);
-      setNewData2(null);
-    }
-  };
+  //     // Reset the input after adding/updating the data
+  //     setNewYear(null);
+  //     setNewData1(null);
+  //     setNewData2(null);
+  //   }
+  // };
   // console.log("data",chart1Data)
   return (
     <>
@@ -114,19 +114,19 @@ function MoreInfoCards({ professors }: { professors: Professor[] }) {
                   <Input
                     type="number"
                     placeholder="سال"
-                    value={newYear || ""}
+                    // value={newYear || ""}
                     // onChange={(e) => setNewYear(parseInt(e.target.value))}
                   />
                   <Input
                     type="number"
                     placeholder="اولین مقدار"
-                    value={newData1 || ""}
+                    // value={newData1 || ""}
                     // onChange={(e) => setNewData1(parseInt(e.target.value))}
                   />
                   <Input
                     type="number"
                     placeholder="دومین مقدار"
-                    value={newData2 || ""}
+                    // value={newData2 || ""}
                     // onChange={(e) => setNewData2(parseInt(e.target.value))}
                   />
                 </div>
@@ -171,19 +171,19 @@ function MoreInfoCards({ professors }: { professors: Professor[] }) {
                   <Input
                     type="number"
                     placeholder="سال"
-                    value={newYear || ""}
+                    // value={newYear || ""}
                     // onChange={(e) => setNewYear(parseInt(e.target.value))}
                   />
                   <Input
                     type="number"
                     placeholder="اولین مقدار"
-                    value={newData1 || ""}
+                    // value={newData1 || ""}
                     // onChange={(e) => setNewData1(parseInt(e.target.value))}
                   />
                   <Input
                     type="number"
                     placeholder="دومین مقدار"
-                    value={newData2 || ""}
+                    // value={newData2 || ""}
                     // onChange={(e) => setNewData2(parseInt(e.target.value))}
                   />
                 </div>
