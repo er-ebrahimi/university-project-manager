@@ -10,6 +10,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import DefaultImage from "@/assets/default.png"; // Assuming you have the image stored
+import { startTransition } from "react";
 
 import UnivercityCard from "./UnivercityCard";
 
@@ -25,8 +26,8 @@ export default function GraphTree() {
     children: [
       {
         name: "قاسم اصغری",
-        nickname:"قاسم",
-        major:"شیمی",
+        nickname: "قاسم",
+        major: "شیمی",
         BirthDate: "1985-12-12",
         EmploymentDate: "2020-01-30",
 
@@ -59,9 +60,9 @@ export default function GraphTree() {
       },
       {
         name: "امیر اکبری",
-        nickname:"امیر",
+        nickname: "امیر",
 
-        major:"شیمی",
+        major: "شیمی",
         BirthDate: "1985-12-12",
         EmploymentDate: "2020-01-30",
         children: [
@@ -93,8 +94,8 @@ export default function GraphTree() {
       },
       {
         name: "سهیله اتمدی",
-        nickname:"سهیله",
-        major:"شیمی",
+        nickname: "سهیله",
+        major: "شیمی",
         BirthDate: "1985-12-12",
         EmploymentDate: "2020-01-30",
         children: [
@@ -114,22 +115,30 @@ export default function GraphTree() {
       },
     ],
   };
-  const kiramtofront = (node) => {
-    setSelectedProfessorNode(node);
+  const BoxData = (node) => {
+    if (selectedProfessorNode?.name !== node.name) {
+      setSelectedProfessorNode(node);
+    }
   };
-  const handleNodeClick = (nodeData, parentData, id) => {
-    // Set professor node and allow collapsibility for depth 1 nodes
-    // console.log(nodeData)
-    if (nodeData.__rd3t.depth === 1) {
-      kiramtofront(nodeData)
+
+  const handleNodeClick = (nodeData, parentData) => {
+    const data = nodeData.data
+    if (nodeData.depth === 1) {
+      const a = nodeData.data;
+      if (a) {
+        BoxData(a);
+      }
+      return;
     }
 
     // Show the dialog for leaf nodes (no children)
-    if (!nodeData.children || nodeData.children.length === 0) {
-      setSelectedNode({ ...nodeData, parentName: parentData.name });
+    if (!nodeData.data.children || nodeData.data.children.length === 0) {
+      // setSelectedNode({ ...nodeData, parentName: parentData.name });
+      setSelectedNode({ ...data, parentName: parentData.name })
+      // console.log("hi" ,selectedNode)
       setIsDialogOpen(true);
     }
-    console.log(nodeData);
+    // console.log(nodeData);
   };
 
   const handleCloseDialog = () => {
@@ -148,16 +157,19 @@ export default function GraphTree() {
     >
       <div className="w-80 h-full border-l border border-dashed">
         {!selectedProfessorNode ? (
-          <img  src={DefaultImage} alt="Default" className=" mt-14 mx-auto w-11/12 " />
+          <img
+            src={DefaultImage}
+            alt="Default"
+            className=" mt-14 mx-auto w-11/12 "
+          />
         ) : (
           <UnivercityCard data={selectedProfessorNode} />
         )}
       </div>
       <Tree
         data={teachers}
-        
         collapsible={true}
-        initialDepth={2}
+        initialDepth={1}
         nodeSize={{ x: 300, y: 80 }}
         separation={{ siblings: 1, nonSiblings: 1 }}
         rootNodeClassName="node__root"
@@ -165,16 +177,16 @@ export default function GraphTree() {
         leafNodeClassName="node__leaf"
         translate={{ x: 50, y: 250 }}
         onNodeClick={(nodeData) =>
-          handleNodeClick(nodeData.data, nodeData.parent?.data)
+          handleNodeClick(nodeData, nodeData.parent?.data)
         }
       />
 
-{selectedNode && (
-  <Dialog open={isDialogOpen} onOpenChange={handleCloseDialog}>
-    <DialogContent className="p-6 pb-8 bg-white rounded-lg shadow-lg h-[500px] w-[700px]">
-      <div className="text-right">
-        <div className="grid grid-cols-2 gap-6  ">
-          {/* <div>
+      {selectedNode && (
+        <Dialog open={isDialogOpen} onOpenChange={handleCloseDialog}>
+          <DialogContent className="p-6 pb-8 bg-white rounded-lg shadow-lg h-[500px] w-[700px]">
+            <div className="text-right">
+              <div className="grid grid-cols-2 gap-6  ">
+                {/* <div>
             <h3 className="font-bold text-lg text-primary-dark">صاحب پروژه</h3>
             <p
               onClick={handleprofesserClick}
@@ -183,56 +195,76 @@ export default function GraphTree() {
               {selectedNode.parentName}
             </p>
           </div> */}
-          <div>
-            <h3 className="font-bold text-lg text-primary-dark">نام پروژه</h3>
-            <p className="text-gray-600">{selectedNode.name}</p>
-          </div>
-          <div>
-            <h3 className="font-bold text-lg text-primary-dark">نام مستعار</h3>
-            <p className="text-gray-600">{selectedNode.Nickname}</p>
-          </div>
-          <div>
-            <h3 className="font-bold text-lg text-primary-dark">تاریخ شروع</h3>
-            <p className="text-gray-600">{selectedNode.Start_date}</p>
-          </div>
-          <div>
-            <h3 className="font-bold text-lg text-primary-dark">تاریخ پایان</h3>
-            <p className="text-gray-600">{selectedNode.End_date}</p>
-          </div>
-          <div>
-            <h3 className="font-bold text-lg text-primary-dark">تاریخ واقعی شروع</h3>
-            <p className="text-gray-600">{selectedNode.Real_start_date}</p>
-          </div>
-          <div>
-            <h3 className="font-bold text-lg text-primary-dark">تاریخ واقعی پایان</h3>
-            <p className="text-gray-600">{selectedNode.Real_end_date}</p>
-          </div>
-          <div>
-            <h3 className="font-bold text-lg text-primary-dark">اعضای خارجی</h3>
-            <p className="text-gray-600">{selectedNode.External_members}</p>
-          </div>
-          <div>
-            <h3 className="font-bold text-lg text-primary-dark"> صاحب پروژه</h3>
-            <p className="text-gray-600">{selectedNode.Owner}</p>
-          </div>
-          <div>
-            <h3 className="font-bold text-lg text-primary-dark">بودجه</h3>
-            <p className="text-gray-600">{selectedNode.Budget}</p>
-          </div>
-        </div>
-      </div>
-      <DialogFooter>
-        <button
-          onClick={handleprofesserClick}
-          className="ml-3 bg-primary text-white py-2 px-4 rounded-md"
-        >
-          صفحه پروژه
-        </button>
-      </DialogFooter>
-    </DialogContent>
-  </Dialog>
-)}
-
+                <div>
+                  <h3 className="font-bold text-lg text-primary-dark">
+                    نام پروژه
+                  </h3>
+                  <p className="text-gray-600">{selectedNode.name}</p>
+                </div>
+                <div>
+                  <h3 className="font-bold text-lg text-primary-dark">
+                    نام مستعار
+                  </h3>
+                  <p className="text-gray-600">{selectedNode.Nickname}</p>
+                </div>
+                <div>
+                  <h3 className="font-bold text-lg text-primary-dark">
+                    تاریخ شروع
+                  </h3>
+                  <p className="text-gray-600">{selectedNode.Start_date}</p>
+                </div>
+                <div>
+                  <h3 className="font-bold text-lg text-primary-dark">
+                    تاریخ پایان
+                  </h3>
+                  <p className="text-gray-600">{selectedNode.End_date}</p>
+                </div>
+                <div>
+                  <h3 className="font-bold text-lg text-primary-dark">
+                    تاریخ واقعی شروع
+                  </h3>
+                  <p className="text-gray-600">
+                    {selectedNode.Real_start_date}
+                  </p>
+                </div>
+                <div>
+                  <h3 className="font-bold text-lg text-primary-dark">
+                    تاریخ واقعی پایان
+                  </h3>
+                  <p className="text-gray-600">{selectedNode.Real_end_date}</p>
+                </div>
+                <div>
+                  <h3 className="font-bold text-lg text-primary-dark">
+                    اعضای خارجی
+                  </h3>
+                  <p className="text-gray-600">
+                    {selectedNode.External_members}
+                  </p>
+                </div>
+                <div>
+                  <h3 className="font-bold text-lg text-primary-dark">
+                    {" "}
+                    صاحب پروژه
+                  </h3>
+                  <p className="text-gray-600">{selectedNode.Owner}</p>
+                </div>
+                <div>
+                  <h3 className="font-bold text-lg text-primary-dark">بودجه</h3>
+                  <p className="text-gray-600">{selectedNode.Budget}</p>
+                </div>
+              </div>
+            </div>
+            <DialogFooter>
+              <button
+                onClick={handleprofesserClick}
+                className="ml-3 bg-primary text-white py-2 px-4 rounded-md"
+              >
+                صفحه پروژه
+              </button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 }

@@ -21,7 +21,7 @@ const UnivercitySidebar: React.FC = () => {
     <div className="h-[530px] w-[230px] rounded-sm border border-dashed absolute right-0 bg-white mt-14 mr-6 p-4 flex flex-col">
       <div className="flex-grow">
         <div className="mb-4">
-          <h3 className="text-sm font-bold">نام دانشگاه</h3>
+          <h3 className="text-sm font-bold text-primary-dark">نام دانشگاه</h3>
           {isEditing ? (
             <input
               type="text"
@@ -35,7 +35,7 @@ const UnivercitySidebar: React.FC = () => {
         </div>
 
         <div className="mb-4">
-          <h3 className="text-sm font-bold">شماره تلفن</h3>
+          <h3 className="text-sm font-bold text-primary-dark">شماره تلفن</h3>
           {isEditing ? (
             <input
               type="text"
@@ -49,7 +49,7 @@ const UnivercitySidebar: React.FC = () => {
         </div>
 
         <div className="mb-4">
-          <h3 className="text-sm font-bold">کد پستی</h3>
+          <h3 className="text-sm font-bold text-primary-dark">کد پستی</h3>
           {isEditing ? (
             <input
               type="text"
@@ -63,7 +63,7 @@ const UnivercitySidebar: React.FC = () => {
         </div>
 
         <div className="mb-4">
-          <h3 className="text-sm font-bold">نام خلاصه</h3>
+          <h3 className="text-sm font-bold text-primary-dark">نام خلاصه</h3>
           {isEditing ? (
             <input
               type="text"
@@ -77,7 +77,7 @@ const UnivercitySidebar: React.FC = () => {
         </div>
 
         <div className="mb-4">
-          <h3 className="text-sm font-bold">آدرس</h3>
+          <h3 className="text-sm font-bold text-primary-dark">آدرس</h3>
           {isEditing ? (
             <input
               type="text"
@@ -91,7 +91,7 @@ const UnivercitySidebar: React.FC = () => {
         </div>
 
         <div className="mb-4">
-          <h3 className="text-sm font-bold">رئیس دانشگاه</h3>
+          <h3 className="text-sm font-bold text-primary-dark">رئیس دانشگاه</h3>
           {isEditing ? (
             <input
               type="text"
