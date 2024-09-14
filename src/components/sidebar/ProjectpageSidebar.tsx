@@ -2,7 +2,16 @@ import React, { useState } from "react";
 import DatePicker from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
-
+import { IoDocumentAttach } from "react-icons/io5";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import ProjectSidebarAttachment from "../sidebaritems/ProjectSidebarAttachment";
 const ProjectpageSidebar: React.FC = () => {
   // Define state for managing field values and edit mode
   const [isEditing, setIsEditing] = useState(false);
@@ -26,6 +35,19 @@ const ProjectpageSidebar: React.FC = () => {
   return (
     <div className="h-[550px] w-[250px] rounded-sm border border-dashed absolute right-0 bg-white mt-14 mr-6 p-4 flex flex-col">
       <div className="flex-grow">
+      <Dialog >
+        <DialogTrigger>
+      <IoDocumentAttach className="absolute left-0 top-0 ml-4 mt-4 w-8 h-8 rounded cursor-pointer text-primary-dark border p-1 border-primary"/>
+
+        </DialogTrigger>
+        <DialogContent className="my-4 h-[600px] w-full overflow-y-auto scrollbar-thin scrollbar-thumb-purple-500 scrollbar-track-gray-200">
+  {/* <DialogHeader>
+    <DialogTitle className="text-right">فایل های ضمیمه</DialogTitle>
+  </DialogHeader> */}
+  
+  <ProjectSidebarAttachment/>
+</DialogContent>
+        </Dialog> 
         <div className="mb-2">
           <h3 className="text-sm font-bold  text-primary-dark">نام</h3>
           {isEditing ? (
