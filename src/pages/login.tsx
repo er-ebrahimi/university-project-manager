@@ -4,7 +4,8 @@ import { login } from '../functions/api'; // Assuming the login function is in s
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-
+// import  toaster,{ toast } from 'react-hot-toast';  // You can still use toast manually if needed
+import { Toaster ,toast } from 'react-hot-toast';
 // Define the types for the login mutation response and request
 interface LoginResponse {
   token: string;
@@ -29,20 +30,25 @@ export default function Dashboard() {
     mutationFn: login,
     onSuccess: (data) => {
       console.log('Login successful:', data);
+      toast.success('با موفقیت وارد شدید');  // Trigger toast on success
     },
     onError: (error) => {
       console.error('Login failed:', error);
+      // toast.error('Login failed! Please check your credentials.');  // Trigger toast on error
     },
   });
-
+  
+  // const handleClick = () => {
+  //   toast.success('This is a test toast!');
+  // };
   // Handle form submission
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    mutation.mutate({ username, password });
+    mutation.mutate({ username, password });  // Ensure correct typing for mutate arguments
   };
-
   return (
     <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
+      {/* <Toaster position='top-center' /> */}
       <div className="flex items-center justify-center py-12">
         <form onSubmit={handleSubmit} className="mx-auto grid w-[350px] gap-6">
           <div className="grid gap-2 text-center">
@@ -81,16 +87,10 @@ export default function Dashboard() {
                 required
               />
             </div>
-            <Button type="submit" className="w-full" >
+            <Button type="submit" className="w-full">
               ورود
             </Button>
-            {mutation.isError && <p className="text-red-500">ورود ناموفق بود. لطفاً دوباره تلاش کنید.</p>}
-          </div>
-          <div className="mt-4 text-center text-sm">
-            اکانت ندارید؟{' '}
-            <a href="#" className="underline">
-              ثبت نام
-            </a>
+            {/* {mutation.isError && <p className="text-red-500">ورود ناموفق بود. لطفاً دوباره تلاش کنید.</p>} */}
           </div>
         </form>
       </div>

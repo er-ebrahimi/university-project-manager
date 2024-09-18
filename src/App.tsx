@@ -11,6 +11,7 @@ import { DirectionProvider } from "@radix-ui/react-direction";
 import Login from "./pages/login";
 import Colleges from "./pages/colleges";
 import AdminUsers from "./pages/admin/users";
+import { Toaster } from 'react-hot-toast';
 
 function AppRoute() {
   return (
@@ -51,6 +52,8 @@ export default function App() {
   return (
     <Router.BrowserRouter>
       <DirectionProvider dir="rtl">
+      <Toaster position="bottom-left" />
+
         <div dir="rtl" className="font-custom">
           <Router.Routes>
             <Router.Route
