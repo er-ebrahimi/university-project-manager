@@ -11,9 +11,12 @@ import { DirectionProvider } from "@radix-ui/react-direction";
 import Login from "./pages/login";
 import Colleges from "./pages/colleges";
 import AdminUsers from "./pages/admin/users";
-import { Toaster } from 'react-hot-toast';
-
+import { Toaster } from "react-hot-toast";
+import { UserProvider } from "./functions/Usercontext";
+import RequirePermission from "./functions/Requrepermision";
 function AppRoute() {
+  // const userPermissionsName = useUserPermissionsName();
+  // console.log("🚀 ~ AppRoute ~ userPermissionsName:", userPermissionsName)
   return (
     <DirectionProvider dir="rtl">
       <Dashboard>
@@ -23,8 +26,14 @@ function AppRoute() {
             element={<Universities></Universities>}
           ></Router.Route>
           <Router.Route
+          
             path="/admin/users"
-            element={<AdminUsers/>}
+            // element={<AdminUsers />}
+            element={
+              <RequirePermission permissionName="SuperAdmin">
+                <AdminUsers />
+              </RequirePermission>
+            }
           ></Router.Route>
           <Router.Route
             path={"/Colleges/:major"}
@@ -52,24 +61,26 @@ export default function App() {
   return (
     <Router.BrowserRouter>
       <DirectionProvider dir="rtl">
-      <Toaster position="bottom-left" />
-
-        <div dir="rtl" className="font-custom">
-          <Router.Routes>
-            <Router.Route
-              path="app/*"
-              element={<AppRoute></AppRoute>}
-            ></Router.Route>
-            <Router.Route
-              path={"/"}
-              element={<Router.Navigate to={"app/"} />}
-            ></Router.Route>
-            <Router.Route
-              path={routes.login}
-              element={<Login></Login>}
-            ></Router.Route>
-          </Router.Routes>
-        </div>
+        <Toaster position="top-center" />
+        <UserProvider>
+          {" "}
+          <div dir="rtl" className="font-custom">
+            <Router.Routes>
+              <Router.Route
+                path="app/*"
+                element={<AppRoute></AppRoute>}
+              ></Router.Route>
+              <Router.Route
+                path={"/"}
+                element={<Router.Navigate to={"app/"} />}
+              ></Router.Route>
+              <Router.Route
+                path={routes.login}
+                element={<Login></Login>}
+              ></Router.Route>
+            </Router.Routes>
+          </div>
+        </UserProvider>
       </DirectionProvider>
     </Router.BrowserRouter>
   );

@@ -1,19 +1,20 @@
-import React, { useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
-import { login } from '../functions/api'; // Assuming the login function is in src/api.ts
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-// import  toaster,{ toast } from 'react-hot-toast';  // You can still use toast manually if needed
-import { Toaster ,toast } from 'react-hot-toast';
+// login.tsx
+import React, { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { login } from "@/functions/authService";
+// Updated import path
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom"; // Import useNavigate for redirection
+
 // Define the types for the login mutation response and request
 interface LoginResponse {
-  token: string;
-  user: {
-    id: string;
-    name: string;
-    email: string;
-  };
+  // data: {
+    access: string;
+    refresh: string;
+  // };
 }
 
 interface LoginRequest {
@@ -21,34 +22,35 @@ interface LoginRequest {
   password: string;
 }
 
-export default function Dashboard() {
-  const [username, setUsername] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+export default function LoginPage() {
+  // Renamed component for clarity
+  const [username, setUsername] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+
+  const navigate = useNavigate(); // Initialize navigate function
 
   // Define mutation using typed request and response
   const mutation = useMutation<LoginResponse, Error, LoginRequest>({
     mutationFn: login,
     onSuccess: (data) => {
-      console.log('Login successful:', data);
-      toast.success('با موفقیت وارد شدید');  // Trigger toast on success
+      console.log("Login successful:", data);
+      toast.success("با موفقیت وارد شدید");
+      navigate("/app");
     },
     onError: (error) => {
-      console.error('Login failed:', error);
-      // toast.error('Login failed! Please check your credentials.');  // Trigger toast on error
+      console.error("Login failed:", error);
+      toast.error("ورود ناموفق بود. لطفاً دوباره تلاش کنید.");
     },
   });
-  
-  // const handleClick = () => {
-  //   toast.success('This is a test toast!');
-  // };
+
   // Handle form submission
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    mutation.mutate({ username, password });  // Ensure correct typing for mutate arguments
+    mutation.mutate({ username, password }); // Pass credentials to the login function
   };
+
   return (
     <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
-      {/* <Toaster position='top-center' /> */}
       <div className="flex items-center justify-center py-12">
         <form onSubmit={handleSubmit} className="mx-auto grid w-[350px] gap-6">
           <div className="grid gap-2 text-center">
@@ -65,7 +67,7 @@ export default function Dashboard() {
                 type="text"
                 placeholder="نام کاربری خود را وارد کنید"
                 value={username}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
+                onChange={(e) => setUsername(e.target.value)}
                 required
               />
             </div>
@@ -82,15 +84,15 @@ export default function Dashboard() {
               <Input
                 id="password"
                 type="password"
+                placeholder="رمز عبور خود را وارد کنید"
                 value={password}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
                 required
               />
             </div>
             <Button type="submit" className="w-full">
-              ورود
+              {mutation.isPending ? "در حال ورود..." : "ورود"}
             </Button>
-            {/* {mutation.isError && <p className="text-red-500">ورود ناموفق بود. لطفاً دوباره تلاش کنید.</p>} */}
           </div>
         </form>
       </div>

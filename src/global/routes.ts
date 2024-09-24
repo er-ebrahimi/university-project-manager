@@ -7,6 +7,7 @@ const routes = {
   dashboard: "/",
   login: "/login",
   signup: "/signup",
+  adminUsers:"/admin/users"
 };
 
 export default routes;
