@@ -23,13 +23,13 @@ function ForceGraph({ majors }: { majors: Major[] }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const nodes: Node[] = [{ id: "دانشگاه", group: 0 }].concat(
+    const nodes: Node[] = [{ id: "سازمان", group: 0 }].concat(
       majors.map((major) => ({ id: major.name, group: 1 }))
     );
     console.log("nodes: ", nodes);
 
     const links: Link[] = majors.map((major) => ({
-      source: "دانشگاه",
+      source: "سازمان",
       target: major.name,
     }));
 

@@ -18,6 +18,7 @@ import {
 import { Input } from "@/components/ui/input"; // Input from ShadCN
 import { Label } from "@/components/ui/label"; // Label from ShadCN
 import { MdDeleteOutline, MdModeEdit } from "react-icons/md";
+import AddUser from "./AddUser";
 
 const AdminTableWithModal: React.FC = () => {
   // const [isModalVisible, setIsModalVisible] = useState(false); // State for add modal visibility
@@ -39,23 +40,7 @@ const AdminTableWithModal: React.FC = () => {
   // };
 
   // Function to handle form submission (when user is added)
-  const onFinish = (values: any) => {
-    const newUser: DataType = {
-      id: String(filteredData.length + 1), // Assign unique key
-      username: values.username,
-      nickname: values.nickname,
-      first_name: values.first_name,
-      last_name: values.last_name,
-      id_number: values.id_number,
-      personal_number: values.personal_number,
-      educational_level: values.educational_level,
-      phone_number: values.phone_number,
-      mobile_number: values.mobile_number,
-    };
-
-    setFilteredData([...filteredData, newUser]); // Add new user to the table
-    // setIsModalVisible(false); // Close the modal
-  };
+  
 
   // Function to handle editing of a user
   const handleEdit = (record: DataType) => {
@@ -172,141 +157,13 @@ const AdminTableWithModal: React.FC = () => {
                 <FaUserPlus className="w-5 h-5" />
               </Button>
             </DialogTrigger>
-            <DialogContent className="my-4 h-[85vh] overflow-y-auto scrollbar-thin scrollbar-thumb-purple-500 scrollbar-track-gray-200">
+            <DialogContent className="my-4 h-[650px] overflow-y-auto scrollbar-thin scrollbar-thumb-purple-500 scrollbar-track-gray-200">
               <DialogHeader>
                 <DialogTitle className="text-right">
                   افزودن کاربر جدید
                 </DialogTitle>
               </DialogHeader>
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  const formData = new FormData(e.currentTarget);
-                  const values = Object.fromEntries(formData.entries());
-                  onFinish(values); // Handle form submission
-                }}
-                className="grid grid-cols-1 md:grid-cols-2 gap-4"
-              >
-                <div>
-                  <Label className=" mr-2" htmlFor="username">
-                    نام کاربری
-                  </Label>
-                  <Input
-                    className="mt-2 w-full"
-                    name="username"
-                    id="username"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <Label className=" mr-2" htmlFor="first_name">
-                    نام
-                  </Label>
-                  <Input
-                    className="mt-2 w-full"
-                    name="first_name"
-                    id="first_name"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <Label className=" mr-2" htmlFor="last_name">
-                    نام خانوادگی
-                  </Label>
-                  <Input
-                    className="mt-2 w-full"
-                    name="last_name"
-                    id="last_name"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <Label className=" mr-2" htmlFor="nickname">
-                    نام مستعار
-                  </Label>
-                  <Input
-                    className="mt-2 w-full"
-                    name="nickname"
-                    id="nickname"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <Label className=" mr-2" htmlFor="id_number">
-                    کد ملی
-                  </Label>
-                  <Input
-                    name="id_number"
-                    id="id_number"
-                    maxLength={10}
-                    required
-                    className="mt-2 w-full"
-                  />
-                </div>
-
-                <div>
-                  <Label className=" mr-2" htmlFor="personal_number">
-                    شماره پرسنلی
-                  </Label>
-                  <Input
-                    className="mt-2 w-full"
-                    name="personal_number"
-                    id="personal_number"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <Label className=" mr-2" htmlFor="educational_level">
-                    سطح تحصیلات
-                  </Label>
-                  <Input
-                    name="educational_level"
-                    id="educational_level"
-                    required
-                    className="mt-2 w-full"
-                  />
-                </div>
-
-                <div>
-                  <Label className=" mr-2" htmlFor="phone_number">
-                    شماره تلفن
-                  </Label>
-                  <Input
-                    className="mt-2 w-full"
-                    name="phone_number"
-                    id="phone_number"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <Label className=" mr-2" htmlFor="mobile_number">
-                    شماره موبایل
-                  </Label>
-                  <Input
-                    name="mobile_number"
-                    id="mobile_number"
-                    maxLength={10}
-                    required
-                    className="mt-2 w-full"
-                  />
-                </div>
-
-                <div dir="ltr" className="md:col-span-2 ml-2 ">
-                  <Button
-                    type="submit"
-                    dir="ltr"
-                    className="w-1/5 bg-indigo-500 text-white"
-                  >
-                    افزودن
-                  </Button>
-                </div>
-              </form>
+              <AddUser/>
             </DialogContent>
           </Dialog>
         </div>

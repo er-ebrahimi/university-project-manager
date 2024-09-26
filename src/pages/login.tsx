@@ -1,20 +1,16 @@
-// login.tsx
 import React, { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { login } from "@/functions/authService";
-// Updated import path
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "react-hot-toast";
-import { useNavigate } from "react-router-dom"; // Import useNavigate for redirection
+import { useNavigate } from "react-router-dom";
+import { useUser } from "@/functions/Usercontext";
+import "../global/css/login.css";
 
-// Define the types for the login mutation response and request
 interface LoginResponse {
-  // data: {
-    access: string;
-    refresh: string;
-  // };
+  access: string;
+  refresh: string;
 }
 
 interface LoginRequest {
@@ -23,19 +19,20 @@ interface LoginRequest {
 }
 
 export default function LoginPage() {
-  // Renamed component for clarity
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  const navigate = useNavigate(); // Initialize navigate function
+  const navigate = useNavigate();
+  const { loginSuccess } = useUser();
 
-  // Define mutation using typed request and response
   const mutation = useMutation<LoginResponse, Error, LoginRequest>({
-    mutationFn: login,
+    mutationFn: async (credentials: LoginRequest) => {
+      return await login(credentials, loginSuccess); // Return the login response
+    },
     onSuccess: (data) => {
       console.log("Login successful:", data);
       toast.success("با موفقیت وارد شدید");
-      navigate("/app");
+      navigate("/app"); // Navigate to the protected route
     },
     onError: (error) => {
       console.error("Login failed:", error);
@@ -43,10 +40,9 @@ export default function LoginPage() {
     },
   });
 
-  // Handle form submission
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    mutation.mutate({ username, password }); // Pass credentials to the login function
+    mutation.mutate({ username, password });
   };
 
   return (
@@ -62,30 +58,28 @@ export default function LoginPage() {
           <div className="grid gap-4">
             <div className="grid gap-2">
               <Label htmlFor="username">نام کاربری</Label>
-              <Input
+              <input
                 id="username"
                 type="text"
+                dir="ltr"
                 placeholder="نام کاربری خود را وارد کنید"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 required
+                className="flex h-10 w-full rounded-md border bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
               />
             </div>
             <div className="grid gap-2">
               <div className="flex items-center">
                 <Label htmlFor="password">رمز عبور</Label>
-                <a
-                  href="/forgot-password"
-                  className="mr-auto inline-block text-sm underline"
-                >
-                  رمز عبور خود را فراموش کردید؟
-                </a>
               </div>
-              <Input
+              <input
                 id="password"
                 type="password"
+                dir="ltr"
                 placeholder="رمز عبور خود را وارد کنید"
                 value={password}
+                className="flex h-10 w-full rounded-md border bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />

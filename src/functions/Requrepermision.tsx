@@ -9,30 +9,19 @@ interface RequirePermissionProps {
 }
 
 const RequirePermission: React.FC<RequirePermissionProps> = ({ children, permissionName }) => {
-  console.log("🚀 ~ AAApermissionName:", permissionName)
   const userPermissionsName = useUserPermissionsName();
-  console.log("🚀 ~ AAAuserPermissionsName:", userPermissionsName)
 
-  if(userPermissionsName !== null || userPermissionsName !==undefined){
-    // if (userPermissionsName !== permissionName) {
-    //   toast.error('شما دسترسی لازم برای این بخش را ندارید');
-    //   return <Navigate to="/app" />;
-    // }
-    if (userPermissionsName === permissionName) {
-      console.log("🚀 ~ permissionName:", permissionName)
-      toast.success('صبر کنید');
-      
-    }
-    return children
+  if (!userPermissionsName) {
+    // Handle case where permission is not available
+    return <Navigate to="/login" />;
   }
-  // if (userPermissionsName === null) {
-  //   toast.error("دوباره وارد شوید")
-  //   return <Navigate to="/login" replace />
-  // }
 
-  
+  if (userPermissionsName !== permissionName) {
+    toast.error('شما اجازه دسترسی ندارید');
+    return <Navigate to="/app" />;
+  }
 
-  // return children;
+  return children;
 };
 
 export default RequirePermission;
