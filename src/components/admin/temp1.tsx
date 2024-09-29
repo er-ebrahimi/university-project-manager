@@ -1,101 +1,100 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import "antd/dist/reset.css";
-import "./TableAdmin.css";
+import "antd/dist/reset.css"; // Reset Ant Design styles
+import "./TableAdmin.css"; // Include your Tailwind styles here
+// import { data, DataType } from "../../data/data"; // Assuming this is your data source
 import { FaUserPlus } from "react-icons/fa";
 
 // ShadCN UI Imports
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button"; // Button from ShadCN
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from "@/components/ui/dialog"; // Modal/Dialog from ShadCN
+import { Input } from "@/components/ui/input"; // Input from ShadCN
+import { Label } from "@/components/ui/label"; // Label from ShadCN
 import { MdDeleteOutline, MdModeEdit } from "react-icons/md";
 import AddUser from "./AddUser";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getUsers, updateUser, deleteUser } from "@/functions/services/users";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { getUsers } from "@/functions/services/users";
 import toast from "react-hot-toast";
 import { User } from "@/types/userType";
-import { degreeToPersian, Degree } from "@/types/userType";
-import { render } from "react-dom";
 const AdminTableWithModal: React.FC = () => {
-  const queryClient = useQueryClient();
-
-  const { data, isLoading, isError } = useQuery({
+  const { data, isPending } = useQuery({
     queryKey: ["UserData"],
     queryFn: getUsers,
   });
+  // const [isModalVisible, setIsModalVisible] = useState(false); // State for add modal visibility
+  const [isEditModalVisible, setIsEditModalVisible] = useState(false); // State for edit modal visibility
+  const [currentUser, setCurrentUser] = useState<User | null>(null); // State for selected user
+  const [searchText, setSearchText] = useState<string>(""); // State for search text
+  const [filteredData, setFilteredData] = useState<User[]>(data!); // State for filtered data
 
-  const [filteredData, setFilteredData] = useState<User[]>([]);
+  // const showModal = () => {
+  //   setIsModalVisible(true);
+  // };
 
-  useEffect(() => {
-    if (data) {
-      setFilteredData(data);
-    }
-  }, [data]);
+  // const handleCancel = () => {
+  //   setIsModalVisible(false);
+  // };
 
-  const [isEditModalVisible, setIsEditModalVisible] = useState(false);
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [searchText, setSearchText] = useState<string>("");
+  // const handleEditCancel = () => {
+  //   setIsEditModalVisible(false);
+  // };
 
-  // Handle editing a user
+  // Function to handle form submission (when user is added)
+  
+
+  // Function to handle editing of a user
   const handleEdit = (record: User) => {
-    setCurrentUser(record);
-    setIsEditModalVisible(true);
+    setCurrentUser(record); // Set current user to be edited
+    setIsEditModalVisible(true); // Show edit modal
   };
-
-  const updateUserMutation = useMutation({
-    mutationFn: (updatedUser: User) => updateUser(updatedUser),
-    onSuccess: () => {
-      queryClient.invalidateQueries(["UserData"]);
-      toast.success("کاربر با موفقیت به‌روز شد");
-      setIsEditModalVisible(false);
-    },
-    onError: () => {
-      toast.error("خطا در به‌روزرسانی کاربر");
-    },
-  });
 
   const onEditFinish = (values: any) => {
-    const updatedUser = { ...currentUser, ...values };
-    updateUserMutation.mutate(updatedUser as User);
+    const updatedData = filteredData.map((user) =>
+      user.id === currentUser?.id ? { ...user, ...values } : user
+    );
+    setFilteredData(updatedData); // Update the user in the table
+    setIsEditModalVisible(false); // Close edit modal
   };
 
-  const deleteUserMutation = useMutation({
-    mutationFn: (userId: number) => deleteUser(userId),
-    onSuccess: () => {
-      queryClient.invalidateQueries(["UserData"]);
-      toast.success("کاربر با موفقیت حذف شد");
-    },
-    onError: () => {
-      toast.error("خطا در حذف کاربر");
-    },
-  });
-
-  const handleDelete = (userId: number) => {
-    deleteUserMutation.mutate(userId);
-  };
-
-  // Search functionality
+  // Search functionality: filter table based on user input
   const handleSearch = (value: string) => {
     setSearchText(value);
     const filtered = data?.filter((item) =>
-      Object.values(item).some(
-        (field) =>
-          field && field.toString().toLowerCase().includes(value.toLowerCase())
+      Object.values(item).some((field) =>
+        field.toString().toLowerCase().includes(value.toLowerCase())
       )
     );
     setFilteredData(filtered!);
-  };
 
+
+  };
+  
+  // const mutation = useMutation({
+  //   // mutationFn: (updatedData: UniversityData) =>
+  //   //   updateOrganizationData(1, updatedData), // Hardcoded ID (1)
+  //   onSuccess: () => {
+  //     // setIsEditing(false);
+  //     // alert("Organization updated successfully!");
+  //     toast.success("با موفقیت ویرایش شد");
+  //     // setUniversityData(data)
+      
+  //   },
+  //   onError: (error: any) => {
+  //     console.error(
+  //       "Failed to update ",
+  //       error.response?.data || error
+  //     );
+  //     toast.error("ویرایش با خطا مواجه شد");
+  //   },
+  // });
   const columns: ColumnsType<User> = [
-    // ... (same columns as before)
     {
       title: "نام کاربری",
       dataIndex: "username",
@@ -123,22 +122,21 @@ const AdminTableWithModal: React.FC = () => {
 
     {
       title: "کد ملی",
-      dataIndex: "social_id_number",
-      key: "social_id_number",
+      dataIndex: "id_number",
+      key: "id_number",
       className: "text-right",
     },
     {
       title: "شماره پرسنلی",
-      dataIndex: "personal_id_number",
-      key: "personal_id_number",
+      dataIndex: "personal_number",
+      key: "personal_number",
       className: "text-right",
     },
     {
       title: "سطح تحصیلات",
-      dataIndex: "education_level",
-      key: "education_level",
+      dataIndex: "educational_level",
+      key: "educational_level",
       className: "text-right",
-      render: (inp: Degree) => degreeToPersian(inp),
     },
     {
       title: "شماره تلفن",
@@ -148,45 +146,30 @@ const AdminTableWithModal: React.FC = () => {
     },
     {
       title: "شماره موبایل",
-      dataIndex: "mobile_phone_number",
-      key: "mobile_phone_number",
-      render: (inp: string) => {
-        return (
-          <div dir="ltr" className="text-left">
-            {inp}
-          </div>
-        );
-      },
+      dataIndex: "mobile_number",
+      key: "mobile_number",
+      className: "text-right",
     },
     {
       title: "عملیات",
       key: "operation",
       render: (_, record) => (
         <div className="flex flex-row-reverse space-x-2">
-          <Button
-            className="bg-red-500 text-white w-10 h-10 p-0 px-2"
-            onClick={() => handleDelete(record.id)}
-          >
+          <Button className="bg-red-500 text-white w-10 h-10 p-0 px-2">
+            {/* حذف  */}
             <MdDeleteOutline className="text-center  w-full h-full" />
           </Button>
           <Button
             className="bg-yellow-500 text-white p-2 w-10 h-10"
             onClick={() => handleEdit(record)}
           >
+            {/* ویرایش */}
             <MdModeEdit className="text-center  w-full h-full" />
           </Button>
         </div>
       ),
     },
   ];
-
-  if (isLoading) {
-    return toast.loading("در حال بارگذاری...", { id: "1", duration: 1000 });
-  }
-
-  if (isError) {
-    return toast.error("لطفا از اتصال اینترنت خود اطمینان حاصل کنید");
-  }
 
   return (
     <div className="p-6 bg-white rounded-lg w-[75vw] h-[80vh]">
@@ -207,7 +190,7 @@ const AdminTableWithModal: React.FC = () => {
                   افزودن کاربر جدید
                 </DialogTitle>
               </DialogHeader>
-              <AddUser />
+              <AddUser/>
             </DialogContent>
           </Dialog>
         </div>
@@ -231,6 +214,7 @@ const AdminTableWithModal: React.FC = () => {
           position: ["bottomLeft"],
           style: {
             direction: "ltr",
+            // transform:"revert",
             textAlign: "right",
             display: "flex",
             flexDirection: "row",
@@ -246,7 +230,7 @@ const AdminTableWithModal: React.FC = () => {
       {/* Edit User Modal */}
       {currentUser && (
         <Dialog open={isEditModalVisible} onOpenChange={setIsEditModalVisible}>
-          <DialogContent className="my-4 h-[660px] overflow-y-auto scrollbar-thin scrollbar-thumb-purple-500 scrollbar-track-gray-200">
+          <DialogContent className="my-4 h-[85vh] overflow-y-auto scrollbar-thin scrollbar-thumb-purple-500 scrollbar-track-gray-200">
             <DialogHeader>
               <DialogTitle className="text-right">ویرایش کاربر</DialogTitle>
             </DialogHeader>
@@ -255,12 +239,11 @@ const AdminTableWithModal: React.FC = () => {
                 e.preventDefault();
                 const formData = new FormData(e.currentTarget);
                 const values = Object.fromEntries(formData.entries());
-                onEditFinish(values);
+                onEditFinish(values); // Handle form submission
               }}
               className="grid grid-cols-1 md:grid-cols-2 gap-4"
             >
               {/* Pre-filled form fields for editing */}
-              {/* ... (same form fields as before) */}
               <div>
                 <Label className=" mr-2" htmlFor="username">
                   نام کاربری
@@ -271,19 +254,6 @@ const AdminTableWithModal: React.FC = () => {
                   id="username"
                   required
                   defaultValue={currentUser.username}
-                />
-              </div>
-              <div>
-                <Label className=" mr-2" htmlFor="username">
-                  رمز عبور جدید
-                </Label>
-                <Input
-                  className="mt-2 w-full"
-                  name="password"
-                  id="password"
-                  required
-                  type="password"
-                  defaultValue={currentUser.password}
                 />
               </div>
               <div>
@@ -331,7 +301,7 @@ const AdminTableWithModal: React.FC = () => {
                   id="id_number"
                   maxLength={10}
                   required
-                  defaultValue={currentUser.social_id_number}
+                  defaultValue={currentUser.id_number}
                   className="mt-2 w-full"
                 />
               </div>
@@ -343,53 +313,32 @@ const AdminTableWithModal: React.FC = () => {
                   name="personal_number"
                   id="personal_number"
                   required
-                  defaultValue={currentUser.personal_id_number}
+                  defaultValue={currentUser.personal_number}
                   className="mt-2 w-full"
                 />
               </div>
               <div>
-                <Label className="mr-2" htmlFor="user_permissions">
-                  نقش
-                </Label>
-                <select
-                  name="user_permissions"
-                  id="user_permissions"
-                  required
-                  defaultValue={currentUser.user_permissions.id}
-                  className="mt-2 flex h-10 w-full rounded-md border bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  <option value="1">سوپرادمین</option>
-                  <option value="2">کاربر</option>
-                </select>
-              </div>
-              <div>
-                <Label className="mr-2" htmlFor="education_level">
+                <Label className="mr-2" htmlFor="educational_level">
                   سطح تحصیلات
                 </Label>
-                <select
-                  name="education_level"
-                  id="education_level"
+                <Input
+                  name="educational_level"
+                  id="educational_level"
                   required
-                  defaultValue={currentUser.education_level}
-                  className="mt-2 flex h-10 w-full rounded-md border bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  <option value="BSc">کارشناسی</option>
-                  <option value="Ms">کارشناسی ارشد</option>
-                  <option value="PhD">دکترا</option>
-                  <option value="Prof">پروفسور</option>
-                </select>
+                  defaultValue={currentUser.educational_level}
+                  className="mt-2 w-full"
+                />
               </div>
               <div>
                 <Label className="mr-2" htmlFor="phone_number">
                   شماره تلفن
                 </Label>
                 <Input
-                  dir="ltr"
                   name="phone_number"
                   id="phone_number"
                   required
                   defaultValue={currentUser.phone_number}
-                  className="mt-2 w-full text-right"
+                  className="mt-2 w-full"
                 />
               </div>
               <div>
@@ -397,14 +346,14 @@ const AdminTableWithModal: React.FC = () => {
                   شماره موبایل
                 </Label>
                 <Input
-                  dir="ltr"
                   name="mobile_number"
                   id="mobile_number"
                   required
-                  defaultValue={currentUser.mobile_phone_number}
-                  className="mt-2 w-full text-right"
+                  defaultValue={currentUser.mobile_number}
+                  className="mt-2 w-full"
                 />
               </div>
+              {/* Submit button in full row */}
               <div className="md:col-span-2 flex justify-end">
                 <Button
                   dir="ltr"

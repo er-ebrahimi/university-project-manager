@@ -16,6 +16,7 @@ export default function Universities() {
     setMajors(majorsData as Major[]);
     console.log(majors); // Ensure that the majors are being set correctly
   }, []);
+  console.log(majors); // Ensure that the majors are being set correctly
 
   return (
     <>
