@@ -32,7 +32,7 @@ export default function Universities() {
         <ForceGraph majors={majors} />
         <div className="flex flex-row-reverse justify-start gap-4 w-[75vw] ml-1">
           {userPermissionsName === "SuperAdmin" && (
-            <AddFieldDialog majors={majors} setMajors={setMajors} />
+            <AddFieldDialog  />
           )}
           {/* Pass the majors state and the setMajors function to EditFieldDialog */}
           {/* <EditFieldDialog majors={majors} setMajors={setMajors} /> */}

@@ -24,13 +24,7 @@ interface ResponseAddmajor {
   message?: string;
 }
 
-const AddFieldDialog = ({
-  majors,
-  setMajors,
-}: {
-  majors: Major[];
-  setMajors: Dispatch<SetStateAction<Major[]>>;
-}) => {
+const AddFieldDialog = () => {
   const [collegeName, setCollegeName] = useState<string>("");
   const [nickname, setNickname] = useState<string>("");
   const [address, setAddress] = useState<string>("");
@@ -83,7 +77,7 @@ const AddFieldDialog = ({
     <div>
       <Dialog open={isOpen}>
         <DialogTrigger>
-          <button className="scale-110 text-white w-8 h-8 font-bold text-lg text-center pt-1 rounded-full bg-primary hover:bg-primary/90">
+          <button onClick={()=>{setIsOpen(true)}} className="scale-110 text-white w-8 h-8 font-bold text-lg text-center pt-1 rounded-full bg-primary hover:bg-primary/90">
             +
           </button>
         </DialogTrigger>

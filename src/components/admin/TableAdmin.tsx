@@ -23,7 +23,7 @@ import { getUsers, updateUser, deleteUser } from "@/functions/services/users";
 import toast from "react-hot-toast";
 import { User } from "@/types/userType";
 import { degreeToPersian, Degree } from "@/types/userType";
-import { render } from "react-dom";
+// import { render } from "react-dom";
 const AdminTableWithModal: React.FC = () => {
   const queryClient = useQueryClient();
 
@@ -53,7 +53,7 @@ const AdminTableWithModal: React.FC = () => {
   const updateUserMutation = useMutation({
     mutationFn: (updatedUser: User) => updateUser(updatedUser),
     onSuccess: () => {
-      queryClient.invalidateQueries(["UserData"]);
+      queryClient.invalidateQueries({ queryKey: ["UserData"] });
       toast.success("کاربر با موفقیت به‌روز شد");
       setIsEditModalVisible(false);
     },
@@ -70,7 +70,7 @@ const AdminTableWithModal: React.FC = () => {
   const deleteUserMutation = useMutation({
     mutationFn: (userId: number) => deleteUser(userId),
     onSuccess: () => {
-      queryClient.invalidateQueries(["UserData"]);
+      queryClient.invalidateQueries({ queryKey: ["UserData"] });
       toast.success("کاربر با موفقیت حذف شد");
     },
     onError: () => {
@@ -189,7 +189,7 @@ const AdminTableWithModal: React.FC = () => {
   }
 
   return (
-    <div className="p-6 bg-white rounded-lg w-[75vw] h-[80vh]">
+    <div className="p-6 pt-1 bg-white rounded-lg w-[75vw] h-[80vh]">
       {/* Add User Button */}
       <div className="flex justify-between items-center mb-6">
         <div className="flex flex-row gap-4">
@@ -225,6 +225,7 @@ const AdminTableWithModal: React.FC = () => {
 
       {/* Ant Design Table */}
       <Table
+        loading={isLoading}
         pagination={{
           pageSize: 5,
           showSizeChanger: false,
@@ -281,9 +282,9 @@ const AdminTableWithModal: React.FC = () => {
                   className="mt-2 w-full"
                   name="password"
                   id="password"
-                  required
+                  // required
                   type="password"
-                  defaultValue={currentUser.password}
+                  defaultValue={undefined}
                 />
               </div>
               <div>
