@@ -32,7 +32,7 @@ const AddFieldDialog = () => {
   const [address, setAddress] = useState<string>("");
   const [owner, setOwner] = useState<number>(1); // Default owner ID
   const [organization, setOrganization] = useState<number>(1); // Default owner ID
-  // const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const { mutate, isPending } = useMutation<
     ResponseAddmajor,
     Error,
@@ -49,7 +49,7 @@ const AddFieldDialog = () => {
       setNickname("");
       setAddress("");
       setOwner(1); // Reset to default owner ID
-      // setIsOpen(false);
+      setIsOpen(false);
       setOrganization(1);
     },
     onError: (error: any) => {
@@ -85,12 +85,12 @@ const AddFieldDialog = () => {
 
   return (
     <div>
-      <Dialog >
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger>
           <button
-            // onClick={() => {
-            //   setIsOpen(true);
-            // }}
+            onClick={() => {
+              setIsOpen(true);
+            }}
             className="scale-110 text-white w-8 h-8 font-bold text-lg text-center pt-1 rounded-full bg-primary hover:bg-primary/90"
           >
             +
@@ -99,7 +99,6 @@ const AddFieldDialog = () => {
 
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader >
-          {/* <DialogClose onClick={()=>{setIsOpen(false)}}></DialogClose> */}
 
             <DialogTitle className="text-right">افزودن زیرسازمان</DialogTitle>
             <DialogDescription className="mt-10">
