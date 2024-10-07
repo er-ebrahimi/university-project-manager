@@ -36,7 +36,7 @@ function AppRoute() {
             }
           ></Router.Route>
           <Router.Route
-            path={"/Colleges/:major"}
+            path={"/Colleges/:id"}
             element={<Colleges />}
           ></Router.Route>
           <Router.Route

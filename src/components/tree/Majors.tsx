@@ -1,12 +1,15 @@
 import { useEffect, useRef } from "react";
 import * as d3 from "d3";
 import { useNavigate } from "react-router-dom";
-import { Major } from "@/types/university";
+// import { Major } from "@/types/university";
+// import { DataItem } from "@/functions/services/organization";
 import routes from "@/global/routes";
+import { DataItem } from "@/functions/services/organization";
 
 interface Node {
   id: string;
   group: number;
+  RealId:number;
   x?: number;
   y?: number;
   fx?: number | null;
@@ -18,18 +21,18 @@ interface Link {
   target: string | Node;
 }
 
-function ForceGraph({ majors }: { majors: Major[] }) {
+function ForceGraph({ majors }: { majors: DataItem[] }) {
   const svgRef = useRef<SVGSVGElement>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const nodes: Node[] = [{ id: "سازمان", group: 0 }].concat(
-      majors.map((major) => ({ id: major.name, group: 1 }))
+    const nodes: Node[] = [{ id: majors[0]?.organization?.name, group: 0,RealId:0 }].concat(
+      majors.map((major) => ({ id: major.name, group: 1,RealId:major.id }))
     );
     console.log("nodes: ", nodes);
 
     const links: Link[] = majors.map((major) => ({
-      source: "سازمان",
+      source: majors[0]?.organization?.name,
       target: major.name,
     }));
 
@@ -78,7 +81,7 @@ function ForceGraph({ majors }: { majors: Major[] }) {
           console.log("")
         }
         if (d.group === 1) {
-          navigate(routes.Colleges(d.id));
+          navigate(routes.Colleges(d.RealId));
         }
       })
       .classed("hover:cursor-pointer fill-current", true)

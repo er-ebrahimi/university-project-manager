@@ -5,6 +5,7 @@ import {
   updateOrganizationData,
 } from "@/functions/services/organization";
 import toast from "react-hot-toast";
+import queryClient from "@/functions/QueryClient";
 
 interface UniversityData {
   name: string;
@@ -37,6 +38,11 @@ const UniversitySidebar: React.FC = () => {
     mutationFn: (updatedData: UniversityData) =>
       updateOrganizationData(1, updatedData), // Hardcoded ID (1)
     onSuccess: () => {
+      queryClient.invalidateQueries(
+        {
+          queryKey:["organizationData"]
+        }
+      )
       setIsEditing(false);
       // alert("Organization updated successfully!");
       toast.success("با موفقیت ویرایش شد");

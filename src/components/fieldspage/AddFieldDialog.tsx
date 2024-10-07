@@ -1,5 +1,6 @@
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -17,6 +18,7 @@ import {
   createUniversityData,
 } from "@/functions/services/organization";
 import { useMutation } from "@tanstack/react-query";
+import queryClient from "@/functions/QueryClient";
 
 interface ResponseAddmajor {
   success: boolean;
@@ -29,33 +31,40 @@ const AddFieldDialog = () => {
   const [nickname, setNickname] = useState<string>("");
   const [address, setAddress] = useState<string>("");
   const [owner, setOwner] = useState<number>(1); // Default owner ID
-  const [isOpen,setIsOpen]=useState(false);
-  const { mutate ,isPending} = useMutation<ResponseAddmajor, Error, createUniversityData>(
-    {
-      mutationFn: CreateOrganization,
-      onSuccess: () => {
-        toast.success("کاربر با موفقیت اضافه شد");
-        // Optionally reset the form fields
-        setCollegeName("");
-        setNickname("");
-        setAddress("");
-        setOwner(1); // Reset to default owner ID
-        setIsOpen(false);
-      },
-      onError: (error: any) => {
-        toast.error("ساخت کاربر با خطا مواجه شد");
-        console.log(error);
+  const [organization, setOrganization] = useState<number>(1); // Default owner ID
+  // const [isOpen, setIsOpen] = useState(false);
+  const { mutate, isPending } = useMutation<
+    ResponseAddmajor,
+    Error,
+    createUniversityData
+  >({
+    mutationFn: CreateOrganization,
+    onSuccess: () => {
+      toast.success("کاربر با موفقیت اضافه شد");
+      // Optionally reset the form fields
+      queryClient.invalidateQueries({
+        queryKey: ["suborganizations"],
+      });
+      setCollegeName("");
+      setNickname("");
+      setAddress("");
+      setOwner(1); // Reset to default owner ID
+      // setIsOpen(false);
+      setOrganization(1);
+    },
+    onError: (error: any) => {
+      toast.error("ساخت کاربر با خطا مواجه شد");
+      console.log(error);
 
-        if (error.response && error.response.data) {
-          for (const i in error.response.data) {
-            toast.error(`${i}: ${error.response.data[i]}`);
-          }
-        } else {
-          toast.error("An unexpected error occurred.");
+      if (error.response && error.response.data) {
+        for (const i in error.response.data) {
+          toast.error(`${i}: ${error.response.data[i]}`);
         }
-      },
-    }
-  );
+      } else {
+        toast.error("An unexpected error occurred.");
+      }
+    },
+  });
 
   const handleAddMajor = () => {
     if (!collegeName.trim()) {
@@ -68,6 +77,7 @@ const AddFieldDialog = () => {
       nickname: nickname,
       address: address,
       owner: owner,
+      organization: organization,
     };
 
     mutate(data);
@@ -75,15 +85,22 @@ const AddFieldDialog = () => {
 
   return (
     <div>
-      <Dialog open={isOpen}>
+      <Dialog >
         <DialogTrigger>
-          <button onClick={()=>{setIsOpen(true)}} className="scale-110 text-white w-8 h-8 font-bold text-lg text-center pt-1 rounded-full bg-primary hover:bg-primary/90">
+          <button
+            // onClick={() => {
+            //   setIsOpen(true);
+            // }}
+            className="scale-110 text-white w-8 h-8 font-bold text-lg text-center pt-1 rounded-full bg-primary hover:bg-primary/90"
+          >
             +
           </button>
         </DialogTrigger>
 
         <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
+          <DialogHeader >
+          {/* <DialogClose onClick={()=>{setIsOpen(false)}}></DialogClose> */}
+
             <DialogTitle className="text-right">افزودن زیرسازمان</DialogTitle>
             <DialogDescription className="mt-10">
               برای افزودن زیر سازمان اطلاعات آن را وارد کنید
@@ -139,6 +156,17 @@ const AddFieldDialog = () => {
                   className="my-2 h-10 w-full border rounded-lg px-3 py-2 ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                   value={owner}
                   onChange={(e) => setOwner(Number(e.target.value))}
+                />
+              </div>
+              <div className="hidden flex-col">
+                <Label htmlFor="organization">شناسه اورگان</Label>
+                <input
+                  type="number"
+                  id="organization"
+                  disabled
+                  className="my-2 h-10 w-full border rounded-lg px-3 py-2 ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  value={organization}
+                  onChange={(e) => setOrganization(Number(e.target.value))}
                 />
               </div>
             </div>

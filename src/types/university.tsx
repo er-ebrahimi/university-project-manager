@@ -1,3 +1,5 @@
+import { Organization } from "@/functions/services/organization";
+
 export interface University {
   professors: Professor[];
 }
@@ -17,6 +19,14 @@ export interface Professor {
 
 export interface Major {
   name: string;
+  id: number;
+  nickname: string;
+  address:string;
+  phone_number: number;
+  postal_code: number;
+  create_date: Date;
+  people: any[];
+  organization: Organization;
+
   // Add other properties as needed
 }
-

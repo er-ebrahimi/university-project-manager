@@ -1,7 +1,6 @@
 // httpRequest.ts
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { getAccessToken, getRefreshToken, setTokens, clearTokens } from './tokenService';
-import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 interface RequestOptions {

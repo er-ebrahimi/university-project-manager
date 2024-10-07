@@ -6,6 +6,9 @@ import GraphTree from "@/components/univercitypage/GraphTree.js";
 // import GraphTreee
 import SubOrganizationSidebar from "@/components/sidebar/SubOrganizationSidebar";
 import { useParams } from "react-router-dom";
+import { getSubOrganization } from "@/functions/services/organization";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
 
 export default function Colleges() {
   // const [professors, setProfessors] = useState<Professor[]>([]);
@@ -13,13 +16,27 @@ export default function Colleges() {
   // useEffect(() => {
   //   setProfessors(professorsData.professors as Professor[]);
   // }, []);
-  const { major } = useParams();
+  const { id } = useParams();
+  const {
+    data,
+    isPending,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: [`suboorganization${id}`],
+    queryFn: () => getSubOrganization(id),  });
+  
+  // useEffect(()=>{
+  //   setTimeout(()=>{
 
+  //     console.log(data)
+  //   },[10000])
+  // },[data])
   return (
     <>
     <div className="overflow-hidden">
       
-      <SubOrganizationSidebar data={major} />
+      <SubOrganizationSidebar data={data} loading={isPending} />
 
       <div className="flex items-center">
         <h1 className="text-lg font-semibold md:text-2xl ">استاد</h1>
