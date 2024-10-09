@@ -1,5 +1,5 @@
 // services/organization.ts
-import { apiGet, apiPost, apiPut } from "../api";
+import { apiDelete, apiGet, apiPost, apiPut } from "../api";
 export const getOrganizationData = async () => {
   // Make sure the endpoint matches the API you're calling
   return apiGet<any>("/organization/show/1/");
@@ -43,12 +43,11 @@ export interface DataItem {
   people: any[]; // You can define a more specific type for 'people' if required
 }
 
-
-interface ResponseAddmajor{
-    success:boolean;
-    data:any;
-    message?:string;
-  }
+interface ResponseAddmajor {
+  success: boolean;
+  data: any;
+  message?: string;
+}
 
 interface UniversityData {
   name: string;
@@ -59,11 +58,11 @@ interface UniversityData {
   owner: string;
 }
 export interface createUniversityData {
-    name: string;
-    nickname: string;
-    address: string;
-    owner: number;
-    organization:number;
+  name: string;
+  nickname: string;
+  address: string;
+  owner: number;
+  organization: number;
 }
 export const updateOrganizationData = async (
   id: number,
@@ -73,22 +72,29 @@ export const updateOrganizationData = async (
   return apiPut(endpoint, updatedData);
 };
 export const updatesuborhanization = async (
-  id: number,
+  id: string | undefined,
   updatedData: DataItem
 ) => {
   const endpoint = `/suborganization/update/${id}/`;
-  return apiPut(endpoint, updatedData);
+  return apiPut(endpoint, updatedData,true);
+};
+export const deleteSubOrganization = async (id: string | undefined) => {
+  return apiDelete(`/suborganization/delete/${id}/`,true)
 };
 
 export const CreateOrganization = async (
-    data: createUniversityData
-  ): Promise<ResponseAddmajor> => {
-    return await apiPost<ResponseAddmajor>('/suborganization/create/', data, true);
-  };
+  data: createUniversityData
+): Promise<ResponseAddmajor> => {
+  return await apiPost<ResponseAddmajor>(
+    "/suborganization/create/",
+    data,
+    true
+  );
+};
 
-  export const getSuborganizationData = async () => {
-    return apiGet<DataItem[]>("/suborganization/list/",true);
-  };
-  export const getSubOrganization = async (id:string|undefined) => {
-    return apiGet<DataItem>(`/suborganization/show/${id}/`,true);
-  };
+export const getSuborganizationData = async () => {
+  return apiGet<DataItem[]>("/suborganization/list/", true);
+};
+export const getSubOrganization = async (id: string | undefined) => {
+  return apiGet<DataItem>(`/suborganization/show/${id}/`, true);
+};

@@ -36,17 +36,17 @@ export default function Colleges() {
     <>
     <div className="overflow-hidden">
       
-      <SubOrganizationSidebar data={data} loading={isPending} />
+      <SubOrganizationSidebar data={data} loading={isPending} id={id} />
 
       <div className="flex items-center">
-        <h1 className="text-lg font-semibold md:text-2xl ">استاد</h1>
+        <h1 className="text-lg font-semibold md:text-2xl ">زیرسازمان</h1>
       </div>
       <div
         className="flex flex-1 items-center justify-center rounded-lg  border-dashed shadow-sm overflow-auto "
         x-chunk="dashboard-02-chunk-1"
         >
         {/* <ProfessorInfo professors={professors}></ProfessorInfo> */}
-        <GraphTree/>
+        <GraphTree data={data} loading={isPending} id={id}/>
       </div>
         </div>
     </>

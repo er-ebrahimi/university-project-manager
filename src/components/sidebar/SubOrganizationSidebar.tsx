@@ -1,53 +1,73 @@
 import queryClient from "@/functions/QueryClient";
 import {
-  DataItem,
+  // DataItem,
+  deleteSubOrganization,
   updatesuborhanization,
 } from "@/functions/services/organization";
 import { useMutation } from "@tanstack/react-query";
 import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import ClipLoader from "react-spinners/ClipLoader";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { useNavigate } from "react-router-dom";
+import routes from "@/global/routes";
+import { FaPlus } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
 
 interface SubOrganizationSidebarProps {
   data: any | undefined;
+  id: string | undefined;
   loading: boolean;
 }
 
 const SubOrganizationSidebar: React.FC<SubOrganizationSidebarProps> = ({
   data,
   loading,
+  id,
 }) => {
   // Define state for managing field values and edit mode
+  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [universityData, setUniversityData] = useState({
-    universityName: "نام دانشکده را وارد کنید",
-    phoneNumber: "021-۷۷۴۹۱۰۲۵",
-    postalCode: "۱۳۱۱۴-۱۶۸۴۶",
-    Nickname: "یونی",
+    name: "نام دانشکده را وارد کنید",
+    phone_number: "021-۷۷۴۹۱۰۲۵",
+    postal_code: "۱۳۱۱۴-۱۶۸۴۶",
+    nickname: "یونی",
     address: "تهران، نارمک، دانشگاه علم و صنعت ایران",
-    owner: "دکتر داود یونسیان",
+    owner: undefined,
+    organization: undefined,
   });
-
+  const [opennalert, setOpenalert] = useState(false);
   // Update university data based on props when data changes
   useEffect(() => {
     if (data) {
       setUniversityData((prevState) => ({
         ...prevState,
-        universityName: data.name || "نام دانشکده را وارد کنید",
-        Nickname: data.Nickname || "یونی",
+        name: data.name,
+        nickname: data.nickname,
         address: data.address,
-        owner: data.owner.username,
-        postalCode: data.postalcode || "کد پستی را وارد کنید",
-        phoneNumber: data.phonenumber || "شماره تلفن را وارد کنید",
+        owner: data.owner.id,
+        postal_code: data.postal_code,
+        phone_number: data.phone_number,
+        organization: data.organization.id,
       }));
     }
   }, [data]);
-  const mutation = useMutation({
-    mutationFn: (updatedData: DataItem) =>
-      updatesuborhanization(1, updatedData), // Hardcoded ID (1)
+  const UpdateMutation = useMutation({
+    mutationFn: (updatedData: any) => updatesuborhanization(id, updatedData),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["organizationData"],
+        queryKey: [`suboorganization${id}`],
       });
       setIsEditing(false);
       // alert("Organization updated successfully!");
@@ -62,7 +82,35 @@ const SubOrganizationSidebar: React.FC<SubOrganizationSidebarProps> = ({
       toast.error("ویرایش با خطا مواجه شد");
     },
   });
+  const deleteMutation = useMutation({
+    mutationFn: () => deleteSubOrganization(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [`suboorganization${id}`],
+      });
+      toast.success("سازمان با موفقیت حذف شد");
+      navigate(routes.dashboard);
+    },
+    onError: (error: any) => {
+      console.error(
+        "Failed to delete organization",
+        error.response?.data || error
+      );
+      toast.error("حذف با خطا مواجه شد");
+    },
+  });
 
+  const handleDelete = () => {
+    // if (id) {
+    //   deleteMutation.mutate(); // Trigger delete mutation
+    // }
+    setOpenalert(true);
+  };
+  const handleDeleteconfirm = () => {
+    if (id) {
+      deleteMutation.mutate(); // Trigger delete mutation
+    }
+  };
   // Handle input changes
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -73,129 +121,179 @@ const SubOrganizationSidebar: React.FC<SubOrganizationSidebarProps> = ({
 
   return (
     <>
-      {!loading && <div className="h-[530px] w-[230px] rounded-sm border border-dashed absolute right-0 bg-white mt-14 mr-6 p-4 flex flex-col">
-        <div className="flex-grow">
-          <div className="mb-4">
-            <h3 className="text-sm font-bold text-primary-dark">نام دانشکده</h3>
-            {isEditing ? (
-              <input
-                type="text"
-                value={universityData.universityName}
-                onChange={(e) => handleInputChange(e, "universityName")}
-                className="border p-1 rounded w-full"
-              />
-            ) : (
-              <p className="text-gray-600 mt-1">
-                {universityData.universityName}
-              </p>
-            )}
+      {!loading && (
+        <div className="h-[530px] w-[230px] rounded-sm border border-dashed absolute right-0 bg-white mt-14 mr-6 p-4 flex flex-col">
+          <div className="flex-grow">
+            <div className="absolute left-0">
+              {/* <button className="text-sm flex justify-center">
+                <FaPlus className="w-5 h-5" />
+                افزودن استاد
+              </button> */}
+               <button
+              disabled={id === undefined}
+              className="bg-white hover:bg-red-500 hover:text-white border-2 border-red-500 text-red-500 rounded-sm py-1 px-1 ml-4 cursor-pointer"
+              onClick={handleDelete}
+            >
+              <MdDelete className="h-6 w-6"/>
+            </button>
+
+            </div>
+            <div className="mb-4">
+              <h3 className="text-sm font-bold text-primary-dark">
+                نام دانشکده
+              </h3>
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={universityData.name}
+                  onChange={(e) => handleInputChange(e, "name")}
+                  className="border p-1 rounded w-full"
+                />
+              ) : (
+                <p className="text-gray-600 mt-1">{universityData.name}</p>
+              )}
+            </div>
+
+            <div className="mb-4">
+              <h3 className="text-sm font-bold text-primary-dark">
+                شماره تلفن
+              </h3>
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={universityData.phone_number}
+                  onChange={(e) => handleInputChange(e, "phone_number")}
+                  className="border p-1 rounded w-full"
+                />
+              ) : (
+                <p className="text-gray-600 mt-1">
+                  {universityData.phone_number
+                    ? universityData.phone_number
+                    : "شماره تلفن را وارد کنید"}
+                </p>
+              )}
+            </div>
+
+            <div className="mb-4">
+              <h3 className="text-sm font-bold text-primary-dark">کد پستی</h3>
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={universityData.postal_code}
+                  onChange={(e) => handleInputChange(e, "postal_code")}
+                  className="border p-1 rounded w-full"
+                />
+              ) : (
+                <p className="text-gray-600 mt-1">
+                  {universityData.postal_code
+                    ? universityData.postal_code
+                    : "کدپستی را وارد کنید"}
+                </p>
+              )}
+            </div>
+
+            <div className="mb-4">
+              <h3 className="text-sm font-bold text-primary-dark">نام خلاصه</h3>
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={universityData.nickname}
+                  onChange={(e) => handleInputChange(e, "nickname")}
+                  className="border p-1 rounded w-full"
+                />
+              ) : (
+                <p className="text-gray-600 mt-1">{universityData.nickname}</p>
+              )}
+            </div>
+
+            <div className="mb-4">
+              <h3 className="text-sm font-bold text-primary-dark">آدرس</h3>
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={universityData.address}
+                  onChange={(e) => handleInputChange(e, "address")}
+                  className="border p-1 rounded w-full"
+                />
+              ) : (
+                <p className="text-gray-600 mt-1 text-sm">
+                  {universityData.address}
+                </p>
+              )}
+            </div>
+
+            <div className="mb-4">
+              <h3 className="text-sm font-bold text-primary-dark">
+                رئیس دانشگاه
+              </h3>
+              {isEditing ? (
+                <input
+                  type="number"
+                  value={universityData.owner}
+                  onChange={(e) => handleInputChange(e, "owner")}
+                  className="border p-1 rounded w-full"
+                />
+              ) : (
+                <p className="text-gray-600 mt-1">{data.owner.username}</p>
+              )}
+            </div>
           </div>
 
-          <div className="mb-4">
-            <h3 className="text-sm font-bold text-primary-dark">شماره تلفن</h3>
+          <div className="flex justify-between mt-auto">
             {isEditing ? (
-              <input
-                type="text"
-                value={universityData.phoneNumber}
-                onChange={(e) => handleInputChange(e, "phoneNumber")}
-                className="border p-1 rounded w-full"
-              />
+              <button
+                className="bg-green-500 text-white py-1 px-3 rounded"
+                onClick={() => {
+                  UpdateMutation.mutate(universityData);
+                }}
+              >
+                ذخیره
+              </button>
             ) : (
-              <p className="text-gray-600 mt-1">{universityData.phoneNumber}</p>
+              <button
+                className="bg-primary border-2 hover:border-primary text-white py-1 px-3 rounded-sm hover:bg-white hover:text-primary"
+                onClick={() => setIsEditing(true)}
+              >
+                ویرایش
+              </button>
             )}
-          </div>
-
-          <div className="mb-4">
-            <h3 className="text-sm font-bold text-primary-dark">کد پستی</h3>
-            {isEditing ? (
-              <input
-                type="text"
-                value={universityData.postalCode}
-                onChange={(e) => handleInputChange(e, "postalCode")}
-                className="border p-1 rounded w-full"
-              />
-            ) : (
-              <p className="text-gray-600 mt-1">{universityData.postalCode}</p>
-            )}
-          </div>
-
-          <div className="mb-4">
-            <h3 className="text-sm font-bold text-primary-dark">نام خلاصه</h3>
-            {isEditing ? (
-              <input
-                type="text"
-                value={universityData.Nickname}
-                onChange={(e) => handleInputChange(e, "Nickname")}
-                className="border p-1 rounded w-full"
-              />
-            ) : (
-              <p className="text-gray-600 mt-1">{universityData.Nickname}</p>
-            )}
-          </div>
-
-          <div className="mb-4">
-            <h3 className="text-sm font-bold text-primary-dark">آدرس</h3>
-            {isEditing ? (
-              <input
-                type="text"
-                value={universityData.address}
-                onChange={(e) => handleInputChange(e, "address")}
-                className="border p-1 rounded w-full"
-              />
-            ) : (
-              <p className="text-gray-600 mt-1 text-sm">
-                {universityData.address}
-              </p>
-            )}
-          </div>
-
-          <div className="mb-4">
-            <h3 className="text-sm font-bold text-primary-dark">
-              رئیس دانشگاه
-            </h3>
-            {isEditing ? (
-              <input
-                type="number"
-                value={data.owner.id}
-                onChange={(e) => handleInputChange(e, "owner")}
-                className="border p-1 rounded w-full"
-              />
-            ) : (
-              <p className="text-gray-600 mt-1">{universityData.owner}</p>
-            )}
+           <button
+                className="bg-white border-2 border-orange-500 text-orange-500 py-1 px-3 rounded-sm hover:bg-orange-500 hover:text-white"
+                // onClick={() => setIsEditing(true)}
+              >
+                افزودن استاد
+                {/* <FaPlus/> */}
+              </button>
           </div>
         </div>
-
-        <div className="flex justify-between mt-auto">
-          {isEditing ? (
-            <button
-              className="bg-green-500 text-white py-1 px-3 rounded"
-              onClick={() => setIsEditing(false)}
-            >
-              ذخیره
-            </button>
-          ) : (
-            <button
-              className="bg-purple-500 text-white py-1 px-3 rounded"
-              onClick={() => setIsEditing(true)}
-            >
-              ویرایش
-            </button>
-          )}
-          <button
-            disabled
-            className="bg-red-500 text-white py-1 px-3 rounded disabled:opacity-50 cursor-not-allowed"
-          >
-            حذف
-          </button>
+      )}
+      {loading && (
+        <div className="h-[530px] w-[230px] rounded-sm border border-dashed absolute right-0 bg-white mt-14 mr-6 p-4 flex flex-col items-center pt-32 ">
+          <ClipLoader />
         </div>
-      </div>}
-      {
-        loading && <div className="h-[530px] w-[230px] rounded-sm border border-dashed absolute right-0 bg-white mt-14 mr-6 p-4 flex flex-col items-center pt-32 ">
-        <ClipLoader />
-      </div>
-      }
-      
+      )}
+      <AlertDialog open={opennalert} onOpenChange={setOpenalert}>
+        {/* <AlertDialogTrigger>Open</AlertDialogTrigger> */}
+        <AlertDialogContent dir="rtl">
+          <AlertDialogHeader>
+            <AlertDialogTitle dir="rtl" className="text-right">
+              برای حذف این زیرسازمان اطمینان دارید
+            </AlertDialogTitle>
+            <AlertDialogDescription dir="rtl" className="text-right">
+              در صورت اطمینان بر روی دکمه حذف کلیک کنید
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="flex justify-start gap-2 items-end flex-row-reverse">
+            <AlertDialogCancel>لغو</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-red-500 hover:bg-white hover:text-red-500 border-2 hover:border-2 border-red-500"
+              onClick={handleDeleteconfirm}
+            >
+              حذف
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 };
