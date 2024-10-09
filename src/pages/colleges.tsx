@@ -8,7 +8,6 @@ import SubOrganizationSidebar from "@/components/sidebar/SubOrganizationSidebar"
 import { useParams } from "react-router-dom";
 import { getSubOrganization } from "@/functions/services/organization";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
 
 export default function Colleges() {
   // const [professors, setProfessors] = useState<Professor[]>([]);
@@ -20,8 +19,8 @@ export default function Colleges() {
   const {
     data,
     isPending,
-    isError,
-    error,
+    // isError,
+    // error,
   } = useQuery({
     queryKey: [`suboorganization${id}`],
     queryFn: () => getSubOrganization(id),  });

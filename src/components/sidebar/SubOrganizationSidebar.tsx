@@ -17,11 +17,9 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useNavigate } from "react-router-dom";
 import routes from "@/global/routes";
-import { FaPlus } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 
 interface SubOrganizationSidebarProps {
