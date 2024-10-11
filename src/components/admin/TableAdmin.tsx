@@ -43,6 +43,7 @@ const AdminTableWithModal: React.FC = () => {
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [searchText, setSearchText] = useState<string>("");
+  const [open,setOpen] =useState(false)
 
   // Handle editing a user
   const handleEdit = (record: User) => {
@@ -187,14 +188,13 @@ const AdminTableWithModal: React.FC = () => {
   if (isError) {
     return toast.error("لطفا از اتصال اینترنت خود اطمینان حاصل کنید");
   }
-
   return (
     <div className="p-6 pt-1 bg-white rounded-lg w-[75vw] h-[80vh]">
       {/* Add User Button */}
       <div className="flex justify-between items-center mb-6">
         <div className="flex flex-row gap-4">
           <h1 className="text-lg font-semibold">مدیریت کاربران</h1>
-          <Dialog>
+          <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
               <Button className="flex items-center gap-2 bg-indigo-500 text-white">
                 افزودن کاربر جدید
@@ -207,7 +207,7 @@ const AdminTableWithModal: React.FC = () => {
                   افزودن کاربر جدید
                 </DialogTitle>
               </DialogHeader>
-              <AddUser />
+              <AddUser setOpen={setOpen} />
             </DialogContent>
           </Dialog>
         </div>

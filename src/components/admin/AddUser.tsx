@@ -1,9 +1,19 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { CreateNewUser } from "@/functions/services/users";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import toast from "react-hot-toast";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Dispatch, SetStateAction, useState } from "react";
+import { getselectsuborganization } from "@/functions/services/organization";
+import ClipLoader from "react-spinners/ClipLoader";
 
 type CreateUserVariables = {
   username: string;
@@ -17,6 +27,7 @@ type CreateUserVariables = {
   mobile_phone_number: string;
   user_permissions: number;
   password: string;
+  subOrganization: number | null;
 };
 
 type CreateUserResponse = {
@@ -25,7 +36,11 @@ type CreateUserResponse = {
   message?: string;
 };
 
-const AddUser = () => {
+const AddUser = ({
+  setOpen,
+}: {
+  setOpen: Dispatch<SetStateAction<boolean>>;
+}) => {
   const { mutate } = useMutation<
     CreateUserResponse,
     Error,
@@ -34,6 +49,7 @@ const AddUser = () => {
     mutationFn: CreateNewUser,
     onSuccess: () => {
       toast.success("کاربر با موفقیت اضافه شد");
+      setOpen(false);
     },
     onError: (error: any) => {
       toast.error("ساخت کاربر با خطا مواجه شد");
@@ -45,7 +61,16 @@ const AddUser = () => {
       }
     },
   });
-
+  const { data, isPending, isError } = useQuery({
+    queryKey: ["selectListsubOrganization"],
+    queryFn: getselectsuborganization,
+  });
+  const [educationLevel, setEducationLevel] = useState<string>("");
+  const [userPermissions, setUserPermissions] = useState<number | null>(null);
+  const [userSuborganization, setUserSuborganization] = useState<number | null>(
+    null
+  );
+  console.log("🚀 ~ AddUser ~ data:", data);
   return (
     <form
       onSubmit={(e) => {
@@ -61,10 +86,11 @@ const AddUser = () => {
           nickname: formData.get("nickname") as string,
           social_id_number: formData.get("social_id_number") as string,
           personal_id_number: formData.get("personal_id_number") as string,
-          education_level: formData.get("education_level") as string,
+          education_level: educationLevel, // Use state value
           phone_number: formData.get("phone_number") as string,
           mobile_phone_number: formData.get("mobile_phone_number") as string,
-          user_permissions: Number(formData.get("user_permissions")),
+          user_permissions: userPermissions ?? 0, // Use state value
+          subOrganization: userSuborganization ?? null,
         };
 
         console.log("🚀 ~ AddUser ~ values:", values);
@@ -151,17 +177,17 @@ const AddUser = () => {
         <Label className="mr-2" htmlFor="education_level">
           سطح تحصیلات
         </Label>
-        <select
-          name="education_level"
-          id="education_level"
-          required
-          className="mt-2 flex h-10 w-full rounded-md border bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          <option value="BSc">کارشناسی</option>
-          <option value="Ms">کارشناسی ارشد</option>
-          <option value="PhD">دکترا</option>
-          <option value="Prof">پروفسور</option>
-        </select>
+        <Select dir="rtl" onValueChange={(value) => setEducationLevel(value)}>
+          <SelectTrigger className="mt-2">
+            <SelectValue placeholder="انتخاب سطح تحصیلات" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="BSc">کارشناسی</SelectItem>
+            <SelectItem value="Ms">کارشناسی ارشد</SelectItem>
+            <SelectItem value="PhD">دکترا</SelectItem>
+            <SelectItem value="Prof">پروفسور</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       <div>
@@ -195,17 +221,46 @@ const AddUser = () => {
         <Label className="mr-2" htmlFor="user_permissions">
           نقش
         </Label>
-        <select
-          name="user_permissions"
-          id="user_permissions"
-          required
-          className="mt-2 flex h-10 w-full rounded-md border bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+        <Select
+          dir="rtl"
+          onValueChange={(value) => setUserPermissions(Number(value))}
         >
-          <option value="1">سوپرادمین</option>
-          <option value="2">کاربر</option>
-        </select>
+          <SelectTrigger className="mt-2">
+            <SelectValue placeholder="انتخاب نقش" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="1">سوپرادمین</SelectItem>
+            <SelectItem value="2">کاربر</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
-
+      <div>
+        <Label className="mr-2" htmlFor="user_permissions">
+          زیرسازمان
+        </Label>
+        <Select
+          dir="rtl"
+          onValueChange={(value) => setUserSuborganization(Number(value))}
+        >
+          <SelectTrigger className="mt-2">
+            <SelectValue  />
+          </SelectTrigger>
+          <SelectContent >
+            {isPending && (
+              <div className="h-10 flex justify-center">
+                <ClipLoader className="h-6 w-6" />
+              </div>
+            )}
+            {!isPending &&
+              data?.map((item) => (
+                <SelectItem key={item.id} value={String(item.id)}>
+                  {item.nickname}
+                </SelectItem>
+              ))}
+          </SelectContent>
+        </Select>
+      </div>
+              
       <div dir="ltr" className="md:col-span-2 ml-2">
         <Button
           type="submit"

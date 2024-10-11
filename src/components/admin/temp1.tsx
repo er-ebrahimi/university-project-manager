@@ -190,7 +190,7 @@ const AdminTableWithModal: React.FC = () => {
                   افزودن کاربر جدید
                 </DialogTitle>
               </DialogHeader>
-              <AddUser/>
+              {/* <AddUser setOpen={}/> */}
             </DialogContent>
           </Dialog>
         </div>

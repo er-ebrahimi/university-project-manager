@@ -7,6 +7,7 @@ import DefaultImage from "@/assets/default.png";
 import ClipLoader from "react-spinners/ClipLoader";
 import UnivercityCard from "./UnivercityCard";
 import { DataItem } from "@/functions/services/organization";
+import { Degree } from "@/types/userType";
 
 const transformPeopleToTreeData = (
   organizationData: DataItem
@@ -18,9 +19,9 @@ const transformPeopleToTreeData = (
     children: people.map((person) => ({
       name: person.username,
       nickname: person.username,
-      major: "Unknown Major", // Replace with actual major data if available
-      BirthDate: "Unknown", // Replace with actual BirthDate if available
-      EmploymentDate: "Unknown", // Replace with actual EmploymentDate if available
+      education_level: person.education_level, // Replace with actual major data if available
+      phone_number: person.mobile_phone_number, // Replace with actual BirthDate if available
+      // EmploymentDate: "Unknown", // Replace with actual EmploymentDate if available
       children: (person.projects || []).map((project: any) => ({
         name: project.name,
         Nickname: project.nickname,
@@ -57,14 +58,14 @@ interface Professor {
   name: string;
   nickname: string;
   major: string;
-  BirthDate: string;
-  EmploymentDate: string;
+  education_level:Degree;
+  mobile_phone_number:number;
   children: Project[];
 }
 
 interface TeachersData {
   name: string;
-  children: Professor[];
+  children: any[];
 }
 
 interface NodeData {
@@ -145,7 +146,7 @@ export default function GraphTree({
         ) : (
           <UnivercityCard data={selectedProfessorNode} />
         )}
-        
+
       </div>
       {!loading && treeData && (
         <Tree

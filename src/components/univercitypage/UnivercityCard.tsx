@@ -9,23 +9,22 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Degree, degreeToPersian } from "@/types/userType";
 
 interface UnivercityCardProps {
   data: {
     name: string;
-    nickname?: string;
-    major?: string;
-    BirthDate?: string;
-    EmploymentDate?: string;
+    nickname: string;
+    mobile_phone_number: number ;
+    education_level: Degree;
   };
 }
 
 interface FormData {
   name: string;
   nickname: string;
-  major: string;
-  BirthDate: string;
-  EmploymentDate: string;
+  mobile_phone_number: number;
+  education_level: Degree;
 }
 
 interface AddFormData {
@@ -41,7 +40,7 @@ interface AddFormData {
 }
 
 const UnivercityCard: React.FC<UnivercityCardProps> = ({ data }) => {
-  console.log("🚀 ~ data:", data)
+  console.log("🚀 ~ data:", data);
   const [isEditing, setIsEditing] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -49,9 +48,9 @@ const UnivercityCard: React.FC<UnivercityCardProps> = ({ data }) => {
   const [formData, setFormData] = useState<FormData>({
     name: data.name,
     nickname: data.nickname || "",
-    major: data.major || "",
-    BirthDate: data.BirthDate || "",
-    EmploymentDate: data.EmploymentDate || "",
+    // major: data.major || "",
+    education_level: data.education_level,
+    mobile_phone_number: data.mobile_phone_number,
   });
 
   // State for the project form inside the modal
@@ -71,9 +70,12 @@ const UnivercityCard: React.FC<UnivercityCardProps> = ({ data }) => {
     setFormData({
       name: data.name,
       nickname: data.nickname || "",
-      major: data.major || "",
-      BirthDate: data.BirthDate || "",
-      EmploymentDate: data.EmploymentDate || "",
+      education_level: data.education_level ,
+      mobile_phone_number: data.mobile_phone_number,
+
+      // education_level: data.education_level\ || "",
+      // mobile: data.BirthDate || "",
+      // EmploymentDate: data.EmploymentDate || "",
     });
   }, [data]);
 
@@ -131,16 +133,16 @@ const UnivercityCard: React.FC<UnivercityCardProps> = ({ data }) => {
             />
           </div>
           <div className="mb-2">
-            <strong className="text-primary-dark">رشته تحصیلی:</strong>
+            <strong className="text-primary-dark">تحصیلات:</strong>
             <input
               className="ml-2 p-1 border"
               type="text"
-              name="major"
-              value={formData.major}
+              name="education_level"
+              value={formData.education_level}
               onChange={handleInputChange}
             />
           </div>
-          <div className="mb-2">
+          {/* <div className="mb-2">
             <strong className="text-primary-dark" dir="rtl">
               تاریخ تولد:
             </strong>
@@ -151,16 +153,16 @@ const UnivercityCard: React.FC<UnivercityCardProps> = ({ data }) => {
               value={formData.BirthDate}
               onChange={handleInputChange}
             />
-          </div>
+          </div> */}
           <div className="mb-2">
             <strong className="text-primary-dark" dir="rtl">
-              تاریخ استخدام:
+              شماره موبایل:
             </strong>
             <input
               className="ml-2 p-1 border"
-              type="text"
-              name="EmploymentDate"
-              value={formData.EmploymentDate}
+              type="number"
+              name="mobile_phone_number"
+              value={formData.mobile_phone_number}
               onChange={handleInputChange}
             />
           </div>
@@ -169,17 +171,22 @@ const UnivercityCard: React.FC<UnivercityCardProps> = ({ data }) => {
         <>
           <h2 className="text-xl font-bold mb-4">{formData.name}</h2>
           <div className="mb-2">
-            <strong className="text-primary-dark">نام مستعار:</strong> <span>{formData.nickname || "N/A"}</span>
+            <strong className="text-primary-dark">نام مستعار:</strong>{" "}
+            <span>{formData.nickname || "تعریف نشده"}</span>
           </div>
           <div className="mb-2">
-            <strong className="text-primary-dark">رشته تحصیلی:</strong> <span>{formData.major || "N/A"}</span>
+            <strong className="text-primary-dark">تحصیلات:</strong>{" "}
+            <span>{ degreeToPersian(formData.education_level )|| "تعریف نشده"}</span>
           </div>
           <div className="mb-2">
-            <strong className="text-primary-dark" dir="rtl">تاریخ تولد:</strong> <span>{formData.BirthDate || "N/A"}</span>
+            <strong className="text-primary-dark" dir="rtl">
+              شماره موبایل:
+            </strong>{" "}
+            <span>{formData.mobile_phone_number || "تعریف نشده"}</span>
           </div>
-          <div className="mb-2">
+          {/* <div className="mb-2">
             <strong className="text-primary-dark" dir="rtl">تاریخ استخدام:</strong> <span>{formData.EmploymentDate || "N/A"}</span>
-          </div>
+          </div> */}
         </>
       )}
       <div className="flex flex-row flex-wrap justify-start gap-3">
@@ -226,112 +233,112 @@ const UnivercityCard: React.FC<UnivercityCardProps> = ({ data }) => {
 
       {/* Dialog for adding new project */}
       <Dialog open={isDialogOpen} onOpenChange={handleCloseDialog}>
-  <DialogContent className="p-8 bg-white rounded-lg shadow-lg h-[670px] w-[750px]">
-    <DialogHeader className="mb-6">
-      <DialogTitle className="text-right text-2xl font-semibold text-primary-dark">
-        افزودن پروژه جدید
-      </DialogTitle>
-    </DialogHeader>
+        <DialogContent className="p-8 bg-white rounded-lg shadow-lg h-[670px] w-[750px]">
+          <DialogHeader className="mb-6">
+            <DialogTitle className="text-right text-2xl font-semibold text-primary-dark">
+              افزودن پروژه جدید
+            </DialogTitle>
+          </DialogHeader>
 
-    <div className="text-right">
-      <div className="grid grid-cols-2 gap-6">
-        <div className="mb-4">
-          <label className="block text-lg font-medium text-primary-dark mb-2">
-            نام پروژه:
-          </label>
-          <input
-            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-            type="text"
-            name="name"
-            value={addFormData.name}
-            onChange={handleAddFormChange}
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-lg font-medium text-primary-dark mb-2">
-            نام مستعار:
-          </label>
-          <input
-            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-            type="text"
-            name="nickname"
-            value={addFormData.nickname}
-            onChange={handleAddFormChange}
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-lg font-medium text-primary-dark mb-2">
-            تاریخ شروع:
-          </label>
-          <input
-            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-            type="date"
-            name="start_date"
-            value={addFormData.start_date}
-            onChange={handleAddFormChange}
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-lg font-medium text-primary-dark mb-2">
-            تاریخ پایان:
-          </label>
-          <input
-            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-            type="date"
-            name="end_date"
-            value={addFormData.end_date}
-            onChange={handleAddFormChange}
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-lg font-medium text-primary-dark mb-2">
-            تاریخ واقعی شروع:
-          </label>
-          <input
-            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-            type="date"
-            name="real_start_date"
-            value={addFormData.real_start_date}
-            onChange={handleAddFormChange}
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-lg font-medium text-primary-dark mb-2">
-            تاریخ واقعی پایان:
-          </label>
-          <input
-            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-            type="date"
-            name="real_end_date"
-            value={addFormData.real_end_date}
-            onChange={handleAddFormChange}
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-lg font-medium text-primary-dark mb-2">
-            اعضای خارجی:
-          </label>
-          <input
-            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-            type="text"
-            name="external_members"
-            value={addFormData.external_members}
-            onChange={handleAddFormChange}
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-lg font-medium text-primary-dark mb-2">
-            صاحب پروژه:
-          </label>
-          <input
-            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-            type="text"
-            name="owner"
-            value={addFormData.owner}
-            onChange={handleAddFormChange}
-          />
-        </div>
-        {/* <div className="mb-4 col-span-2">
+          <div className="text-right">
+            <div className="grid grid-cols-2 gap-6">
+              <div className="mb-4">
+                <label className="block text-lg font-medium text-primary-dark mb-2">
+                  نام پروژه:
+                </label>
+                <input
+                  className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  type="text"
+                  name="name"
+                  value={addFormData.name}
+                  onChange={handleAddFormChange}
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-lg font-medium text-primary-dark mb-2">
+                  نام مستعار:
+                </label>
+                <input
+                  className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  type="text"
+                  name="nickname"
+                  value={addFormData.nickname}
+                  onChange={handleAddFormChange}
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-lg font-medium text-primary-dark mb-2">
+                  تاریخ شروع:
+                </label>
+                <input
+                  className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  type="date"
+                  name="start_date"
+                  value={addFormData.start_date}
+                  onChange={handleAddFormChange}
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-lg font-medium text-primary-dark mb-2">
+                  تاریخ پایان:
+                </label>
+                <input
+                  className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  type="date"
+                  name="end_date"
+                  value={addFormData.end_date}
+                  onChange={handleAddFormChange}
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-lg font-medium text-primary-dark mb-2">
+                  تاریخ واقعی شروع:
+                </label>
+                <input
+                  className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  type="date"
+                  name="real_start_date"
+                  value={addFormData.real_start_date}
+                  onChange={handleAddFormChange}
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-lg font-medium text-primary-dark mb-2">
+                  تاریخ واقعی پایان:
+                </label>
+                <input
+                  className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  type="date"
+                  name="real_end_date"
+                  value={addFormData.real_end_date}
+                  onChange={handleAddFormChange}
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-lg font-medium text-primary-dark mb-2">
+                  اعضای خارجی:
+                </label>
+                <input
+                  className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  type="text"
+                  name="external_members"
+                  value={addFormData.external_members}
+                  onChange={handleAddFormChange}
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-lg font-medium text-primary-dark mb-2">
+                  صاحب پروژه:
+                </label>
+                <input
+                  className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  type="text"
+                  name="owner"
+                  value={addFormData.owner}
+                  onChange={handleAddFormChange}
+                />
+              </div>
+              {/* <div className="mb-4 col-span-2">
           <label className="block text-lg font-medium text-primary-dark mb-2">
             بودجه:
           </label>
@@ -343,20 +350,19 @@ const UnivercityCard: React.FC<UnivercityCardProps> = ({ data }) => {
             onChange={handleAddFormChange}
           />
         </div> */}
-      </div>
-    </div>
+            </div>
+          </div>
 
-    <DialogFooter className="flex justify-end mt-6">
-      <button
-        onClick={handleCloseDialog}
-        className="bg-primary hover:bg-primary-dark text-white font-semibold py-2 px-6 rounded-md transition duration-300 ease-in-out"
-      >
-        افزودن پروژه
-      </button>
-    </DialogFooter>
-  </DialogContent>
-</Dialog>
-
+          <DialogFooter className="flex justify-end mt-6">
+            <button
+              onClick={handleCloseDialog}
+              className="bg-primary hover:bg-primary-dark text-white font-semibold py-2 px-6 rounded-md transition duration-300 ease-in-out"
+            >
+              افزودن پروژه
+            </button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

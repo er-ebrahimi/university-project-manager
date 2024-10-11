@@ -29,6 +29,10 @@ export interface Organization {
   address: string;
   create_date: string;
 }
+export interface Suborganizationselect{
+  id:number;
+  nickname:string;
+}
 
 export interface DataItem {
   id: number;
@@ -95,6 +99,10 @@ export const CreateOrganization = async (
 export const getSuborganizationData = async () => {
   return apiGet<DataItem[]>("/suborganization/list/", true);
 };
+
+export const getselectsuborganization=async()=>{
+  return apiGet<Suborganizationselect[]>("/suborganization/selectlist/",true)
+}
 export const getSubOrganization = async (id: string | undefined) => {
   return apiGet<DataItem>(`/suborganization/show/${id}/`, true);
 };
