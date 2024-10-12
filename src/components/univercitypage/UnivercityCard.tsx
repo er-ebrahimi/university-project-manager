@@ -10,12 +10,14 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Degree, degreeToPersian } from "@/types/userType";
+import AddProject from "./AddProject";
 
 interface UnivercityCardProps {
   data: {
+    id:string;
     name: string;
     nickname: string;
-    mobile_phone_number: number ;
+    mobile_phone_number: number;
     education_level: Degree;
   };
 }
@@ -27,17 +29,7 @@ interface FormData {
   education_level: Degree;
 }
 
-interface AddFormData {
-  name: string;
-  nickname: string;
-  start_date: string;
-  end_date: string;
-  real_start_date: string;
-  real_end_date: string;
-  external_members: string;
-  owner: string;
-  budget: string;
-}
+
 
 const UnivercityCard: React.FC<UnivercityCardProps> = ({ data }) => {
   console.log("🚀 ~ data:", data);
@@ -54,23 +46,12 @@ const UnivercityCard: React.FC<UnivercityCardProps> = ({ data }) => {
   });
 
   // State for the project form inside the modal
-  const [addFormData, setAddFormData] = useState<AddFormData>({
-    name: "",
-    nickname: "",
-    start_date: "",
-    end_date: "",
-    real_start_date: "",
-    real_end_date: "",
-    external_members: "",
-    owner: "",
-    budget: "",
-  });
-
+ 
   useEffect(() => {
     setFormData({
       name: data.name,
       nickname: data.nickname || "",
-      education_level: data.education_level ,
+      education_level: data.education_level,
       mobile_phone_number: data.mobile_phone_number,
 
       // education_level: data.education_level\ || "",
@@ -95,13 +76,7 @@ const UnivercityCard: React.FC<UnivercityCardProps> = ({ data }) => {
     });
   };
 
-  const handleAddFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setAddFormData({
-      ...addFormData,
-      [name]: value,
-    });
-  };
+  
 
   const handleOpenDialog = () => {
     setIsDialogOpen(true); // Open the dialog when clicked
@@ -176,7 +151,9 @@ const UnivercityCard: React.FC<UnivercityCardProps> = ({ data }) => {
           </div>
           <div className="mb-2">
             <strong className="text-primary-dark">تحصیلات:</strong>{" "}
-            <span>{ degreeToPersian(formData.education_level )|| "تعریف نشده"}</span>
+            <span>
+              {degreeToPersian(formData.education_level) || "تعریف نشده"}
+            </span>
           </div>
           <div className="mb-2">
             <strong className="text-primary-dark" dir="rtl">
@@ -233,135 +210,7 @@ const UnivercityCard: React.FC<UnivercityCardProps> = ({ data }) => {
 
       {/* Dialog for adding new project */}
       <Dialog open={isDialogOpen} onOpenChange={handleCloseDialog}>
-        <DialogContent className="p-8 bg-white rounded-lg shadow-lg h-[670px] w-[750px]">
-          <DialogHeader className="mb-6">
-            <DialogTitle className="text-right text-2xl font-semibold text-primary-dark">
-              افزودن پروژه جدید
-            </DialogTitle>
-          </DialogHeader>
-
-          <div className="text-right">
-            <div className="grid grid-cols-2 gap-6">
-              <div className="mb-4">
-                <label className="block text-lg font-medium text-primary-dark mb-2">
-                  نام پروژه:
-                </label>
-                <input
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                  type="text"
-                  name="name"
-                  value={addFormData.name}
-                  onChange={handleAddFormChange}
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-lg font-medium text-primary-dark mb-2">
-                  نام مستعار:
-                </label>
-                <input
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                  type="text"
-                  name="nickname"
-                  value={addFormData.nickname}
-                  onChange={handleAddFormChange}
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-lg font-medium text-primary-dark mb-2">
-                  تاریخ شروع:
-                </label>
-                <input
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                  type="date"
-                  name="start_date"
-                  value={addFormData.start_date}
-                  onChange={handleAddFormChange}
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-lg font-medium text-primary-dark mb-2">
-                  تاریخ پایان:
-                </label>
-                <input
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                  type="date"
-                  name="end_date"
-                  value={addFormData.end_date}
-                  onChange={handleAddFormChange}
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-lg font-medium text-primary-dark mb-2">
-                  تاریخ واقعی شروع:
-                </label>
-                <input
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                  type="date"
-                  name="real_start_date"
-                  value={addFormData.real_start_date}
-                  onChange={handleAddFormChange}
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-lg font-medium text-primary-dark mb-2">
-                  تاریخ واقعی پایان:
-                </label>
-                <input
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                  type="date"
-                  name="real_end_date"
-                  value={addFormData.real_end_date}
-                  onChange={handleAddFormChange}
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-lg font-medium text-primary-dark mb-2">
-                  اعضای خارجی:
-                </label>
-                <input
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                  type="text"
-                  name="external_members"
-                  value={addFormData.external_members}
-                  onChange={handleAddFormChange}
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-lg font-medium text-primary-dark mb-2">
-                  صاحب پروژه:
-                </label>
-                <input
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                  type="text"
-                  name="owner"
-                  value={addFormData.owner}
-                  onChange={handleAddFormChange}
-                />
-              </div>
-              {/* <div className="mb-4 col-span-2">
-          <label className="block text-lg font-medium text-primary-dark mb-2">
-            بودجه:
-          </label>
-          <input
-            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-            type="text"
-            name="budget"
-            value={addFormData.budget}
-            onChange={handleAddFormChange}
-          />
-        </div> */}
-            </div>
-          </div>
-
-          <DialogFooter className="flex justify-end mt-6">
-            <button
-              onClick={handleCloseDialog}
-              className="bg-primary hover:bg-primary-dark text-white font-semibold py-2 px-6 rounded-md transition duration-300 ease-in-out"
-            >
-              افزودن پروژه
-            </button>
-          </DialogFooter>
-        </DialogContent>
+       <AddProject ownerId={data.id} open={isDialogOpen} setOpen={setIsDialogOpen}/>
       </Dialog>
     </div>
   );

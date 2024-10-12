@@ -4,7 +4,7 @@ import {
   deleteSubOrganization,
   updatesuborhanization,
 } from "@/functions/services/organization";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import ClipLoader from "react-spinners/ClipLoader";
@@ -20,7 +20,16 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useNavigate } from "react-router-dom";
 import routes from "@/global/routes";
-import { MdDelete } from "react-icons/md";
+import { MdCancel, MdDelete } from "react-icons/md";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import { getUsersSelect, userSelect } from "@/functions/services/users";
+import AddProfessor from "./AddProfessor";
 
 interface SubOrganizationSidebarProps {
   data: any | undefined;
@@ -36,14 +45,22 @@ const SubOrganizationSidebar: React.FC<SubOrganizationSidebarProps> = ({
   // Define state for managing field values and edit mode
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
-  const [universityData, setUniversityData] = useState({
+  const [universityData, setUniversityData] = useState<{
+    name: string;
+    phone_number: string;
+    postal_code: string;
+    nickname: string;
+    address: string;
+    owner: string | null; // Allow both string and null
+    organization: string | null; // Also adjust organization field if needed
+  }>({
     name: "نام دانشکده را وارد کنید",
     phone_number: "021-۷۷۴۹۱۰۲۵",
     postal_code: "۱۳۱۱۴-۱۶۸۴۶",
     nickname: "یونی",
     address: "تهران، نارمک، دانشگاه علم و صنعت ایران",
-    owner: undefined,
-    organization: undefined,
+    owner: null, // or owner ID when fetched
+    organization: null, // or organization ID when fetched
   });
   const [opennalert, setOpenalert] = useState(false);
   // Update university data based on props when data changes
@@ -97,7 +114,21 @@ const SubOrganizationSidebar: React.FC<SubOrganizationSidebarProps> = ({
       toast.error("حذف با خطا مواجه شد");
     },
   });
+  const [users, setUsers] = useState<userSelect[]>();
 
+  const { data: userlist, isPending: userLoading } = useQuery({
+    queryKey: ["UserSelect"],
+    queryFn: getUsersSelect,
+    enabled: isEditing, // Only fetch when editing mode is enabled
+    // onSuccess: (data:userSelect[]) => {
+    //   setUsers(data);
+    // },
+  });
+  useEffect(() => {
+    if (userlist) {
+      setUsers(userlist);
+    }
+  }, [userlist]);
   const handleDelete = () => {
     // if (id) {
     //   deleteMutation.mutate(); // Trigger delete mutation
@@ -127,14 +158,13 @@ const SubOrganizationSidebar: React.FC<SubOrganizationSidebarProps> = ({
                 <FaPlus className="w-5 h-5" />
                 افزودن استاد
               </button> */}
-               <button
-              disabled={id === undefined}
-              className="bg-white hover:bg-red-500 hover:text-white border-2 border-red-500 text-red-500 rounded-sm py-1 px-1 ml-4 cursor-pointer"
-              onClick={handleDelete}
-            >
-              <MdDelete className="h-6 w-6"/>
-            </button>
-
+             {!isEditing && <button
+                disabled={id === undefined}
+                className="bg-white hover:bg-red-500 hover:text-white border-2 border-red-500 text-red-500 rounded-sm py-1 px-1 ml-4 cursor-pointer"
+                onClick={handleDelete}
+              >
+                <MdDelete className="h-6 w-6" />
+              </button>}
             </div>
             <div className="mb-4">
               <h3 className="text-sm font-bold text-primary-dark">
@@ -225,12 +255,35 @@ const SubOrganizationSidebar: React.FC<SubOrganizationSidebarProps> = ({
                 رئیس دانشگاه
               </h3>
               {isEditing ? (
-                <input
-                  type="number"
-                  value={universityData.owner}
-                  onChange={(e) => handleInputChange(e, "owner")}
-                  className="border p-1 rounded w-full"
-                />
+                // <input
+                //   type="number"
+                //   value={universityData.owner}
+                //   onChange={(e) => handleInputChange(e, "owner")}
+                //   className="border p-1 rounded w-full"
+                // />
+                <Select
+                  dir="rtl"
+                  onValueChange={(value) =>
+                    setUniversityData({ ...universityData, owner: value })
+                  }
+                >
+                  <SelectTrigger className="mt-2">
+                    <SelectValue placeholder="انتخاب صاحب سازمان" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {!userLoading &&
+                      users?.map((item) => (
+                        <SelectItem key={item.id} value={String(item.id)}>
+                          {item.username}
+                        </SelectItem>
+                      ))}
+                    {userLoading && (
+                      <div className="flex justify-center py-2">
+                        <ClipLoader />
+                      </div>
+                    )}
+                  </SelectContent>
+                </Select>
               ) : (
                 <p className="text-gray-600 mt-1">{data.owner.username}</p>
               )}
@@ -240,7 +293,7 @@ const SubOrganizationSidebar: React.FC<SubOrganizationSidebarProps> = ({
           <div className="flex justify-between mt-auto">
             {isEditing ? (
               <button
-                className="bg-green-500 text-white py-1 px-3 rounded"
+                className="bg-green-500 text-white py-1 px-2 rounded-sm"
                 onClick={() => {
                   UpdateMutation.mutate(universityData);
                 }}
@@ -255,13 +308,19 @@ const SubOrganizationSidebar: React.FC<SubOrganizationSidebarProps> = ({
                 ویرایش
               </button>
             )}
-           <button
-                className="bg-white border-2 border-orange-500 text-orange-500 py-1 px-3 rounded-sm hover:bg-orange-500 hover:text-white"
-                // onClick={() => setIsEditing(true)}
+            {
+              isEditing &&
+              <button
+                className="bg-red-500 px-2 text-white  rounded-sm"
+                onClick={() => {
+                  // UpdateMutation.mutate(universityData);
+                  setIsEditing(false)
+                }}
               >
-                افزودن استاد
-                {/* <FaPlus/> */}
+                <MdCancel/>
               </button>
+            }
+            <AddProfessor/>
           </div>
         </div>
       )}

@@ -45,7 +45,7 @@ export default function Colleges() {
         x-chunk="dashboard-02-chunk-1"
         >
         {/* <ProfessorInfo professors={professors}></ProfessorInfo> */}
-        <GraphTree data={data} loading={isPending} id={id}/>
+        <GraphTree data={data} loading={isPending}/>
       </div>
         </div>
     </>

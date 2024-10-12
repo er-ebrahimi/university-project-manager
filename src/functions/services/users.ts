@@ -1,7 +1,11 @@
-
 import { User } from "@/types/userType";
 import { apiGet, apiPost, apiPut, apiDelete } from "../api";
-
+import { UserPermissions } from "@/types/userType";
+export interface userSelect {
+  id: number;
+  username: string;
+  user_permissions: UserPermissions;
+}
 export const CreateNewUser = async (data: any) => {
   // Ensure the endpoint matches your API
   return apiPost<any>("/user/create/", data, true);
@@ -10,6 +14,9 @@ export const CreateNewUser = async (data: any) => {
 // Fetch all users
 export const getUsers = async (): Promise<User[]> => {
   return apiGet<User[]>("/user/adminlist/", true);
+};
+export const getUsersSelect = async (): Promise<userSelect[]> => {
+  return apiGet<User[]>("/user/list/", true);
 };
 
 // Update a user by ID

@@ -8,6 +8,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import UnivercityCard from "./UnivercityCard";
 import { DataItem } from "@/functions/services/organization";
 import { Degree } from "@/types/userType";
+import moment from "moment-jalaali";
 
 const transformPeopleToTreeData = (
   organizationData: DataItem
@@ -17,6 +18,7 @@ const transformPeopleToTreeData = (
   const transformedData: TeachersData = {
     name: organizationData.nickname || "Unknown Organization",
     children: people.map((person) => ({
+      id:person.id,
       name: person.username,
       nickname: person.username,
       education_level: person.education_level, // Replace with actual major data if available
@@ -55,6 +57,7 @@ interface Project {
 }
 
 interface Professor {
+  id:string;
   name: string;
   nickname: string;
   major: string;
@@ -85,11 +88,11 @@ interface NodeData {
 export default function GraphTree({
   data,
   loading,
-  id,
+  // id,
 }: {
   data: DataItem | undefined;
   loading: boolean;
-  id: string | undefined;
+  // id: string | undefined;
 }) {
   console.log("🚀 ~ GraphTree ~ data:", data);
   const [selectedNode, setSelectedNode] = useState<NodeData | null>(null);
@@ -172,7 +175,7 @@ export default function GraphTree({
 
       {selectedNode && (
         <Dialog open={isDialogOpen} onOpenChange={handleCloseDialog}>
-        <DialogContent className="pl-6 pb-8 bg-gradient-to-r from-gray-100 to-gray-400 rounded-xl shadow-2xl h-[680px] w-[800px] ">
+        <DialogContent className="pl-6 pb-8 bg-gradient-to-r from-gray-100 to-gray-400 rounded-xl shadow-2xl h-[650px] w-[800px] ">
           <div className="p-6 bg-white rounded-lg">
             <div className="grid grid-cols-2 gap-8 text-right">
               <div className="mb-4">
@@ -190,25 +193,33 @@ export default function GraphTree({
               <div className="mb-4">
                 <h3 className="font-bold text-lg text-primary-dark">تاریخ شروع</h3>
                 <p className="text-gray-900 mt-1 bg-gray-100 p-3 rounded-lg shadow-inner">
-                  {selectedNode.Start_date}
+                  {/* {selectedNode.Start_date} */}
+                  {moment(selectedNode.Start_date).format("jYYYY/jMM/jDD")}
+
                 </p>
               </div>
               <div className="mb-4">
                 <h3 className="font-bold text-lg text-primary-dark">تاریخ پایان</h3>
                 <p className="text-gray-900 mt-1 bg-gray-100 p-3 rounded-lg shadow-inner">
-                  {selectedNode.End_date}
+                  {/* {selectedNode.End_date} */}
+                  {moment(selectedNode.End_date).format("jYYYY/jMM/jDD")}
+
                 </p>
               </div>
               <div className="mb-4">
                 <h3 className="font-bold text-lg text-primary-dark">تاریخ واقعی شروع</h3>
                 <p className="text-gray-900 mt-1 bg-gray-100 p-3 rounded-lg shadow-inner">
-                  {selectedNode.Real_start_date}
+                  {/* {selectedNode.Real_start_date} */}
+                  {moment(selectedNode.Real_start_date).format("jYYYY/jMM/jDD")}
+
                 </p>
               </div>
               <div className="mb-4">
                 <h3 className="font-bold text-lg text-primary-dark">تاریخ واقعی پایان</h3>
                 <p className="text-gray-900 mt-1 bg-gray-100 p-3 rounded-lg shadow-inner">
-                  {selectedNode.Real_end_date}
+                  {/* {selectedNode.Real_end_date} */}
+                  {moment(selectedNode.Real_end_date).format("jYYYY/jMM/jDD")}
+
                 </p>
               </div>
               <div className="mb-4">

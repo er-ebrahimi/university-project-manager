@@ -11,14 +11,23 @@ import {
 import { Button } from "@/components/ui/button";
 import { Label } from "../ui/label";
 import { Major } from "@/types/university";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import {
   CreateOrganization,
   createUniversityData,
 } from "@/functions/services/organization";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import queryClient from "@/functions/QueryClient";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import ClipLoader from "react-spinners/ClipLoader";
+import { getUsersSelect, userSelect } from "@/functions/services/users";
 
 interface ResponseAddmajor {
   success: boolean;
@@ -82,6 +91,22 @@ const AddFieldDialog = () => {
 
     mutate(data);
   };
+  // const[]
+  const [users, setUsers] = useState<userSelect[]>();
+
+  const { data: userlist, isPending: userLoading } = useQuery({
+    queryKey: ["UserSelect"],
+    queryFn: getUsersSelect,
+    // enabled: isEditing, // Only fetch when editing mode is enabled
+    // onSuccess: (data:userSelect[]) => {
+    //   setUsers(data);
+    // },
+  });
+  useEffect(() => {
+    if (userlist) {
+      setUsers(userlist);
+    }
+  }, [userlist]);
 
   return (
     <div>
@@ -98,8 +123,7 @@ const AddFieldDialog = () => {
         </DialogTrigger>
 
         <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader >
-
+          <DialogHeader>
             <DialogTitle className="text-right">افزودن زیرسازمان</DialogTitle>
             <DialogDescription className="mt-10">
               برای افزودن زیر سازمان اطلاعات آن را وارد کنید
@@ -146,19 +170,41 @@ const AddFieldDialog = () => {
               </div>
 
               {/* Owner Input */}
-              <div className="flex flex-col">
+              <div dir="rtl" className="flex flex-col">
                 <Label htmlFor="owner">شناسه مالک</Label>
-                <input
+                {/* <input
                   type="number"
                   id="owner"
                   disabled
                   className="my-2 h-10 w-full border rounded-lg px-3 py-2 ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                   value={owner}
                   onChange={(e) => setOwner(Number(e.target.value))}
-                />
+                /> */}
+                <Select dir="rtl" onValueChange={(value)=> setOwner(Number(value))}>
+                  <SelectTrigger className="mt-2">
+                    <SelectValue placeholder="انتخاب صاحب سازمان" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {!userLoading &&
+                      users?.map((item) => (
+                        <SelectItem
+                          className="pr-4 cursor-pointer"
+                          key={item.id}
+                          value={String(item.id)}
+                        >
+                          {item.username}
+                        </SelectItem>
+                      ))}
+                    {userLoading && (
+                      <div className="flex justify-center py-2">
+                        <ClipLoader />
+                      </div>
+                    )}
+                  </SelectContent>
+                </Select>
               </div>
               <div className="hidden flex-col">
-                <Label htmlFor="organization">شناسه اورگان</Label>
+                <Label htmlFor="organization">شناسه سازمان</Label>
                 <input
                   type="number"
                   id="organization"

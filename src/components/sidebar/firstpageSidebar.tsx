@@ -6,6 +6,15 @@ import {
 } from "@/functions/services/organization";
 import toast from "react-hot-toast";
 import queryClient from "@/functions/QueryClient";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { getUsersSelect, userSelect } from "@/functions/services/users";
+import ClipLoader from "react-spinners/ClipLoader";
 
 interface UniversityData {
   name: string;
@@ -18,6 +27,7 @@ interface UniversityData {
 
 const UniversitySidebar: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
+  const [users, setUsers] = useState<userSelect[]>();
   const [universityData, setUniversityData] = useState<UniversityData>({
     name: "",
     phone_number: "",
@@ -32,22 +42,33 @@ const UniversitySidebar: React.FC = () => {
     queryKey: ["organizationData"],
     queryFn: getOrganizationData,
   });
+  if (isEditing) {
+    // console.log("🚀 ~ data:", users)
+  }
+  // useEffect(() => {
+  //   const {
+  //     data: users,
+  //     // isLoading: userLoading,
+  //     // isError: errorUser,
+  //   } = useQuery({
+  //     queryKey: ["UserSelect"],
+  //     queryFn: getUsersSelect,
+  //   });
+  //     console.log("🚀 ~ useEffect ~ data:", users)
+  // }, [isEditing]);
 
   // Mutation for updating organization data
   const mutation = useMutation({
     mutationFn: (updatedData: UniversityData) =>
       updateOrganizationData(1, updatedData), // Hardcoded ID (1)
     onSuccess: () => {
-      queryClient.invalidateQueries(
-        {
-          queryKey:["organizationData"]
-        }
-      )
+      queryClient.invalidateQueries({
+        queryKey: ["organizationData"],
+      });
       setIsEditing(false);
       // alert("Organization updated successfully!");
       toast.success("با موفقیت ویرایش شد");
       // setUniversityData(data)
-      
     },
     onError: (error: any) => {
       console.error(
@@ -57,7 +78,21 @@ const UniversitySidebar: React.FC = () => {
       toast.error("ویرایش با خطا مواجه شد");
     },
   });
+  const { data: userlist ,isPending:userLoading} = useQuery({
+    queryKey: ["UserSelect"],
+    queryFn: getUsersSelect,
+    enabled: isEditing, // Only fetch when editing mode is enabled
+    // onSuccess: (data:userSelect[]) => {
+    //   setUsers(data);
+    // },
+  });
+  useEffect(() => {
+    if (userlist) {
+      setUsers(userlist);
+    }
+  }, [userlist]);
 
+  console.log("🚀 ~ userlist:", userlist)
   // Update the state when data is fetched
   useEffect(() => {
     if (data && !isLoading && !isError) {
@@ -82,17 +117,32 @@ const UniversitySidebar: React.FC = () => {
 
   // Handle form submission
   const handleSubmit = () => {
-    mutation.mutate(universityData);
+    mutation.mutate({
+      ...universityData,
+      owner: universityData.owner, // only sending owner ID as required
+    });
   };
 
   if (isLoading) {
-    return toast.loading("لطفا صبر کنید",{id:"1",duration:1000})
-
+    return toast.loading("لطفا صبر کنید", { id: "1", duration: 1000 });
   }
 
   if (isError) {
     return toast.error("لطفا از اتصال اینترنت خود اطمینان حاصل کنید");
   }
+  const editButton = () => {
+    setIsEditing(true);
+    // const {
+    //   data: userlist,
+    //   // isLoading: userLoading,
+    //   // isError: errorUser,
+    // } = useQuery({
+    //   queryKey: ["UserSelect"],
+    //   queryFn: getUsersSelect,
+    // });
+    // console.log("🚀 ~ useEffect ~ data:", userlist)
+    // setUsers(userlist);
+  };
 
   return (
     <div className="h-[530px] w-[230px] rounded-sm border border-dashed absolute right-0 bg-white mt-14 mr-6 p-4 flex flex-col">
@@ -176,12 +226,31 @@ const UniversitySidebar: React.FC = () => {
         <div className="mb-4">
           <h3 className="text-sm font-bold text-primary-dark">رئیس سازمان</h3>
           {isEditing ? (
-            <input
-              type="number"
-              value={universityData.owner}
-              onChange={(e) => handleInputChange(e, "owner")}
-              className="border p-1 rounded w-full"
-            />
+            // <input
+            //   type="number"
+            //   value={universityData.owner}
+            //   onChange={(e) => handleInputChange(e, "owner")}
+            //   className="border p-1 rounded w-full"
+            // />
+            <Select
+            dir="rtl"
+            onValueChange={(value) =>
+              setUniversityData({ ...universityData, owner: value })
+            }
+          >
+            <SelectTrigger className="mt-2">
+              <SelectValue placeholder="انتخاب صاحب سازمان" />
+            </SelectTrigger>
+            <SelectContent>
+              {!userLoading&& users?.map((item) => (
+                <SelectItem key={item.id} value={String(item.id)}>
+                  {item.username}
+                </SelectItem>
+              ))}
+              {userLoading&& <div className="flex justify-center py-2">
+                <ClipLoader /></div>}
+            </SelectContent>
+          </Select>
           ) : (
             <p className="text-gray-600 mt-1">{data.owner?.username}</p>
           )}
@@ -199,17 +268,22 @@ const UniversitySidebar: React.FC = () => {
         ) : (
           <button
             className="bg-purple-500 text-white py-1 px-3 rounded"
-            onClick={() => setIsEditing(true)}
+            onClick={editButton}
           >
             ویرایش
           </button>
         )}
-        <button
-          disabled
-          className="bg-red-500 text-white py-1 px-3 rounded disabled:opacity-50 cursor-not-allowed"
-        >
-          حذف
-        </button>
+        {isEditing && (
+          <button
+            // disabled
+            className="bg-red-500 text-white py-1 px-3 rounded disabled:opacity-50 "
+            onClick={() => {
+              setIsEditing(false);
+            }}
+          >
+            لغو
+          </button>
+        )}
       </div>
     </div>
   );
