@@ -48,7 +48,7 @@ function AppRoute() {
             element={<ProfessorProfile></ProfessorProfile>}
           ></Router.Route> */}
           <Router.Route
-            path={routes.moreInfo(":name")}
+            path={routes.Project(":id")}
             element={<MoreInfo></MoreInfo>}
           ></Router.Route>
         </Router.Routes>

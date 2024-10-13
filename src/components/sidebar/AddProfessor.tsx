@@ -15,17 +15,42 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { getUsersSelect, userSelect } from "@/functions/services/users";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import ClipLoader from "react-spinners/ClipLoader";
+import { PutAddProfessor } from "@/functions/services/project";
+import queryClient from "@/functions/QueryClient";
+import toast from "react-hot-toast";
+import { useParams } from "react-router-dom";
 
 const AddProfessor = () => {
   const [selectedProfessor, setSelectedProfessor] = useState<string | null>(null);
+  const a = useParams();
+  const subOrganizations=a.id // Extract organizationId from URL
   const [users, setUsers] = useState<userSelect[] | undefined>([]);
-    const [open,setOpen]=useState(false)
+  const [open, setOpen] = useState(false);
+
   // Fetch professors or users
   const { data: userlist, isPending: userLoading } = useQuery({
     queryKey: ["UserSelect"],
     queryFn: getUsersSelect,
+  });
+  
+  const addProfessorMutation = useMutation({
+    mutationFn: (selectedProfessor1:string) => {
+      if (selectedProfessor && subOrganizations) {
+        // Ensure both organizationId and selectedProfessor are available
+        return PutAddProfessor(selectedProfessor1, { subOrganizations });
+      }
+      throw new Error("Missing organization or professor ID");
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [`suboorganization${subOrganizations}`] });
+      toast.success("استاد با موفقیت اضافه شد");
+      setOpen(false);
+    },
+    onError: () => {
+      toast.error("خطا در به‌روزرسانی کاربر");
+    },
   });
 
   useEffect(() => {
@@ -33,6 +58,14 @@ const AddProfessor = () => {
       setUsers(userlist);
     }
   }, [userlist]);
+
+  const handleAddProfessor = () => {
+    if (selectedProfessor) {
+      addProfessorMutation.mutate(selectedProfessor);
+    } else {
+      toast.error("لطفاً استاد مورد نظر را انتخاب کنید");
+    }
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -61,11 +94,12 @@ const AddProfessor = () => {
               <SelectValue placeholder="انتخاب استاد" />
             </SelectTrigger>
             <SelectContent>
-              {!userLoading && users?.map((item) => (
-                <SelectItem key={item.id} value={String(item.id)}>
-                  {item.username}
-                </SelectItem>
-              ))}
+              {!userLoading &&
+                users?.map((item) => (
+                  <SelectItem key={item.id} value={String(item.id)}>
+                    {item.username}
+                  </SelectItem>
+                ))}
               {userLoading && (
                 <div className="flex justify-center py-2">
                   <ClipLoader />
@@ -76,10 +110,18 @@ const AddProfessor = () => {
         </div>
 
         <DialogFooter className="gap-2 justify-start">
-          <button onClick={()=>{setOpen(false)}} className="bg-red-500 text-white py-1 px-3 rounded">
+          <button
+            onClick={() => {
+              setOpen(false);
+            }}
+            className="bg-red-500 text-white py-1 px-3 rounded"
+          >
             لغو
           </button>
-          <button className="bg-green-500 text-white py-1 px-3 rounded">
+          <button
+            onClick={handleAddProfessor}
+            className="bg-green-500 text-white py-1 px-3 rounded"
+          >
             تأیید
           </button>
         </DialogFooter>

@@ -17,6 +17,7 @@ const transformPeopleToTreeData = (
 
   const transformedData: TeachersData = {
     name: organizationData.nickname || "Unknown Organization",
+    
     children: people.map((person) => ({
       id:person.id,
       name: person.username,
@@ -25,6 +26,7 @@ const transformPeopleToTreeData = (
       phone_number: person.mobile_phone_number, // Replace with actual BirthDate if available
       // EmploymentDate: "Unknown", // Replace with actual EmploymentDate if available
       children: (person.projects || []).map((project: any) => ({
+        id:project.id,
         name: project.name,
         Nickname: project.nickname,
         Start_date: project.start_date,
@@ -72,6 +74,7 @@ interface TeachersData {
 }
 
 interface NodeData {
+  id:string;
   name: string;
   Nickname?: string;
   Start_date?: string;
@@ -81,7 +84,11 @@ interface NodeData {
   External_members?: string;
   Owner?: string;
   Budget?: string;
-  children?: NodeData[];
+  major: string;
+  education_level:Degree;
+  mobile_phone_number:number;
+
+  children?: Project[];
   parentName?: string;
 }
 
@@ -115,7 +122,7 @@ export default function GraphTree({
       return;
     }
 
-    if (!nodeData.data.children || nodeData.data.children.length === 0) {
+    if (!nodeData.data.children || nodeData.depth ===2 ) {
       setSelectedNode({ ...data, parentName: parentData?.name });
       setIsDialogOpen(true);
     }
@@ -125,10 +132,10 @@ export default function GraphTree({
     setIsDialogOpen(false);
     setSelectedNode(null);
   };
-
+  console.log(selectedNode)
   const handleProfessorClick = () => {
-    if (selectedNode?.parentName) {
-      navigate(`/app/more-info/${selectedNode.parentName}`);
+    if (selectedNode?.id) {
+      navigate(`/app/project/${selectedNode.id}`);
     }
   };
 
@@ -175,24 +182,24 @@ export default function GraphTree({
 
       {selectedNode && (
         <Dialog open={isDialogOpen} onOpenChange={handleCloseDialog}>
-        <DialogContent className="pl-6 pb-8 bg-gradient-to-r from-gray-100 to-gray-400 rounded-xl shadow-2xl h-[650px] w-[800px] ">
+        <DialogContent className="pl-6 pb-8 rounded-xl shadow-2xl h-[650px] w-[850px] ">
           <div className="p-6 bg-white rounded-lg">
             <div className="grid grid-cols-2 gap-8 text-right">
               <div className="mb-4">
-                <h3 className="font-bold text-lg text-primary-dark">نام پروژه</h3>
-                <p className="text-gray-900 mt-1 bg-gray-100 p-3 rounded-lg shadow-inner">
+                <h3 className="font-bold text-primary-dark">نام پروژه</h3>
+                <p className="text-gray-900 text-md font-bold border border-primary mt-2 bg-gray-100 p-3 rounded-lg shadow-inner">
                   {selectedNode.name}
                 </p>
               </div>
               <div className="mb-4">
-                <h3 className="font-bold text-lg text-primary-dark">نام مستعار</h3>
-                <p className="text-gray-900 mt-1 bg-gray-100 p-3 rounded-lg shadow-inner">
+                <h3 className="font-bold text-primary-dark">نام مستعار</h3>
+                <p className="text-gray-900 text-md font-bold border border-primary mt-2 bg-gray-100 p-3 rounded-lg shadow-inner">
                   {selectedNode.Nickname}
                 </p>
               </div>
               <div className="mb-4">
                 <h3 className="font-bold text-lg text-primary-dark">تاریخ شروع</h3>
-                <p className="text-gray-900 mt-1 bg-gray-100 p-3 rounded-lg shadow-inner">
+                <p className="text-gray-900 text-md font-bold border border-primary mt-2 bg-gray-100 p-3 rounded-lg shadow-inner">
                   {/* {selectedNode.Start_date} */}
                   {moment(selectedNode.Start_date).format("jYYYY/jMM/jDD")}
 
@@ -200,7 +207,7 @@ export default function GraphTree({
               </div>
               <div className="mb-4">
                 <h3 className="font-bold text-lg text-primary-dark">تاریخ پایان</h3>
-                <p className="text-gray-900 mt-1 bg-gray-100 p-3 rounded-lg shadow-inner">
+                <p className="text-gray-900 text-md font-bold border border-primary mt-2 bg-gray-100 p-3 rounded-lg shadow-inner">
                   {/* {selectedNode.End_date} */}
                   {moment(selectedNode.End_date).format("jYYYY/jMM/jDD")}
 
@@ -208,7 +215,7 @@ export default function GraphTree({
               </div>
               <div className="mb-4">
                 <h3 className="font-bold text-lg text-primary-dark">تاریخ واقعی شروع</h3>
-                <p className="text-gray-900 mt-1 bg-gray-100 p-3 rounded-lg shadow-inner">
+                <p className="text-gray-900 text-md font-bold border border-primary mt-2 bg-gray-100 p-3 rounded-lg shadow-inner">
                   {/* {selectedNode.Real_start_date} */}
                   {moment(selectedNode.Real_start_date).format("jYYYY/jMM/jDD")}
 
@@ -216,7 +223,7 @@ export default function GraphTree({
               </div>
               <div className="mb-4">
                 <h3 className="font-bold text-lg text-primary-dark">تاریخ واقعی پایان</h3>
-                <p className="text-gray-900 mt-1 bg-gray-100 p-3 rounded-lg shadow-inner">
+                <p className="text-gray-900 text-md font-bold border border-primary mt-2 bg-gray-100 p-3 rounded-lg shadow-inner">
                   {/* {selectedNode.Real_end_date} */}
                   {moment(selectedNode.Real_end_date).format("jYYYY/jMM/jDD")}
 
@@ -224,13 +231,13 @@ export default function GraphTree({
               </div>
               <div className="mb-4">
                 <h3 className="font-bold text-lg text-primary-dark">اعضای خارجی</h3>
-                <p className="text-gray-900 mt-1 bg-gray-100 p-3 rounded-lg shadow-inner">
-                  {selectedNode.External_members}
+                <p  className="text-gray-900 text-md font-bold border border-primary mt-2 bg-gray-100 p-3 rounded-lg shadow-inner">
+                  {selectedNode.External_members?selectedNode.External_members:<p className="text-sm text-gray-500">اعضای خارجی وجود ندارد </p>}
                 </p>
               </div>
               <div className="mb-4">
                 <h3 className="font-bold text-lg text-primary-dark">صاحب پروژه</h3>
-                <p className="text-gray-900 mt-1 bg-gray-100 p-3 rounded-lg shadow-inner">
+                <p className="text-gray-900 text-md font-bold border border-primary mt-2 bg-gray-100 p-3 rounded-lg shadow-inner">
                   {selectedNode.Owner}
                 </p>
               </div>

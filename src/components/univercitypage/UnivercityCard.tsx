@@ -33,7 +33,8 @@ interface FormData {
 
 const UnivercityCard: React.FC<UnivercityCardProps> = ({ data }) => {
   console.log("🚀 ~ data:", data);
-  const [isEditing, setIsEditing] = useState(false);
+  // const [isEditing, setIsEditing] = useState(false);
+  const isEditing = false
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   // State for the professor details form
@@ -65,7 +66,7 @@ const UnivercityCard: React.FC<UnivercityCardProps> = ({ data }) => {
   }
 
   const handleEditClick = () => {
-    setIsEditing(!isEditing);
+    // setIsEditing(!isEditing);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -167,7 +168,7 @@ const UnivercityCard: React.FC<UnivercityCardProps> = ({ data }) => {
         </>
       )}
       <div className="flex flex-row flex-wrap justify-start gap-3">
-        {isEditing ? (
+        {/* {isEditing ? (
           <button
             onClick={handleEditClick}
             className="mt-4 w-9 h-9 bg-white text-sm p-1 text-green-500 border-2 border-green-500 rounded hover:bg-green-500 hover:text-white"
@@ -181,10 +182,10 @@ const UnivercityCard: React.FC<UnivercityCardProps> = ({ data }) => {
           >
             <MdModeEdit className="w-full h-full" />
           </button>
-        )}
+        )} */}
 
         {!isEditing && (
-          <button className="mt-4 w-9 h-9 text-sm p-1 bg-white text-red-500 border-2 border-red-500 rounded hover:bg-red-500 hover:text-white">
+          <button  className="mt-4 w-9 h-9 text-sm p-1 bg-white text-red-500 border-2 border-red-500 rounded hover:bg-red-500 hover:text-white">
             <MdDelete className="w-full h-full" />
           </button>
         )}

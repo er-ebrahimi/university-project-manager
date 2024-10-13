@@ -9,6 +9,10 @@ import { useMutation } from "@tanstack/react-query";
 import { postAddProject } from "@/functions/services/project";
 import { useParams } from "react-router-dom";
 import queryClient from "@/functions/QueryClient";
+import DatePicker from "react-multi-date-picker"; // Import the date picker
+import persian from "react-date-object/calendars/persian"; // Jalali calendar support
+import persian_fa from "react-date-object/locales/persian_fa"; // Persian language
+import DateObject from "react-date-object";
 
 export interface AddProjectData {
   name: string;
@@ -22,15 +26,15 @@ export interface AddProjectData {
   subOrganization: string;
 }
 
-const AddProject = ({ ownerId ,open,setOpen}: { ownerId: string ,open:boolean,setOpen:Dispatch<SetStateAction<boolean>>}) => {
+const AddProject = ({ ownerId, open, setOpen }: { ownerId: string, open: boolean, setOpen: Dispatch<SetStateAction<boolean>> }) => {
   const { id: organizationId } = useParams(); // Extract organizationId from URL
   const [addFormData, setAddFormData] = useState<AddProjectData>({
     name: "",
     nickname: "",
-    start_date: "",
-    end_date: "",
-    real_start_date: "",
-    real_end_date: "",
+    start_date: new DateObject({ calendar: persian }).format("YYYY-MM-DD"), // Default to now
+    end_date: new DateObject({ calendar: persian }).format("YYYY-MM-DD"), // Default to now
+    real_start_date: new DateObject({ calendar: persian }).format("YYYY-MM-DD"), // Default to now
+    real_end_date: new DateObject({ calendar: persian }).format("YYYY-MM-DD"), // Default to now
     external_members: "",
     owner: ownerId, // Pre-fill with provided ownerId
     subOrganization: organizationId!, // Assign subOrganization from URL
@@ -44,28 +48,60 @@ const AddProject = ({ ownerId ,open,setOpen}: { ownerId: string ,open:boolean,se
     });
   };
 
+  const handleDateChange = (name: keyof AddProjectData, date: any) => {
+    if (date && date.isValid) {
+      // Convert Jalali date to Gregorian and then format to ISO string
+      const gregorianDate = date.toDate(); // convert to regular JavaScript date
+      setAddFormData({
+        ...addFormData,
+        [name]: gregorianDate.toISOString().split("T")[0], // Only keep YYYY-MM-DD
+      });
+    } else {
+      setAddFormData({
+        ...addFormData,
+        [name]: "",
+      });
+    }
+  };
+  
   // Mutation for adding a new project
   const mutation = useMutation({
-    mutationFn:(addFormData:AddProjectData)=>
-        postAddProject(addFormData),
-    
+    mutationFn: (addFormData: AddProjectData) =>
+      postAddProject(addFormData),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey:[`suboorganization${organizationId}`]
+        queryKey: [`suboorganization${organizationId}`]
       }); // Ensure organization data is refreshed
       console.log("Project added successfully");
-      setOpen(false)
-      // Optionally handle success (e.g., close dialog, show notification)
+      setOpen(false);
     },
     onError: (error: any) => {
       console.error("Error adding project:", error);
-      // Optionally handle error (e.g., show error message)
     },
   });
 
   const handleSubmit = () => {
-    mutation.mutate(addFormData); // Call the mutation with form data
+    // Convert the date fields into the expected format
+    const formattedData = {
+      ...addFormData,
+      start_date: new Date(addFormData.start_date).toISOString(),
+      end_date: new Date(addFormData.end_date).toISOString(),
+      real_start_date: new Date(addFormData.real_start_date).toISOString(),
+      real_end_date: new Date(addFormData.real_end_date).toISOString(),
+    };
+    console.log("data: ",formattedData)
+    mutation.mutate(formattedData, {
+      onSuccess: () => {
+        console.log("Project added successfully");
+        // Optionally handle success (e.g., close dialog, show notification)
+      },
+      onError: (error: any) => {
+        console.error("Error adding project:", error);
+        // Optionally handle error (e.g., show error message)
+      },
+    });
   };
+  
 
   return (
     <DialogContent className="p-8 bg-white rounded-lg shadow-lg h-[670px] w-[750px]">
@@ -101,54 +137,68 @@ const AddProject = ({ ownerId ,open,setOpen}: { ownerId: string ,open:boolean,se
               onChange={handleAddFormChange}
             />
           </div>
+
+          {/* Persian DatePicker for Start Date */}
           <div className="mb-4">
             <label className="block text-lg font-medium text-primary-dark mb-2">
               تاریخ شروع:
             </label>
-            <input
+            <DatePicker
               className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-              type="date"
-              name="start_date"
-              value={addFormData.start_date}
-              onChange={handleAddFormChange}
+              calendar={persian}
+              locale={persian_fa}
+            //   value={addFormData.start_date}
+
+              onChange={(date) => handleDateChange("start_date", date)}
+              inputClass="w-full p-2 border border-gray-300 rounded-lg focus:outline-none"
             />
           </div>
+
+          {/* Persian DatePicker for End Date */}
           <div className="mb-4">
             <label className="block text-lg font-medium text-primary-dark mb-2">
               تاریخ پایان:
             </label>
-            <input
+            <DatePicker
               className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-              type="date"
-              name="end_date"
-              value={addFormData.end_date}
-              onChange={handleAddFormChange}
+              calendar={persian}
+              locale={persian_fa}
+            //   value={addFormData.end_date}
+              onChange={(date) => handleDateChange("end_date", date)}
+              inputClass="w-full p-2 border border-gray-300 rounded-lg focus:outline-none"
             />
           </div>
+
+          {/* Persian DatePicker for Real Start Date */}
           <div className="mb-4">
             <label className="block text-lg font-medium text-primary-dark mb-2">
               تاریخ واقعی شروع:
             </label>
-            <input
+            <DatePicker
               className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-              type="date"
-              name="real_start_date"
-              value={addFormData.real_start_date}
-              onChange={handleAddFormChange}
+              calendar={persian}
+              locale={persian_fa}
+            //   value={addFormData.real_start_date}
+              onChange={(date) => handleDateChange("real_start_date", date)}
+              inputClass="w-full p-2 border border-gray-300 rounded-lg focus:outline-none"
             />
           </div>
+
+          {/* Persian DatePicker for Real End Date */}
           <div className="mb-4">
             <label className="block text-lg font-medium text-primary-dark mb-2">
               تاریخ واقعی پایان:
             </label>
-            <input
+            <DatePicker
               className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-              type="date"
-              name="real_end_date"
-              value={addFormData.real_end_date}
-              onChange={handleAddFormChange}
+              calendar={persian}
+              locale={persian_fa}
+            //   value={addFormData.real_end_date}
+              onChange={(date) => handleDateChange("real_end_date", date)}
+              inputClass="w-full p-2 border border-gray-300 rounded-lg focus:outline-none"
             />
           </div>
+
           <div className="mb-4">
             <label className="block text-lg font-medium text-primary-dark mb-2">
               اعضای خارجی:
@@ -161,6 +211,7 @@ const AddProject = ({ ownerId ,open,setOpen}: { ownerId: string ,open:boolean,se
               onChange={handleAddFormChange}
             />
           </div>
+
           <div className="mb-4">
             <label className="block text-lg font-medium text-primary-dark mb-2">
               صاحب پروژه:

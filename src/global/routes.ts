@@ -3,7 +3,7 @@ const routes = {
   professors: (id: string) => `professors/${id}`,
   Colleges: (id: number) => `Colleges/${id}`,
   professor: (id: string) => `professor/${id}`,
-  moreInfo: (id: string) => `more-info/${id}`,
+  Project: (id: string) => `project/${id}`,
   dashboard: "/",
   login: "/login",
   signup: "/signup",
