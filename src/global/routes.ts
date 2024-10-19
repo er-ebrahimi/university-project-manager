@@ -7,7 +7,10 @@ const routes = {
   dashboard: "/",
   login: "/login",
   signup: "/signup",
-  adminUsers:"/admin/users"
+  adminUsers:"/admin/users",
+  notfound : "/404",
+  a500:"/500",
+  a502:"/502"
 };
 
 export default routes;

@@ -1,4 +1,3 @@
-// httpRequest.ts
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { getAccessToken, getRefreshToken, setTokens, clearTokens } from './tokenService';
 import toast from 'react-hot-toast';
@@ -22,13 +21,14 @@ export const httpRequest = async <T>(
     includeHeaders = true,
     retry = true,
   } = options;
-//   const navigate = useNavigate()
+
   const url = `${API_BASE_URL}${endpoint}`;
 
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
   };
 
+  // Include access token if available
   if (includeHeaders) {
     const token = getAccessToken();
     if (token) {
@@ -51,16 +51,18 @@ export const httpRequest = async <T>(
       // Attempt to refresh the token
       const refreshToken = getRefreshToken();
 
-      if (!refreshToken && refreshToken === undefined) {
+      if (!refreshToken) {
+        // If no refresh token, clear tokens and redirect to login
         clearTokens();
-        // Optionally redirect to login page
-        // throw new Error('لطفا ابتدا وارد شوید');
-        toast.error("ابتدا وارد شوید")
+        toast.error("ابتدا وارد شوید");
         
-        
+        // Redirect to login page
+        window.location.href = '/login';
+        return Promise.reject(new Error('Unauthorized'));
       }
 
       try {
+        // Attempt to refresh the token
         const refreshResponse = await axios.post(`${API_BASE_URL}/user/refresh/`, {
           refreshToken,
         });
@@ -76,16 +78,16 @@ export const httpRequest = async <T>(
         const retryConfig: AxiosRequestConfig = {
           ...config,
           headers,
-        //   retry: false, 
-          // Prevent infinite loop
         };
 
         const retryResponse: AxiosResponse<T> = await axios(retryConfig);
         return retryResponse.data;
       } catch (refreshError) {
+        // Clear tokens and redirect to login if refresh fails
         clearTokens();
-        // Optionally redirect to login page
-        throw refreshError;
+        toast.error('مشکلی در ورود مجدد رخ داده است.');
+        window.location.href = '/login';
+        return Promise.reject(refreshError);
       }
     }
 
@@ -93,4 +95,3 @@ export const httpRequest = async <T>(
     throw error;
   }
 };
-

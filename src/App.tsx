@@ -14,6 +14,9 @@ import AdminUsers from "./pages/admin/users";
 import { Toaster } from "react-hot-toast";
 import { UserProvider } from "./functions/Usercontext";
 import RequirePermission from "./functions/Requrepermision";
+import NotFound from "./pages/notFound";
+import InternalServerError from "./pages/500";
+import BadGateway from "./pages/502";
 function AppRoute() {
   // const userPermissionsName = useUserPermissionsName();
   // console.log("🚀 ~ AppRoute ~ userPermissionsName:", userPermissionsName)
@@ -77,6 +80,18 @@ export default function App() {
               <Router.Route
                 path={routes.login}
                 element={<Login></Login>}
+              ></Router.Route>
+              <Router.Route
+                path={routes.notfound}
+                element={<NotFound></NotFound>}
+              ></Router.Route>
+              <Router.Route
+                path={routes.a500}
+                element={<InternalServerError></InternalServerError>}
+              ></Router.Route>
+              <Router.Route
+                path={routes.a502}
+                element={<BadGateway></BadGateway>}
               ></Router.Route>
             </Router.Routes>
           </div>

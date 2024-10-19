@@ -59,13 +59,13 @@ export default function Universities() {
 
   return (
     <>
-      <UnivercitySidebar />
+      <UnivercitySidebar/>
       <div className="flex items-center">
         <h1 className="text-lg font-semibold md:text-2xl">سازمان ها</h1>
       </div>
       <div className="flex flex-1 flex-col items-center justify-center rounded-lg border border-dashed shadow-sm">
         {/* Pass the majors data to the ForceGraph component */}
-        <ForceGraph majors={suborganizations!} />
+        <ForceGraph majors={suborganizations?.sub_organs} organ={suborganizations} />
         <div className="flex flex-row-reverse justify-start gap-4 w-[75vw] ml-1">
           {userPermissionsName === "SuperAdmin" && <AddFieldDialog />}
         </div>

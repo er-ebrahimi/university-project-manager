@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import {
   getOrganizationData,
@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/select";
 import { getUsersSelect, userSelect } from "@/functions/services/users";
 import ClipLoader from "react-spinners/ClipLoader";
+import { UserContext } from "@/functions/Usercontext";
 
 interface UniversityData {
   name: string;
@@ -28,6 +29,7 @@ interface UniversityData {
 const UniversitySidebar: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [users, setUsers] = useState<userSelect[]>();
+  const [ownerName ,setOwnerName] =useState<string>()
   const [universityData, setUniversityData] = useState<UniversityData>({
     name: "",
     phone_number: "",
@@ -37,6 +39,8 @@ const UniversitySidebar: React.FC = () => {
     owner: "", // or owner_id: 0
   });
 
+  const a = useContext(UserContext)
+  console.log("🚀 ~ a:", a)
   // Fetch organization data
   const { data, isLoading, isError } = useQuery({
     queryKey: ["organizationData"],
@@ -81,7 +85,7 @@ const UniversitySidebar: React.FC = () => {
   const { data: userlist ,isPending:userLoading} = useQuery({
     queryKey: ["UserSelect"],
     queryFn: getUsersSelect,
-    enabled: isEditing, // Only fetch when editing mode is enabled
+    // enabled: isEditing, // Only fetch when editing mode is enabled
     // onSuccess: (data:userSelect[]) => {
     //   setUsers(data);
     // },
@@ -91,6 +95,8 @@ const UniversitySidebar: React.FC = () => {
       setUsers(userlist);
     }
   }, [userlist]);
+  
+  
 
   console.log("🚀 ~ userlist:", userlist)
   // Update the state when data is fetched
@@ -102,8 +108,17 @@ const UniversitySidebar: React.FC = () => {
         postal_code: data.postal_code || "Unknown",
         nickname: data.nickname || "Unknown",
         address: data.address || "Unknown",
-        owner: data.owner?.id || "1", // or owner_id: data.owner?.id || 0
+        owner: data.owner || "1", // or owner_id: data.owner?.id || 0
       });
+      if (userlist) {
+        // console.log("hi")
+        const ownerUser = userlist.find((user) => user.id === data.owner);
+        if (ownerUser) {
+        // console.log("hi")
+
+          setOwnerName(ownerUser.username); // Set ownerName to the matched username
+        }
+      }
     }
   }, [data, isLoading, isError]);
 
@@ -234,14 +249,15 @@ const UniversitySidebar: React.FC = () => {
             // />
             <Select
             dir="rtl"
+            defaultValue={String(data.owner)}
             onValueChange={(value) =>
               setUniversityData({ ...universityData, owner: value })
             }
           >
             <SelectTrigger className="mt-2">
-              <SelectValue placeholder="انتخاب صاحب سازمان" />
+              <SelectValue placeholder="انتخاب صاحب سازمان"  />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent >
               {!userLoading&& users?.map((item) => (
                 <SelectItem key={item.id} value={String(item.id)}>
                   {item.username}
@@ -252,7 +268,7 @@ const UniversitySidebar: React.FC = () => {
             </SelectContent>
           </Select>
           ) : (
-            <p className="text-gray-600 mt-1">{data.owner?.username}</p>
+            <p className="text-gray-600 mt-1">{ownerName}</p>
           )}
         </div>
       </div>

@@ -24,6 +24,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [userPermissionsName, setUserPermissionsName] = useState<string | null>(
     localStorage.getItem('userRole')
   );
+  
 
   useEffect(() => {
     const fetchUser = async () => {

@@ -15,4 +15,5 @@ export const getRefreshToken = () => localStorage.getItem("refreshToken");
 export const clearTokens = () => {
   localStorage.removeItem("accessToken");
   localStorage.removeItem("refreshToken");
+  localStorage.removeItem("userRole")
 };

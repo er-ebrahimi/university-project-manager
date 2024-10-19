@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 // import { Major } from "@/types/university";
 // import { DataItem } from "@/functions/services/organization";
 import routes from "@/global/routes";
-import { DataItem } from "@/functions/services/organization";
+import { DataItem, Organization } from "@/functions/services/organization";
 
 interface Node {
   id: string;
@@ -21,18 +21,18 @@ interface Link {
   target: string | Node;
 }
 
-function ForceGraph({ majors }: { majors: DataItem[] }) {
+function ForceGraph({ majors ,organ}: { majors: DataItem[] ,organ:Organization}) {
   const svgRef = useRef<SVGSVGElement>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const nodes: Node[] = [{ id: majors[0]?.organization?.name, group: 0,RealId:0 }].concat(
+    const nodes: Node[] = [{ id: organ.name, group: 0,RealId:0 }].concat(
       majors.map((major) => ({ id: major.name, group: 1,RealId:major.id }))
     );
     console.log("nodes: ", nodes);
 
     const links: Link[] = majors.map((major) => ({
-      source: majors[0]?.organization?.name,
+      source: organ.name,
       target: major.name,
     }));
 
