@@ -42,16 +42,15 @@ const CumulativeLineChart: React.FC<CumulativeLineChartProps> = ({ data }) => {
       .attr("transform", `translate(${margin.left},${margin.top})`);
 
     // X axis
-    const uniqueYears = Array.from(new Set(data.map((d) => d.year)));
-    console.log("🚀 ~ drawChart ~ uniqueYears:", uniqueYears)
     const x = d3
       .scaleLinear()
-      .domain(d3.extent(uniqueYears) as [number, number])
+      .domain(d3.extent(data, (d) => d.year) as [number, number])
       .range([0, width]);
+
     svg
       .append("g")
-      .attr("transform", `translate(20,${height+2})`)
-      .call(d3.axisBottom(x).tickFormat(d3.format("d")).ticks(uniqueYears.length - 1));
+      .attr("transform", `translate(0,${height})`)
+      .call(d3.axisBottom(x).tickFormat(d3.format("d")).ticks(data.length));
 
     // Single Y axis for both cumulative count and count (left axis)
     const y = d3
@@ -78,9 +77,7 @@ const CumulativeLineChart: React.FC<CumulativeLineChartProps> = ({ data }) => {
         "d",
         d3
           .line<DataPoint>()
-          .x((d) => {
-            console.log(x)
-            return x(d.year)})
+          .x((d) => x(d.year))
           .y((d) => y(d.cumulativeCount))
       );
 
@@ -131,3 +128,31 @@ const CumulativeLineChart: React.FC<CumulativeLineChartProps> = ({ data }) => {
 };
 
 export default CumulativeLineChart;
+
+// Example usage in a page component
+// import React from "react";
+// import CumulativeLineChart from "./CumulativeLineChart";
+
+// const exampleData = [
+//   {
+//     year: 2024,
+//     count: 20,
+//     cumulativeCount: 20,
+//   },
+//   {
+//     year: 2025,
+//     count: 100,
+//     cumulativeCount: 120,
+//   },
+// ];
+
+// const ChartPage: React.FC = () => {
+//   return (
+//     <div>
+//       <h1>Chart Example</h1>
+//       <CumulativeLineChart data={exampleData} />
+//     </div>
+//   );
+// };
+
+// export default CumulativeLineChart;

@@ -1,6 +1,6 @@
 // import { useState } from "react";
 import { useParams } from "react-router-dom";
-import processData from "./ProcessDataForLineChart";
+// import processData from "./ProcessDataForLineChart";
 import CumulativeLineChart from "./CumulativeLineChart";
 import { Professor } from "@/types/university";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -26,14 +26,50 @@ function MoreInfoCards({ professors }: { professors: Professor[] }) {
     (p) => `${p.ProfessorFN} ${p.ProfessorLN}` === decodedName
   );
 
-  // If professor is undefined, show a fallback message or handle it gracefully
-  if (!professor) {
-    return <div>استاد پیدا نشد</div>;
-  }
+  // // If professor is undefined, show a fallback message or handle it gracefully
+  // if (!professor) {
+  //   return <div>استاد پیدا نشد</div>;
+  // }
 
+  const rawData = [
+    
+    {
+      id: 2,
+      program_progress_percentage: "20.00",
+      time_program_progress_percentage: "10.00",
+      date: "2022-08-09T15:56:56+03:30",
+      create_date: "2022-10-20T15:31:09.104725+03:30",
+      project: 1,
+    },
+    {
+      id: 2,
+      program_progress_percentage: "20.00",
+      time_program_progress_percentage: "10.00",
+      date: "2023-08-09T15:56:56+03:30",
+      create_date: "2023-10-20T15:31:09.104725+03:30",
+      project: 1,
+    },
+    {
+      id: 1,
+      program_progress_percentage: "100.00",
+      time_program_progress_percentage: "95.00",
+      date: "2024-08-09T15:56:56+03:30",
+      create_date: "2024-10-20T15:29:26.765125+03:30",
+      project: 1,
+    },
+  ];
+const transformData = (rawData: any[]) => {
+  const transformedData = rawData.map((item) => ({
+    year: new Date(item.date).getFullYear(),
+    count: parseFloat(item.program_progress_percentage),
+    cumulativeCount: parseFloat(item.time_program_progress_percentage),
+  }));
+  return transformedData;
+};
+console.log(transformData(rawData))
   // Separate state for each chart data
   // const [chart1Data, setChart1Data] = useState(processData(professor));
-  const chart1Data = processData(professor);
+  // const chart1Data = processData(professor);
   // const [chart2Data, setChart2Data] = useState(processData(professor));
 
   // State for the modal input
@@ -141,7 +177,7 @@ function MoreInfoCards({ professors }: { professors: Professor[] }) {
             </Dialog>
           </CardHeader>
           <CardContent dir="ltr" className="p-2">
-            <CumulativeLineChart data={chart1Data} />
+            <CumulativeLineChart data={transformData(rawData)} />
           </CardContent>
         </Card>
 
@@ -198,7 +234,7 @@ function MoreInfoCards({ professors }: { professors: Professor[] }) {
             </Dialog>
           </CardHeader>
           <CardContent dir="ltr" className="p-2">
-            <CumulativeLineChart data={chart1Data} />
+            <CumulativeLineChart data={transformData(rawData)} />
           </CardContent>
         </Card>
       </div>
