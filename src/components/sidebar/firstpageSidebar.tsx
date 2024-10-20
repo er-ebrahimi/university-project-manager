@@ -39,8 +39,8 @@ const UniversitySidebar: React.FC = () => {
     owner: "", // or owner_id: 0
   });
 
-  const a = useContext(UserContext)
-  console.log("🚀 ~ a:", a)
+  const userData = useContext(UserContext)
+  // console.log("🚀 ~ a:", a)
   // Fetch organization data
   const { data, isLoading, isError } = useQuery({
     queryKey: ["organizationData"],

@@ -3,15 +3,16 @@
 import ForceGraph from "@/components/tree/Majors";
 import AddFieldDialog from "@/components/fieldspage/AddFieldDialog";
 import UnivercitySidebar from "@/components/sidebar/firstpageSidebar";
-import { useUserPermissionsName } from "@/functions/Usercontext";
+import { UserContext } from "@/functions/Usercontext";
 import { useQuery } from "@tanstack/react-query";
 import { getSuborganizationData } from "@/functions/services/organization";
 // import { DataItem } from "@/functions/services/organization"; // Ensure this import path is correct
 import toast from "react-hot-toast";
+import { useContext } from "react";
 
 export default function Universities() {
-  const userPermissionsName = useUserPermissionsName();
-
+  const userData = useContext(UserContext)
+  console.log("🚀 ~ Universities ~ userData:", userData)
   // Use useQuery to fetch the suborganization data
   // const {
   //   data: suborganizations,
@@ -22,7 +23,7 @@ export default function Universities() {
   //   ["suborganizations"], // queryKey
   //   getSuborganizationData // queryFn
   // );
-
+  console.log(userData?.user?.is_superuser)
   const {
     data: suborganizations,
     isPending,
@@ -67,7 +68,7 @@ export default function Universities() {
         {/* Pass the majors data to the ForceGraph component */}
         <ForceGraph majors={suborganizations?.sub_organs} organ={suborganizations} />
         <div className="flex flex-row-reverse justify-start gap-4 w-[75vw] ml-1">
-          {userPermissionsName === "SuperAdmin" && <AddFieldDialog />}
+          {(userData?.user?.is_superuser || userData?.user?.admin ) && <AddFieldDialog />}
         </div>
       </div>
     </>

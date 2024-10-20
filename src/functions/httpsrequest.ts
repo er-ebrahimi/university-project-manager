@@ -90,6 +90,10 @@ export const httpRequest = async <T>(
         return Promise.reject(refreshError);
       }
     }
+    if(error.response?.status === 403){
+      toast.error("شما دسترسی مورد نظر را ندارید")
+      window.location.href = '/app'
+    }
 
     // Handle other errors
     throw error;

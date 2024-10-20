@@ -33,9 +33,9 @@ function AppRoute() {
             path="/admin/users"
             // element={<AdminUsers />}
             element={
-              <RequirePermission permissionName="SuperAdmin">
+              // <RequirePermission >
                 <AdminUsers />
-              </RequirePermission>
+              // </RequirePermission>
             }
           ></Router.Route>
           <Router.Route

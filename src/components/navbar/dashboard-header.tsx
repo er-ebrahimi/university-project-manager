@@ -100,10 +100,10 @@ export default function DashboardHeader() {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>پروفایل</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>تنظیمات</DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={handleLogout}>خروج</DropdownMenuItem>
+          {/* <DropdownMenuSeparator /> */}
+          {/* <DropdownMenuItem>تنظیمات</DropdownMenuItem> */}
+          {/* <DropdownMenuSeparator /> */}
+          <DropdownMenuItem onClick={handleLogout} className='my-2 py-3'>خروج</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </header>

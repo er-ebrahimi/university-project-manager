@@ -184,11 +184,11 @@ const UnivercityCard: React.FC<UnivercityCardProps> = ({ data }) => {
           </button>
         )} */}
 
-        {!isEditing && (
+        {/* {!isEditing && (
           <button  className="mt-4 w-9 h-9 text-sm p-1 bg-white text-red-500 border-2 border-red-500 rounded hover:bg-red-500 hover:text-white">
             <MdDelete className="w-full h-full" />
           </button>
-        )}
+        )} */}
 
         {!isEditing && (
           <button

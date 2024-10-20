@@ -52,7 +52,7 @@ const SubOrganizationSidebar: React.FC<SubOrganizationSidebarProps> = ({
     nickname: string;
     address: string;
     owner: string | null; // Allow both string and null
-    organization: string | null; // Also adjust organization field if needed
+    organization: string ; // Also adjust organization field if needed
   }>({
     name: "نام دانشکده را وارد کنید",
     phone_number: "021-۷۷۴۹۱۰۲۵",
@@ -60,7 +60,7 @@ const SubOrganizationSidebar: React.FC<SubOrganizationSidebarProps> = ({
     nickname: "یونی",
     address: "تهران، نارمک، دانشگاه علم و صنعت ایران",
     owner: null, // or owner ID when fetched
-    organization: null, // or organization ID when fetched
+    organization: "", // or organization ID when fetched
   });
   const [opennalert, setOpenalert] = useState(false);
   // Update university data based on props when data changes
@@ -74,7 +74,7 @@ const SubOrganizationSidebar: React.FC<SubOrganizationSidebarProps> = ({
         owner: data.owner.id,
         postal_code: data.postal_code,
         phone_number: data.phone_number,
-        organization: data.organization.id,
+        organization: data.organization,
       }));
     }
   }, [data]);
@@ -233,6 +233,20 @@ const SubOrganizationSidebar: React.FC<SubOrganizationSidebarProps> = ({
                 <p className="text-gray-600 mt-1">{universityData.nickname}</p>
               )}
             </div>
+            <div  className="hidden mb-4">
+              <h3 className="text-sm font-bold text-primary-dark">نام خلاصه</h3>
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={universityData.organization}
+                  // defaultValue={universityData.organization}
+                  onChange={(e) => handleInputChange(e, "organization")}
+                  className="border p-1 rounded w-full"
+                />
+              ) : (
+                <p className="text-gray-600 mt-1">{universityData.nickname}</p>
+              )}
+            </div>
 
             <div className="mb-4">
               <h3 className="text-sm font-bold text-primary-dark">آدرس</h3>
@@ -266,6 +280,7 @@ const SubOrganizationSidebar: React.FC<SubOrganizationSidebarProps> = ({
                   onValueChange={(value) =>
                     setUniversityData({ ...universityData, owner: value })
                   }
+                  defaultValue={String(data.owner.id)}
                 >
                   <SelectTrigger className="mt-2">
                     <SelectValue placeholder="انتخاب صاحب سازمان" />

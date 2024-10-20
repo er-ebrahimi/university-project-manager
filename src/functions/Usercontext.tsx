@@ -1,10 +1,10 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { UserData, fetchUserData } from "./UserService";
-import { getAccessToken } from "./tokenService";
+// import { getAccessToken } from "./tokenService";
 
 interface UserContextType {
   user: UserData | null;
-  userPermissionsName: string | null;
+  // userPermissionsName: string | null;
   setUser: React.Dispatch<React.SetStateAction<UserData | null>>;
   loading: boolean;
   error: any;
@@ -21,25 +21,25 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false); // Track if the user just logged in
 
   // Get role from local storage if available
-  const [userPermissionsName, setUserPermissionsName] = useState<string | null>(
-    localStorage.getItem('userRole')
-  );
+  // const [userPermissionsName, setUserPermissionsName] = useState<string | null>(
+  //   localStorage.getItem('userRole')
+  // );
   
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         setLoading(true);
-        const accessToken = getAccessToken();
+        // const accessToken = getAccessToken();
         // Fetch user data if the user has logged in or userPermissionsName is not set
-        if (accessToken && (!userPermissionsName || isLoggedIn)) {
+        if (user === null || undefined) {
           const fetchedUser = await fetchUserData(); // API call to fetch user
           setUser(fetchedUser);
-          const role = fetchedUser.user_permissions?.name;
-          if (role) {
-            setUserPermissionsName(role);
-            localStorage.setItem('userRole', role); // Save the role in localStorage
-          }
+          // const role = fetchedUser.user_permissions?.name;
+          // if (role) {
+          //   setUserPermissionsName(role);
+          //   localStorage.setItem('userRole', role); // Save the role in localStorage
+          // }
         }
       } catch (err) {
         setError(err);
@@ -49,11 +49,11 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     };
 
     fetchUser();
-  }, [userPermissionsName, isLoggedIn]); // Fetch user data on login success or if role is missing
+  }, [ isLoggedIn]); // Fetch user data on login success or if role is missing
 
   const logout = () => {
     setUser(null);
-    setUserPermissionsName(null);
+    // setUserPermissionsName(null);
     setIsLoggedIn(false);
     localStorage.removeItem("userRole"); // Remove only the role from localStorage
     localStorage.removeItem("accessToken");
@@ -66,7 +66,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   return (
     <UserContext.Provider
-      value={{ user, userPermissionsName, setUser, loading, error, logout, loginSuccess }}
+      value={{ user, setUser, loading, error, logout, loginSuccess }}
     >
       {children}
     </UserContext.Provider>
@@ -81,7 +81,7 @@ export const useUser = (): UserContextType => {
   return context;
 };
 
-export const useUserPermissionsName = (): string | null => {
-  const { userPermissionsName } = useUser();
-  return userPermissionsName;
-};
+// export const useUserPermissionsName = (): string | null => {
+//   // const { userPermissionsName } = useUser();
+//   return userPermissionsName;
+// };

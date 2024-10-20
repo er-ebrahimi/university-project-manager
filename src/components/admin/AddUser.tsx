@@ -4,16 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import toast from "react-hot-toast";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Dispatch, SetStateAction, useState } from "react";
 import { getselectsuborganization } from "@/functions/services/organization";
-import ClipLoader from "react-spinners/ClipLoader";
+import Select from "react-select";
+import { getprojectList } from "@/functions/services/project";
+import { Checkbox } from "../ui/checkbox";
+
+// Define types
 
 type CreateUserVariables = {
   username: string;
@@ -27,7 +24,10 @@ type CreateUserVariables = {
   mobile_phone_number: string;
   user_permissions: number;
   password: string;
-  subOrganization: number | null;
+  subOrganizations: number;
+  projects: number[];
+  admin: boolean;
+  crud_project: boolean;
 };
 
 type CreateUserResponse = {
@@ -41,6 +41,7 @@ const AddUser = ({
 }: {
   setOpen: Dispatch<SetStateAction<boolean>>;
 }) => {
+  // React query mutation for creating a user
   const { mutate } = useMutation<
     CreateUserResponse,
     Error,
@@ -54,23 +55,32 @@ const AddUser = ({
     onError: (error: any) => {
       toast.error("ساخت کاربر با خطا مواجه شد");
       console.log(error);
-      // toast.error(error.responce.data.message);
-
       for (const i in error.response.data) {
         toast.error(`${i}: ${error.response.data[i]}`);
       }
     },
   });
-  const { data, isPending, isError } = useQuery({
+
+  // React query for fetching sub-organization data
+  const { data, isPending } = useQuery({
     queryKey: ["selectListsubOrganization"],
     queryFn: getselectsuborganization,
   });
+
+  const { data: ProjectList, isPending: pPending } = useQuery({
+    queryKey: ["projectList"],
+    queryFn: getprojectList,
+  });
+
+  // Component states
   const [educationLevel, setEducationLevel] = useState<string>("");
-  const [userPermissions, setUserPermissions] = useState<number | null>(null);
   const [userSuborganization, setUserSuborganization] = useState<number | null>(
     null
   );
-  console.log("🚀 ~ AddUser ~ data:", data);
+  const [userProjects, setUserProjects] = useState<number[]>([]);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  const [crudProject, setCrudProject] = useState<boolean>(false);
+
   return (
     <form
       onSubmit={(e) => {
@@ -89,8 +99,11 @@ const AddUser = ({
           education_level: educationLevel, // Use state value
           phone_number: formData.get("phone_number") as string,
           mobile_phone_number: formData.get("mobile_phone_number") as string,
-          user_permissions: userPermissions ?? 0, // Use state value
-          subOrganization: userSuborganization ?? null,
+          user_permissions: 0, // Removed unused state
+          subOrganizations: userSuborganization ?? 0, // Use state value
+          projects: userProjects, // Use state value
+          admin: isAdmin,
+          crud_project: crudProject,
         };
 
         console.log("🚀 ~ AddUser ~ values:", values);
@@ -104,6 +117,7 @@ const AddUser = ({
         </Label>
         <Input className="mt-2 w-full" name="username" id="username" required />
       </div>
+
       <div>
         <Label className="mr-2" htmlFor="password">
           رمز عبور
@@ -177,17 +191,18 @@ const AddUser = ({
         <Label className="mr-2" htmlFor="education_level">
           سطح تحصیلات
         </Label>
-        <Select dir="rtl" onValueChange={(value) => setEducationLevel(value)}>
-          <SelectTrigger className="mt-2">
-            <SelectValue placeholder="انتخاب سطح تحصیلات" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="BSc">کارشناسی</SelectItem>
-            <SelectItem value="Ms">کارشناسی ارشد</SelectItem>
-            <SelectItem value="PhD">دکترا</SelectItem>
-            <SelectItem value="Prof">پروفسور</SelectItem>
-          </SelectContent>
-        </Select>
+        <Select
+          options={[
+            { value: "BSc", label: "کارشناسی" },
+            { value: "Ms", label: "کارشناسی ارشد" },
+            { value: "PhD", label: "دکترا" },
+            { value: "Prof", label: "پروفسور" },
+          ]}
+          placeholder="انتخاب سطح تحصیلات"
+          noOptionsMessage={() => "گزینه‌ای موجود نیست"}
+          onChange={(option) => setEducationLevel(option?.value || "")}
+          className="mt-2 w-full"
+        />
       </div>
 
       <div>
@@ -217,50 +232,70 @@ const AddUser = ({
         />
       </div>
 
+      <div className="flex justify-end mr-2 items-center  flex-row-reverse gap-4 mt-6">
+        <div className="flex flex-row-reverse gap-2">
+          <Checkbox id="admin" checked={isAdmin} onCheckedChange={(checked) => setIsAdmin(checked === true)} />
+          <label
+            htmlFor="admin"
+            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          >
+            ادمین
+          </label>
+        </div>
+        <div className="flex flex-row-reverse gap-2">
+          <Checkbox
+            id="crud_project"
+            checked={crudProject}
+            onCheckedChange={(checked) => setCrudProject(checked === true)}
+          />
+          <label
+            htmlFor="crud_project"
+            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          >
+            کراد پروژه
+          </label>
+        </div>
+      </div>
+
       <div>
-        <Label className="mr-2" htmlFor="user_permissions">
-          نقش
+        <Label className="mr-2" htmlFor="subOrganizations">
+          زیرسازمان‌ها
         </Label>
         <Select
-          dir="rtl"
-          onValueChange={(value) => setUserPermissions(Number(value))}
-        >
-          <SelectTrigger className="mt-2">
-            <SelectValue placeholder="انتخاب نقش" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="1">سوپرادمین</SelectItem>
-            <SelectItem value="2">کاربر</SelectItem>
-          </SelectContent>
-        </Select>
+          options={
+            data?.map((item) => ({
+              value: item.id,
+              label: item.nickname,
+            })) || []
+          }
+          isLoading={isPending}
+          placeholder="انتخاب زیرسازمان"
+          noOptionsMessage={() => "زیرسازمانی موجود نیست"}
+          onChange={(option) => setUserSuborganization(option?.value || null)}
+          className="mt-2 w-full"
+        />
       </div>
+
       <div>
-        <Label className="mr-2" htmlFor="user_permissions">
-          زیرسازمان
+        <Label className="mr-2" htmlFor="projects">
+          پروژه‌ها
         </Label>
         <Select
-          dir="rtl"
-          onValueChange={(value) => setUserSuborganization(Number(value))}
-        >
-          <SelectTrigger className="mt-2">
-            <SelectValue  />
-          </SelectTrigger>
-          <SelectContent >
-            {isPending && (
-              <div className="h-10 flex justify-center">
-                <ClipLoader className="h-6 w-6" />
-              </div>
-            )}
-            {!isPending &&
-              data?.map((item) => (
-                <SelectItem key={item.id} value={String(item.id)}>
-                  {item.nickname}
-                </SelectItem>
-              ))}
-          </SelectContent>
-        </Select>
+          options={
+            ProjectList?.map((item) => ({
+              value: item.id,
+              label: item.name,
+            })) || []
+          }
+          isLoading={pPending}
+          isMulti
+          placeholder="انتخاب پروژه"
+          noOptionsMessage={() => "پروژه‌ای موجود نیست"}
+          onChange={(options) => setUserProjects(options?.map((opt) => opt.value) || [])}
+          className="mt-2 w-full"
+        />
       </div>
-              
+
       <div dir="ltr" className="md:col-span-2 ml-2">
         <Button
           type="submit"
