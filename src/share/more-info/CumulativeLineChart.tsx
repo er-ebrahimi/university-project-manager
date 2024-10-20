@@ -13,6 +13,7 @@ interface CumulativeLineChartProps {
 }
 
 const CumulativeLineChart: React.FC<CumulativeLineChartProps> = ({ data }) => {
+  console.log("🚀 ~ dataaaaa:", data)
   const ref = useRef<SVGSVGElement | null>(null);
   const margin = { top: 20, right: 50, bottom: 30, left: 50 };
   const width = 1500 - margin.left - margin.right;
@@ -43,7 +44,7 @@ const CumulativeLineChart: React.FC<CumulativeLineChartProps> = ({ data }) => {
 
     // X axis
     const uniqueYears = Array.from(new Set(data.map((d) => d.year)));
-    console.log("🚀 ~ drawChart ~ uniqueYears:", uniqueYears)
+    // console.log("🚀 ~ drawChart ~ uniqueYears:", uniqueYears)
     const x = d3
       .scaleLinear()
       .domain(d3.extent(uniqueYears) as [number, number])
@@ -79,7 +80,7 @@ const CumulativeLineChart: React.FC<CumulativeLineChartProps> = ({ data }) => {
         d3
           .line<DataPoint>()
           .x((d) => {
-            console.log(x)
+            // console.log(x)
             return x(d.year)})
           .y((d) => y(d.cumulativeCount))
       );

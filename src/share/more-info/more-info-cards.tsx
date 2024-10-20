@@ -16,56 +16,77 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { HiOutlinePencil } from "react-icons/hi";
+import { useQuery } from "@tanstack/react-query";
+import { CulChart, getRealScalesByProj, getTimeScalesByProj } from "@/functions/services/charts";
 
 function MoreInfoCards({ professors }: { professors: Professor[] }) {
-  const { name } = useParams();
-  const decodedName = decodeURIComponent(name || ""); // Ensure it's always a string
+  const { id } = useParams();
+  // const decodedName = decodeURIComponent(name || ""); // Ensure it's always a string
 
   // Find professor by name
-  const professor = professors.find(
-    (p) => `${p.ProfessorFN} ${p.ProfessorLN}` === decodedName
-  );
+  // const professor = professors.find(
+  //   (p) => `${p.ProfessorFN} ${p.ProfessorLN}` === decodedName
+  // );
 
   // // If professor is undefined, show a fallback message or handle it gracefully
   // if (!professor) {
   //   return <div>استاد پیدا نشد</div>;
   // }
 
-  const rawData = [
-    {
-      id: 2,
-      program_progress_percentage: "20.00",
-      time_program_progress_percentage: "10.00",
-      date: "2022-08-09T15:56:56+03:30",
-      create_date: "2022-10-20T15:31:09.104725+03:30",
-      project: 1,
-    },
-    {
-      id: 2,
-      program_progress_percentage: "20.00",
-      time_program_progress_percentage: "10.00",
-      date: "2023-08-09T15:56:56+03:30",
-      create_date: "2023-10-20T15:31:09.104725+03:30",
-      project: 1,
-    },
-    {
-      id: 1,
-      program_progress_percentage: "100.00",
-      time_program_progress_percentage: "95.00",
-      date: "2024-08-09T15:56:56+03:30",
-      create_date: "2024-10-20T15:29:26.765125+03:30",
-      project: 1,
-    },
-  ];
-  const transformData = (rawData: any[]) => {
+  const { data, isPending } = useQuery({
+    queryKey: [`getTimeScalesByProj${id}`],
+    queryFn: () => getTimeScalesByProj(id),
+  });
+  const { data:realStateData, isPending:RealStatePending } = useQuery({
+    queryKey: [`getRealScalesByProj${id}`],
+    queryFn: () => getRealScalesByProj(id),
+  });
+  console.log("🚀 ~ MoreInfoCards ~ realStateData:", realStateData)
+  console.log("🚀 ~ MoreInfoCards ~ data:", data)
+  // const rawData = [
+  //   {
+  //     id: 2,
+  //     program_progress_percentage: "20.00",
+  //     time_program_progress_percentage: "10.00",
+  //     date: "2022-08-09T15:56:56+03:30",
+  //     create_date: "2022-10-20T15:31:09.104725+03:30",
+  //     project: 1,
+  //   },
+  //   {
+  //     id: 2,
+  //     program_progress_percentage: "20.00",
+  //     time_program_progress_percentage: "10.00",
+  //     date: "2023-08-09T15:56:56+03:30",
+  //     create_date: "2023-10-20T15:31:09.104725+03:30",
+  //     project: 1,
+  //   },
+  //   {
+  //     id: 1,
+  //     program_progress_percentage: "100.00",
+  //     time_program_progress_percentage: "95.00",
+  //     date: "2024-08-09T15:56:56+03:30",
+  //     create_date: "2024-10-20T15:29:26.765125+03:30",
+  //     project: 1,
+  //   },
+  // ];
+  const transformData = (rawData: CulChart[] | undefined) => {
+    if (!rawData) {
+      // Return an empty array if rawData is undefined
+      return [];
+    }
+  
+    // Map through the rawData and transform it
     const transformedData = rawData.map((item) => ({
       year: new Date(item.date).getFullYear(),
-      count: parseFloat(item.program_progress_percentage),
-      cumulativeCount: parseFloat(item.time_program_progress_percentage),
+      count: parseFloat(item.program_progress_percentage) || 0, // handle default for NaN
+      cumulativeCount: parseFloat(item.real_program_progress_percentage) || 0, // handle default for NaN
     }));
+    transformedData.sort((a, b) => a.year - b.year);
+
     return transformedData;
   };
-  console.log(transformData(rawData));
+  
+  console.log(transformData(data));
   // Separate state for each chart data
   // const [chart1Data, setChart1Data] = useState(processData(professor));
   // const chart1Data = processData(professor);
@@ -125,7 +146,7 @@ function MoreInfoCards({ professors }: { professors: Professor[] }) {
       <div className="flex w-[650px] flex-row flex-wrap justify-around">
         <Card className="chart-container w-[630px] mt-1">
           <CardHeader className="flex flex-row justify-between items-start pt-3 pb-0 px-6">
-            <CardTitle className="my-auto text-lg">آمار مقاله‌ها </CardTitle>
+            <CardTitle className="my-auto text-lg">آمار زمانی </CardTitle>
             <Dialog>
               <DialogTrigger asChild>
                 {/* Make sure there's only a single child here */}
@@ -176,13 +197,13 @@ function MoreInfoCards({ professors }: { professors: Professor[] }) {
             </Dialog>
           </CardHeader>
           <CardContent dir="ltr" className="p-2">
-            <CumulativeLineChart data={transformData(rawData)} />
+            <CumulativeLineChart data={transformData(data)} />
           </CardContent>
         </Card>
 
         <Card className="chart-container w-[630px] mt-4">
           <CardHeader className="flex flex-row justify-between items-start pt-3 pb-0 px-6">
-            <CardTitle className="my-auto text-lg">آمار مقاله‌ها </CardTitle>
+            <CardTitle className="my-auto text-lg">آمار واقعی</CardTitle>
             <Dialog>
               <DialogTrigger asChild>
                 {/* Make sure there's only a single child here */}
@@ -233,7 +254,7 @@ function MoreInfoCards({ professors }: { professors: Professor[] }) {
             </Dialog>
           </CardHeader>
           <CardContent dir="ltr" className="p-2">
-            <CumulativeLineChart data={transformData(rawData)} />
+            <CumulativeLineChart data={transformData(realStateData)} />
           </CardContent>
         </Card>
       </div>

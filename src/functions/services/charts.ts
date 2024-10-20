@@ -12,8 +12,8 @@ export interface pieScales {
 
 export interface CulChart {
   id: string | undefined;
-  program_progress_percentage: number;
-  real_program_progress_percentage: number;
+  program_progress_percentage: string;
+  real_program_progress_percentage: string;
   date: Date;
   create_date?: Date;
 }
@@ -23,9 +23,9 @@ export const getPieScales = async (projectId: string | undefined) => {
 };
 
 export const getTimeScalesByProj = async (projectId: string | undefined) => {
-  return apiGet<CulChart>(`/timescale/showbyproject/${projectId}/`, true);
+  return apiGet<CulChart[]|[]>(`/timescale/showbyproject/${projectId}/`, true);
 };
 
 export const getRealScalesByProj = async (projectId: string | undefined) => {
-  return apiGet<CulChart>(`/realscale/showbyproject/${projectId}/`, true);
+  return apiGet<CulChart[]>(`/realscale/showbyproject/${projectId}/`, true);
 };
