@@ -32,7 +32,6 @@ function MoreInfoCards({ professors }: { professors: Professor[] }) {
   // }
 
   const rawData = [
-    
     {
       id: 2,
       program_progress_percentage: "20.00",
@@ -58,15 +57,15 @@ function MoreInfoCards({ professors }: { professors: Professor[] }) {
       project: 1,
     },
   ];
-const transformData = (rawData: any[]) => {
-  const transformedData = rawData.map((item) => ({
-    year: new Date(item.date).getFullYear(),
-    count: parseFloat(item.program_progress_percentage),
-    cumulativeCount: parseFloat(item.time_program_progress_percentage),
-  }));
-  return transformedData;
-};
-console.log(transformData(rawData))
+  const transformData = (rawData: any[]) => {
+    const transformedData = rawData.map((item) => ({
+      year: new Date(item.date).getFullYear(),
+      count: parseFloat(item.program_progress_percentage),
+      cumulativeCount: parseFloat(item.time_program_progress_percentage),
+    }));
+    return transformedData;
+  };
+  console.log(transformData(rawData));
   // Separate state for each chart data
   // const [chart1Data, setChart1Data] = useState(processData(professor));
   // const chart1Data = processData(professor);
@@ -131,7 +130,7 @@ console.log(transformData(rawData))
               <DialogTrigger asChild>
                 {/* Make sure there's only a single child here */}
                 {/* <Button> */}
-                  <HiOutlinePencil className=" cursor-pointer z-50 top-2 w-6 h-6 px-0 py-1 rounded-full bg-primary text-white shadow-md" />
+                <HiOutlinePencil className=" cursor-pointer z-50 top-2 w-6 h-6 px-0 py-1 rounded-full bg-primary text-white shadow-md" />
                 {/* </Button> */}
               </DialogTrigger>
               <DialogContent dir="rtl">
@@ -188,7 +187,7 @@ console.log(transformData(rawData))
               <DialogTrigger asChild>
                 {/* Make sure there's only a single child here */}
                 {/* <Button> */}
-                  <HiOutlinePencil className=" cursor-pointer z-50 top-2 w-6 h-6 px-0 py-1 rounded-full bg-primary text-white shadow-md" />
+                <HiOutlinePencil className=" cursor-pointer z-50 top-2 w-6 h-6 px-0 py-1 rounded-full bg-primary text-white shadow-md" />
                 {/* </Button> */}
               </DialogTrigger>
               <DialogContent dir="rtl">
