@@ -194,14 +194,14 @@ const AdminTableWithModal: React.FC = () => {
       <div className="flex justify-between items-center mb-6">
         <div className="flex flex-row gap-4">
           <h1 className="text-lg font-semibold">مدیریت کاربران</h1>
-          <Dialog open={open} onOpenChange={setOpen}>
+          <Dialog open={open} onOpenChange={setOpen} >
             <DialogTrigger asChild>
               <Button className="flex items-center gap-2 bg-indigo-500 text-white">
                 افزودن کاربر جدید
                 <FaUserPlus className="w-5 h-5" />
               </Button>
             </DialogTrigger>
-            <DialogContent className="my-4 h-[660px] overflow-y-auto scrollbar-thin scrollbar-thumb-purple-500 scrollbar-track-gray-200">
+            <DialogContent className=" h-[660px] overflow-y-auto scrollbar-thin scrollbar-thumb-purple-500 scrollbar-track-gray-200">
               <DialogHeader>
                 <DialogTitle className="text-right">
                   افزودن کاربر جدید

@@ -9,6 +9,7 @@ import { getselectsuborganization } from "@/functions/services/organization";
 import Select from "react-select";
 import { getprojectList } from "@/functions/services/project";
 import { Checkbox } from "../ui/checkbox";
+import queryClient from "@/functions/QueryClient";
 
 // Define types
 
@@ -24,7 +25,7 @@ type CreateUserVariables = {
   mobile_phone_number: string;
   user_permissions: number;
   password: string;
-  subOrganizations: number;
+  subOrganizations: number|null;
   projects: number[];
   admin: boolean;
   crud_project: boolean;
@@ -51,6 +52,7 @@ const AddUser = ({
     onSuccess: () => {
       toast.success("کاربر با موفقیت اضافه شد");
       setOpen(false);
+      queryClient.invalidateQueries({ queryKey: ["UserData"] })
     },
     onError: (error: any) => {
       toast.error("ساخت کاربر با خطا مواجه شد");
@@ -100,7 +102,7 @@ const AddUser = ({
           phone_number: formData.get("phone_number") as string,
           mobile_phone_number: formData.get("mobile_phone_number") as string,
           user_permissions: 0, // Removed unused state
-          subOrganizations: userSuborganization ?? 0, // Use state value
+          subOrganizations: userSuborganization ?? null, // Use state value
           projects: userProjects, // Use state value
           admin: isAdmin,
           crud_project: crudProject,
@@ -109,7 +111,8 @@ const AddUser = ({
         console.log("🚀 ~ AddUser ~ values:", values);
         mutate(values); // Send form data to API via mutation
       }}
-      className="grid grid-cols-1 md:grid-cols-2 gap-4"
+      className="grid grid-cols-1 md:grid-cols-2 gap-4 gap-y-1"
+      // className=" flex flex-row flex-wrap justify-around"
     >
       <div>
         <Label className="mr-2" htmlFor="username">
@@ -268,6 +271,7 @@ const AddUser = ({
               label: item.nickname,
             })) || []
           }
+          menuPlacement="top"
           isLoading={isPending}
           placeholder="انتخاب زیرسازمان"
           noOptionsMessage={() => "زیرسازمانی موجود نیست"}
@@ -276,7 +280,7 @@ const AddUser = ({
         />
       </div>
 
-      <div>
+      {crudProject && <div>
         <Label className="mr-2" htmlFor="projects">
           پروژه‌ها
         </Label>
@@ -287,6 +291,8 @@ const AddUser = ({
               label: item.name,
             })) || []
           }
+          menuPlacement="top"
+
           isLoading={pPending}
           isMulti
           placeholder="انتخاب پروژه"
@@ -294,9 +300,9 @@ const AddUser = ({
           onChange={(options) => setUserProjects(options?.map((opt) => opt.value) || [])}
           className="mt-2 w-full"
         />
-      </div>
+      </div>}
 
-      <div dir="ltr" className="md:col-span-2 ml-2">
+      <div dir="ltr" className="mt-2 md:col-span-2 ml-2">
         <Button
           type="submit"
           dir="ltr"
