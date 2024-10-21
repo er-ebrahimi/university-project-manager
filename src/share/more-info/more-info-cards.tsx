@@ -17,9 +17,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { HiOutlinePencil } from "react-icons/hi";
 import { useQuery } from "@tanstack/react-query";
-import { CulChart, getRealScalesByProj, getTimeScalesByProj } from "@/functions/services/charts";
+import {
+  CulChart,
+  getRealScalesByProj,
+  getTimeScalesByProj,
+} from "@/functions/services/charts";
 
-function MoreInfoCards({ professors }: { professors: Professor[] }) {
+function MoreInfoCards() {
   const { id } = useParams();
   // const decodedName = decodeURIComponent(name || ""); // Ensure it's always a string
 
@@ -37,12 +41,12 @@ function MoreInfoCards({ professors }: { professors: Professor[] }) {
     queryKey: [`getTimeScalesByProj${id}`],
     queryFn: () => getTimeScalesByProj(id),
   });
-  const { data:realStateData, isPending:RealStatePending } = useQuery({
+  const { data: realStateData, isPending: RealStatePending } = useQuery({
     queryKey: [`getRealScalesByProj${id}`],
     queryFn: () => getRealScalesByProj(id),
   });
-  console.log("🚀 ~ MoreInfoCards ~ realStateData:", realStateData)
-  console.log("🚀 ~ MoreInfoCards ~ data:", data)
+  // console.log("🚀 ~ MoreInfoCards ~ realStateData:", realStateData)
+  // console.log("🚀 ~ MoreInfoCards ~ data:", data)
   // const rawData = [
   //   {
   //     id: 2,
@@ -74,7 +78,7 @@ function MoreInfoCards({ professors }: { professors: Professor[] }) {
       // Return an empty array if rawData is undefined
       return [];
     }
-  
+
     // Map through the rawData and transform it
     const transformedData = rawData.map((item) => ({
       year: new Date(item.date).getFullYear(),
@@ -85,8 +89,8 @@ function MoreInfoCards({ professors }: { professors: Professor[] }) {
 
     return transformedData;
   };
-  
-  console.log(transformData(data));
+
+  // console.log(transformData(data));
   // Separate state for each chart data
   // const [chart1Data, setChart1Data] = useState(processData(professor));
   // const chart1Data = processData(professor);

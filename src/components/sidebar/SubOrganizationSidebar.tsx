@@ -52,7 +52,7 @@ const SubOrganizationSidebar: React.FC<SubOrganizationSidebarProps> = ({
     nickname: string;
     address: string;
     owner: string | null; // Allow both string and null
-    organization: string ; // Also adjust organization field if needed
+    organization: string; // Also adjust organization field if needed
   }>({
     name: "نام دانشکده را وارد کنید",
     phone_number: "021-۷۷۴۹۱۰۲۵",
@@ -107,11 +107,8 @@ const SubOrganizationSidebar: React.FC<SubOrganizationSidebarProps> = ({
       navigate(routes.dashboard);
     },
     onError: (error: any) => {
-      console.error(
-        "Failed to delete organization",
-        error.response?.data || error
-      );
-      toast.error("حذف با خطا مواجه شد");
+      // console.log(error?.response?.data?.detail);
+      toast.error(error?.response?.data?.detail);
     },
   });
   const [users, setUsers] = useState<userSelect[]>();
@@ -158,13 +155,15 @@ const SubOrganizationSidebar: React.FC<SubOrganizationSidebarProps> = ({
                 <FaPlus className="w-5 h-5" />
                 افزودن استاد
               </button> */}
-             {!isEditing && <button
-                disabled={id === undefined}
-                className="bg-white hover:bg-red-500 hover:text-white border-2 border-red-500 text-red-500 rounded-sm py-1 px-1 ml-4 cursor-pointer"
-                onClick={handleDelete}
-              >
-                <MdDelete className="h-6 w-6" />
-              </button>}
+              {!isEditing && (
+                <button
+                  disabled={id === undefined}
+                  className="bg-white hover:bg-red-500 hover:text-white border-2 border-red-500 text-red-500 rounded-sm py-1 px-1 ml-4 cursor-pointer"
+                  onClick={handleDelete}
+                >
+                  <MdDelete className="h-6 w-6" />
+                </button>
+              )}
             </div>
             <div className="mb-4">
               <h3 className="text-sm font-bold text-primary-dark">
@@ -233,7 +232,7 @@ const SubOrganizationSidebar: React.FC<SubOrganizationSidebarProps> = ({
                 <p className="text-gray-600 mt-1">{universityData.nickname}</p>
               )}
             </div>
-            <div  className="hidden mb-4">
+            <div className="hidden mb-4">
               <h3 className="text-sm font-bold text-primary-dark">نام خلاصه</h3>
               {isEditing ? (
                 <input
@@ -323,19 +322,18 @@ const SubOrganizationSidebar: React.FC<SubOrganizationSidebarProps> = ({
                 ویرایش
               </button>
             )}
-            {
-              isEditing &&
+            {isEditing && (
               <button
                 className="bg-red-500 px-2 text-white  rounded-sm"
                 onClick={() => {
                   // UpdateMutation.mutate(universityData);
-                  setIsEditing(false)
+                  setIsEditing(false);
                 }}
               >
-                <MdCancel/>
+                <MdCancel />
               </button>
-            }
-            <AddProfessor/>
+            )}
+            <AddProfessor />
           </div>
         </div>
       )}

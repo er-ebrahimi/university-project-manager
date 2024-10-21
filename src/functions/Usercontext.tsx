@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { UserData, fetchUserData } from "./UserService";
+import { useLocation, useParams } from "react-router-dom";
+import toast from "react-hot-toast";
 // import { getAccessToken } from "./tokenService";
 
 interface UserContextType {
@@ -24,7 +26,8 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   // const [userPermissionsName, setUserPermissionsName] = useState<string | null>(
   //   localStorage.getItem('userRole')
   // );
-  
+  const url = useLocation()
+  // console.log("🚀 ~ url:", url)
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -32,7 +35,8 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         setLoading(true);
         // const accessToken = getAccessToken();
         // Fetch user data if the user has logged in or userPermissionsName is not set
-        if (user === null || undefined) {
+        if ((user === null || undefined) && url.pathname !== '/login') {
+          // toast.error("ابتدا وارد شوید",{id:"2"})
           const fetchedUser = await fetchUserData(); // API call to fetch user
           setUser(fetchedUser);
           // const role = fetchedUser.user_permissions?.name;
@@ -40,6 +44,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           //   setUserPermissionsName(role);
           //   localStorage.setItem('userRole', role); // Save the role in localStorage
           // }
+          // console.log("bitch")
         }
       } catch (err) {
         setError(err);

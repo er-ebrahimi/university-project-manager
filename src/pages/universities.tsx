@@ -36,7 +36,7 @@ export default function Universities() {
   // Handle loading and error states
   if (isPending) {
     // return <div>در حال بارگذاری سازمان‌ها...</div>;
-    return toast.loading("در حال بارگذاری سازمان‌ها...",{duration:2000});
+    return toast.loading("در حال بارگذاری سازمان‌ها...",{duration:2000,id:"درحال بارگزاری سازمان ها"});
   }
 
   if (isError) {
