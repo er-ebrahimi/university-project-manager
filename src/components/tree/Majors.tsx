@@ -26,14 +26,14 @@ function ForceGraph({ majors ,organ}: { majors: DataItem[] ,organ:Organization})
   const navigate = useNavigate();
 
   useEffect(() => {
-    const nodes: Node[] = [{ id: organ.name, group: 0,RealId:0 }].concat(
-      majors.map((major) => ({ id: major.name, group: 1,RealId:major.id }))
+    const nodes: Node[] = [{ id: organ.nickname, group: 0,RealId:0 }].concat(
+      majors.map((major) => ({ id: major.nickname, group: 1,RealId:major.id }))
     );
     console.log("nodes: ", nodes);
 
     const links: Link[] = majors.map((major) => ({
-      source: organ.name,
-      target: major.name,
+      source: organ.nickname,
+      target: major.nickname,
     }));
 
     drawForceGraph(nodes, links);

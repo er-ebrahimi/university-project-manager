@@ -5,7 +5,7 @@ import {
   updatesuborhanization,
 } from "@/functions/services/organization";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import toast from "react-hot-toast";
 import ClipLoader from "react-spinners/ClipLoader";
 import {
@@ -30,6 +30,7 @@ import {
 } from "../ui/select";
 import { getUsersSelect, userSelect } from "@/functions/services/users";
 import AddProfessor from "./AddProfessor";
+import { UserContext } from "@/functions/Usercontext";
 
 interface SubOrganizationSidebarProps {
   data: any | undefined;
@@ -97,6 +98,8 @@ const SubOrganizationSidebar: React.FC<SubOrganizationSidebarProps> = ({
       toast.error("ویرایش با خطا مواجه شد");
     },
   });
+  const userData = useContext(UserContext);
+
   const deleteMutation = useMutation({
     mutationFn: () => deleteSubOrganization(id),
     onSuccess: () => {
@@ -150,7 +153,7 @@ const SubOrganizationSidebar: React.FC<SubOrganizationSidebarProps> = ({
       {!loading && (
         <div className="h-[530px] w-[230px] rounded-sm border border-dashed absolute right-0 bg-white mt-14 mr-6 p-4 flex flex-col">
           <div className="flex-grow">
-            <div className="absolute left-0">
+           {(userData?.user?.is_superuser || userData?.user?.admin) && <div className="absolute left-0">
               {/* <button className="text-sm flex justify-center">
                 <FaPlus className="w-5 h-5" />
                 افزودن استاد
@@ -164,7 +167,7 @@ const SubOrganizationSidebar: React.FC<SubOrganizationSidebarProps> = ({
                   <MdDelete className="h-6 w-6" />
                 </button>
               )}
-            </div>
+            </div>}
             <div className="mb-4">
               <h3 className="text-sm font-bold text-primary-dark">
                 نام دانشکده
@@ -304,7 +307,7 @@ const SubOrganizationSidebar: React.FC<SubOrganizationSidebarProps> = ({
             </div>
           </div>
 
-          <div className="flex justify-between mt-auto">
+          {(userData?.user?.is_superuser || userData?.user?.admin) && <div className="flex justify-between mt-auto">
             {isEditing ? (
               <button
                 className="bg-green-500 text-white py-1 px-2 rounded-sm"
@@ -334,7 +337,7 @@ const SubOrganizationSidebar: React.FC<SubOrganizationSidebarProps> = ({
               </button>
             )}
             <AddProfessor />
-          </div>
+          </div>}
         </div>
       )}
       {loading && (
@@ -347,7 +350,7 @@ const SubOrganizationSidebar: React.FC<SubOrganizationSidebarProps> = ({
         <AlertDialogContent dir="rtl">
           <AlertDialogHeader>
             <AlertDialogTitle dir="rtl" className="text-right">
-              برای حذف این زیرسازمان اطمینان دارید
+              برای حذف این مرکز اطمینان دارید
             </AlertDialogTitle>
             <AlertDialogDescription dir="rtl" className="text-right">
               در صورت اطمینان بر روی دکمه حذف کلیک کنید

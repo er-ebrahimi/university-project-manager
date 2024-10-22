@@ -38,7 +38,7 @@ export default function Colleges() {
       <SubOrganizationSidebar data={data} loading={isPending} id={id} />
 
       <div className="flex items-center">
-        <h1 className="text-lg font-semibold md:text-2xl ">زیرسازمان</h1>
+        <h1 className="text-lg font-semibold md:text-2xl ">مرکز</h1>
       </div>
       <div
         className="flex flex-1 items-center justify-center rounded-lg  border-dashed shadow-sm overflow-auto "

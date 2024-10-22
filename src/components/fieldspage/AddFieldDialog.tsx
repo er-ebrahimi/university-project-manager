@@ -77,7 +77,7 @@ const AddFieldDialog = () => {
 
   const handleAddMajor = () => {
     if (!collegeName.trim()) {
-      toast.error("لطفاً نام زیرسازمان را وارد کنید");
+      toast.error("لطفاً نام مرکز را وارد کنید");
       return;
     }
 
@@ -124,7 +124,7 @@ const AddFieldDialog = () => {
 
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle className="text-right">افزودن زیرسازمان</DialogTitle>
+            <DialogTitle className="text-right">افزودن مرکز</DialogTitle>
             <DialogDescription className="mt-10">
               برای افزودن زیر سازمان اطلاعات آن را وارد کنید
             </DialogDescription>
