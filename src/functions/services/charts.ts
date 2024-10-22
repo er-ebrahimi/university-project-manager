@@ -36,6 +36,10 @@ export const getTimeScalesByProj = async (projectId: string | undefined) => {
   );
 };
 
+export const createTimeScalesByProj = async ( data:any) => {
+  return apiPost<CulChart[]|[]>(`/timescale/showbyproject/${data.projectId}/`,data, true);
+};
+
 export const getRealScalesByProj = async (projectId: string | undefined) => {
   return apiGet<CulChart[]>(`/realscale/showbyproject/${projectId}/`, true);
 };
