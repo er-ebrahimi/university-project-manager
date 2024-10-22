@@ -12,10 +12,19 @@ import {
 import { Input } from "@/components/ui/input";
 import { FaPlus } from "react-icons/fa";
 import { useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { getPieScales } from "@/functions/services/charts";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import {
+  AddPieChart,
+  getPieScales,
+  postPieScales,
+} from "@/functions/services/charts";
 import toast from "react-hot-toast";
 import "./professor-info.css";
+import DatePicker from "react-multi-date-picker";
+import persian from "react-date-object/calendars/persian"; // Jalali calendar support
+import persian_fa from "react-date-object/locales/persian_fa";
+import queryClient from "@/functions/QueryClient";
+
 // Professor Info Component with PieChart and Modal to adjust percentages
 function ProfessorInfo() {
   const { id } = useParams();
@@ -25,18 +34,51 @@ function ProfessorInfo() {
     queryFn: () => getPieScales(id),
   });
 
+  // const mutation = useMutation(postPieScales, {
+  //   onSuccess: () => {
+  //     toast.success("Data successfully submitted.");
+  //   },
+  //   onError: () => {
+  //     toast.error("Failed to submit data. Please try again.");
+  //   },
+  // });
+  const mutation = useMutation({
+    mutationFn: (data: AddPieChart) => postPieScales(data),
+    onSuccess: () => {
+      toast.success("با موفقیت اضافه شد");
+      queryClient.invalidateQueries({
+        queryKey: ["pieData"],
+      });
+    },
+    onError: (error: any) => {
+      toast.error("درخواست با خطا مواجه شد", error);
+    },
+  });
+  // const mutation = useMutation({
+  //   mutationFn: (addFormData: AddProjectData) =>
+  //     postAddProject(addFormData),
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries({
+  //       queryKey: [`suboorganization${organizationId}`]
+  //     }); // Ensure organization data is refreshed
+  //     console.log("Project added successfully");
+  //     setOpen(false);
+  //   },
+  //   onError: (error: any) => {
+  //     console.error("Error adding project:", error);
+  //   },
+  // });
+
   // Set the default data, will be updated once pieData is available
   const [data, setData] = useState([
     { name: "داده‌ای  برای نمایش وجود ندارد", value: 100 },
-    // { name: "استادیار", value: 33 },
-    // { name: "کارمند", value: 34 },
   ]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [inputValues, setInputValues] = useState({
-    ta: 33,
-    associate: 33,
-    employed: 34,
+    pending_percentage: pieData ? Number(pieData[0]?.pending_percentage) : 0,
+    doing_percentage: pieData ? Number(pieData[0]?.doing_percentage) : 0,
+    finished_percentage: pieData ? Number(pieData[0]?.finished_percentage) : 0,
   });
   const [error, setError] = useState("");
 
@@ -51,6 +93,14 @@ function ProfessorInfo() {
     }
   }, [pieData]);
 
+  const [addFormData, setAddFormData] = useState<AddPieChart>({
+    project: id,
+    doing_percentage: 0,
+    finished_percentage: 0,
+    pending_percentage: 0,
+    date: "",
+  });
+
   const handleInputChange = (e: any) => {
     setInputValues({
       ...inputValues,
@@ -58,13 +108,39 @@ function ProfessorInfo() {
     });
   };
 
+  const handleDateChange = (name: any, date: any) => {
+    if (date && date.isValid) {
+      // Convert Jalali date to Gregorian and then format to ISO string
+      const gregorianDate = date.toDate(); // convert to regular JavaScript date
+      setAddFormData({
+        ...addFormData,
+        [name]: gregorianDate.toISOString().split("T")[0], // Only keep YYYY-MM-DD
+      });
+    } else {
+      setAddFormData({
+        ...addFormData,
+        [name]: "",
+      });
+    }
+  };
+
   const handleSubmit = () => {
-    const sum = inputValues.ta + inputValues.associate + inputValues.employed;
+    const sum =
+      inputValues.pending_percentage +
+      inputValues.doing_percentage +
+      inputValues.finished_percentage;
     if (sum === 100) {
+      const payload = {
+        ...addFormData,
+        pending_percentage: inputValues.pending_percentage,
+        doing_percentage: inputValues.doing_percentage,
+        finished_percentage: inputValues.finished_percentage,
+      };
+      mutation.mutate(payload);
       setData([
-        { name: "باقیمانده", value: inputValues.ta },
-        { name: "در حال انجام", value: inputValues.associate },
-        { name: "خاتمه یافته", value: inputValues.employed },
+        { name: "باقیمانده", value: inputValues.pending_percentage },
+        { name: "در حال انجام", value: inputValues.doing_percentage },
+        { name: "خاتمه یافته", value: inputValues.finished_percentage },
       ]);
       setIsModalOpen(false);
       setError("");
@@ -96,11 +172,11 @@ function ProfessorInfo() {
                 dataKey="value"
                 isAnimationActive={true}
                 data={data}
-                cx="56%"
+                cx="50%"
                 cy="50%"
+                display={"flex"}
                 outerRadius={120}
                 fill="#8884d8"
-                //labelLine=
                 label={({ name, percent }) =>
                   `${name}${
                     !(data[0].name == "داده‌ای  برای نمایش وجود ندارد")
@@ -125,8 +201,6 @@ function ProfessorInfo() {
                           ? "fill-danger"
                           : "fill-red-600"
                         : "fill-gray-300"
-
-                        
                     }
                   />
                 ))}
@@ -140,7 +214,10 @@ function ProfessorInfo() {
 
         {/* Modal for inputting new percentages */}
         <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-          <DialogContent dir="rtl" className="space-y-4">
+          <DialogContent
+            dir="rtl"
+            className="space-y-4 font-IranSans w-[400px]"
+          >
             <DialogHeader>
               <DialogTitle className="text-right">
                 درصد های مورد نظر را وارد کنید
@@ -149,50 +226,65 @@ function ProfessorInfo() {
             <div className="space-y-3">
               <div>
                 <label
-                  htmlFor="ta"
+                  htmlFor="pending_percentage"
                   className="block text-right mb-1 text-gray-700"
                 >
-                  درصد دستیار استاد
+                  درصد انجام نشده
                 </label>
                 <Input
-                  name="ta"
+                  name="pending_percentage"
                   type="number"
                   placeholder="درصد دستیار استاد"
-                  value={inputValues.ta}
+                  value={inputValues.pending_percentage}
                   onChange={handleInputChange}
                   className="w-full border-gray-300 focus:ring-primary"
                 />
               </div>
               <div>
                 <label
-                  htmlFor="associate"
+                  htmlFor="doing_percentage"
                   className="block text-right mb-1 text-gray-700"
                 >
-                  درصد استادیار
+                  درصد در حال انجام
                 </label>
                 <Input
-                  name="associate"
+                  name="doing_percentage"
                   type="number"
                   placeholder="درصد استادیار"
-                  value={inputValues.associate}
+                  value={inputValues.doing_percentage}
                   onChange={handleInputChange}
                   className="w-full border-gray-300 focus:ring-primary"
                 />
               </div>
               <div>
                 <label
-                  htmlFor="employed"
+                  htmlFor="finished_percentage"
                   className="block text-right mb-1 text-gray-700"
                 >
-                  درصد کارمند
+                  درصد خاتمه یافته
                 </label>
                 <Input
-                  name="employed"
+                  name="finished_percentage"
                   type="number"
                   placeholder="درصد کارمند"
-                  value={inputValues.employed}
+                  value={inputValues.finished_percentage}
                   onChange={handleInputChange}
                   className="w-full border-gray-300 focus:ring-primary"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="finished_percentage"
+                  className="block text-right mb-1 text-gray-700"
+                >
+                  تاریخ{" "}
+                </label>
+                <DatePicker
+                  className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  calendar={persian}
+                  locale={persian_fa}
+                  onChange={(date) => handleDateChange("date", date)}
+                  inputClass="w-[348px] p-2 border border-gray-300 rounded-lg focus:outline-none"
                 />
               </div>
               {error && (
