@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { MdDelete, MdModeEdit } from "react-icons/md";
 import { TiTick, TiCancel } from "react-icons/ti";
 import { FaPlus } from "react-icons/fa";
@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Degree, degreeToPersian } from "@/types/userType";
 import AddProject from "./AddProject";
+import { UserContext } from "@/functions/Usercontext";
 
 interface UnivercityCardProps {
   data: {
@@ -19,6 +20,7 @@ interface UnivercityCardProps {
     nickname: string;
     mobile_phone_number: number;
     education_level: Degree;
+    phone_number:number;
   };
 }
 
@@ -27,6 +29,7 @@ interface FormData {
   nickname: string;
   mobile_phone_number: number;
   education_level: Degree;
+  phone_number:number
 }
 
 
@@ -44,16 +47,19 @@ const UnivercityCard: React.FC<UnivercityCardProps> = ({ data }) => {
     // major: data.major || "",
     education_level: data.education_level,
     mobile_phone_number: data.mobile_phone_number,
+    phone_number:data.phone_number,
   });
 
   // State for the project form inside the modal
- 
+  const userData = useContext(UserContext);
+
   useEffect(() => {
     setFormData({
       name: data.name,
       nickname: data.nickname || "",
       education_level: data.education_level,
       mobile_phone_number: data.mobile_phone_number,
+      phone_number:data.phone_number,
 
       // education_level: data.education_level\ || "",
       // mobile: data.BirthDate || "",
@@ -138,7 +144,7 @@ const UnivercityCard: React.FC<UnivercityCardProps> = ({ data }) => {
               className="ml-2 p-1 border"
               type="number"
               name="mobile_phone_number"
-              value={formData.mobile_phone_number}
+              value={formData.phone_number}
               onChange={handleInputChange}
             />
           </div>
@@ -160,7 +166,7 @@ const UnivercityCard: React.FC<UnivercityCardProps> = ({ data }) => {
             <strong className="text-primary-dark" dir="rtl">
               شماره موبایل:
             </strong>{" "}
-            <span>{formData.mobile_phone_number || "تعریف نشده"}</span>
+            <span dir="ltr" className="text-right">{formData.phone_number || "تعریف نشده"}</span>
           </div>
           {/* <div className="mb-2">
             <strong className="text-primary-dark" dir="rtl">تاریخ استخدام:</strong> <span>{formData.EmploymentDate || "N/A"}</span>
@@ -190,13 +196,13 @@ const UnivercityCard: React.FC<UnivercityCardProps> = ({ data }) => {
           </button>
         )} */}
 
-        {!isEditing && (
+        {!isEditing && (userData?.user?.is_superuser || userData?.user?.admin) &&(
           <button
             onClick={handleOpenDialog} // Open the dialog when clicked
             className="mt-4 flex flex-row items-center gap-2 h-9 text-sm p-1 bg-white text-orange-500 border-2 border-orange-500 rounded hover:bg-orange-500 hover:text-white"
           >
             <FaPlus className="w-6 h-6" />
-            <p className="w-full mt-1">افزودن استاد</p>
+            <p className="w-full mt-1">افزودن پروژه</p>
           </button>
         )}
 

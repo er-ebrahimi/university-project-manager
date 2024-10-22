@@ -262,7 +262,7 @@ const AddUser = ({
 
       <div>
         <Label className="mr-2" htmlFor="subOrganizations">
-          زیرسازمان‌ها
+          مرکز‌ها
         </Label>
         <Select
           options={
@@ -273,8 +273,8 @@ const AddUser = ({
           }
           menuPlacement="top"
           isLoading={isPending}
-          placeholder="انتخاب زیرسازمان"
-          noOptionsMessage={() => "زیرسازمانی موجود نیست"}
+          placeholder="انتخاب مرکز"
+          noOptionsMessage={() => "مرکزی موجود نیست"}
           onChange={(option) => setUserSuborganization(option?.value || null)}
           className="mt-2 w-full"
         />

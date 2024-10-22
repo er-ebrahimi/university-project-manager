@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -24,6 +24,7 @@ import DatePicker from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian"; // Jalali calendar support
 import persian_fa from "react-date-object/locales/persian_fa";
 import queryClient from "@/functions/QueryClient";
+import { UserContext } from "@/functions/Usercontext";
 
 // Professor Info Component with PieChart and Modal to adjust percentages
 function ProfessorInfo() {
@@ -68,12 +69,14 @@ function ProfessorInfo() {
   //     console.error("Error adding project:", error);
   //   },
   // });
-
+  const user = useContext(UserContext);
+  console.log("🚀 ~ ProfessorInfo ~ user:", user);
   // Set the default data, will be updated once pieData is available
   const [data, setData] = useState([
     { name: "داده‌ای  برای نمایش وجود ندارد", value: 100 },
   ]);
-
+  const [canEdit, setCanEdit] = useState(false);
+  console.log("🚀 ~ ProfessorInfo ~ canEdit:", canEdit);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [inputValues, setInputValues] = useState({
     pending_percentage: pieData ? Number(pieData[0]?.pending_percentage) : 0,
@@ -82,6 +85,18 @@ function ProfessorInfo() {
   });
   const [error, setError] = useState("");
 
+  useEffect(() => {
+    if (user && user.user?.projects && user.user?.crud_project) {
+      user.user?.projects.map((obj) => {
+        if (obj.id === Number(id)) {
+          setCanEdit(true);
+        }
+      });
+    }
+    
+
+    // setCanEdit(true)
+  }, [user]);
   // Update the pie chart data when pieData is available
   useEffect(() => {
     if (pieData && pieData[0]) {
@@ -148,6 +163,7 @@ function ProfessorInfo() {
       toast.error("مجموع اعداد باید برابر با ۱۰۰ باشد.");
     }
   };
+  const userData = useContext(UserContext);
 
   return (
     <>
@@ -162,10 +178,14 @@ function ProfessorInfo() {
         }}
       >
         <Card dir="rtl" className="relative">
-          <FaPlus
-            className="absolute cursor-pointer z-50 top-2 w-8 h-8 p-2 left-2 rounded-full bg-primary text-white shadow-md"
-            onClick={() => setIsModalOpen(true)}
-          />
+          {(userData?.user?.is_superuser ||
+            userData?.user?.admin ||
+            canEdit) && (
+            <FaPlus
+              className="absolute cursor-pointer z-50 top-2 w-8 h-8 p-2 left-2 rounded-full bg-primary text-white shadow-md"
+              onClick={() => setIsModalOpen(true)}
+            />
+          )}
           <CardContent className="flex justify-start items-center h-[525px]">
             <PieChart width={500} height={500}>
               <Pie

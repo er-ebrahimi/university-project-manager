@@ -463,7 +463,7 @@ const AdminTableWithModal: React.FC = () => {
               </div>
               <div>
                 <Label className="mr-2" htmlFor="subOrganizations">
-                  زیرسازمان‌ها
+                  مرکز‌ها
                 </Label>
                 <Select
                   options={
@@ -481,8 +481,8 @@ const AdminTableWithModal: React.FC = () => {
                   }}
                   menuPlacement="top"
                   isLoading={isPending}
-                  placeholder="انتخاب زیرسازمان"
-                  noOptionsMessage={() => "زیرسازمانی موجود نیست"}
+                  placeholder="انتخاب مرکز"
+                  noOptionsMessage={() => "مرکزی موجود نیست"}
                   onChange={(option) =>
                     setUserSuborganizations(option?.value || null)
                   }
