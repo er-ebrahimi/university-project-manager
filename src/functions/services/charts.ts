@@ -1,4 +1,4 @@
-import { apiGet } from "../api";
+import { apiGet, apiPost } from "../api";
 
 export interface pieScales {
   id: number;
@@ -24,6 +24,10 @@ export const getPieScales = async (projectId: string | undefined) => {
 
 export const getTimeScalesByProj = async (projectId: string | undefined) => {
   return apiGet<CulChart[]|[]>(`/timescale/showbyproject/${projectId}/`, true);
+};
+
+export const createTimeScalesByProj = async ( data:any) => {
+  return apiPost<CulChart[]|[]>(`/timescale/showbyproject/${data.projectId}/`,data, true);
 };
 
 export const getRealScalesByProj = async (projectId: string | undefined) => {

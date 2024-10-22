@@ -29,12 +29,11 @@ function AppRoute() {
             element={<Universities></Universities>}
           ></Router.Route>
           <Router.Route
-          
             path="/admin/users"
             // element={<AdminUsers />}
             element={
               // <RequirePermission >
-                <AdminUsers />
+              <AdminUsers />
               // </RequirePermission>
             }
           ></Router.Route>
