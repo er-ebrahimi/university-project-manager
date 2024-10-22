@@ -19,16 +19,19 @@ export interface User {
   personal_id_number: string;
   mobile_phone_number: string;
   phone_number: string;
-  education_level: Degree;
+  education_level: Degree|undefined;
   subOrganizations: any; // You can define this more precisely if needed
   create_date: string; // Consider using Date if appropriate
-  user_permissions: UserPermissions;
+  // user_permissions: UserPermissions;
+  admin:boolean;
+  crud_project:boolean;
+  projects?:any[];
   password?:string;
 }
 //function render the education level to persian
 export type Degree = 'BSc' | 'Ms' | 'PhD' | 'Prof';
 
-export const degreeToPersian = (degree: Degree): string => {
+export const degreeToPersian = (degree: Degree|undefined): string => {
   switch (degree) {
     case 'BSc':
       return 'کارشناسی';

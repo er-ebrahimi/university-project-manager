@@ -13,7 +13,7 @@ import queryClient from "@/functions/QueryClient";
 
 // Define types
 
-type CreateUserVariables = {
+export type CreateUserVariables = {
   username: string;
   first_name: string;
   last_name: string;
@@ -23,7 +23,7 @@ type CreateUserVariables = {
   education_level: string;
   phone_number: string;
   mobile_phone_number: string;
-  user_permissions: number;
+  // user_permissions: number;
   password: string;
   subOrganizations: number|null;
   projects: number[];
@@ -101,7 +101,7 @@ const AddUser = ({
           education_level: educationLevel, // Use state value
           phone_number: formData.get("phone_number") as string,
           mobile_phone_number: formData.get("mobile_phone_number") as string,
-          user_permissions: 0, // Removed unused state
+          // user_permissions: 0, // Removed unused state
           subOrganizations: userSuborganization ?? null, // Use state value
           projects: userProjects, // Use state value
           admin: isAdmin,

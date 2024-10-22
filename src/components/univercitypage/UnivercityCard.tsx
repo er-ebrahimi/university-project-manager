@@ -193,9 +193,10 @@ const UnivercityCard: React.FC<UnivercityCardProps> = ({ data }) => {
         {!isEditing && (
           <button
             onClick={handleOpenDialog} // Open the dialog when clicked
-            className="mt-4 w-9 h-9 text-sm p-1 bg-white text-orange-500 border-2 border-orange-500 rounded hover:bg-orange-500 hover:text-white"
+            className="mt-4 flex flex-row items-center gap-2 h-9 text-sm p-1 bg-white text-orange-500 border-2 border-orange-500 rounded hover:bg-orange-500 hover:text-white"
           >
-            <FaPlus className="w-full h-full" />
+            <FaPlus className="w-6 h-6" />
+            <p className="w-full mt-1">افزودن استاد</p>
           </button>
         )}
 

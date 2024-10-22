@@ -182,7 +182,7 @@ export default function GraphTree({
 
       {selectedNode && (
         <Dialog open={isDialogOpen} onOpenChange={handleCloseDialog}>
-        <DialogContent className="pl-6 pb-8 rounded-xl shadow-2xl h-[650px] w-[850px] ">
+        <DialogContent className="pl-6 pb-8 rounded-xl shadow-2xl h-[650px] w-[850px] font-IranSans ">
           <div className="p-6 bg-white rounded-lg">
             <div className="grid grid-cols-2 gap-8 text-right">
               <div className="mb-4">

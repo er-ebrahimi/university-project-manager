@@ -4,6 +4,7 @@ import type { ColumnsType } from "antd/es/table";
 import "antd/dist/reset.css";
 import "./TableAdmin.css";
 import { FaUserPlus } from "react-icons/fa";
+import Select from "react-select";
 
 // ShadCN UI Imports
 import { Button } from "@/components/ui/button";
@@ -23,7 +24,10 @@ import { getUsers, updateUser, deleteUser } from "@/functions/services/users";
 import toast from "react-hot-toast";
 import { User } from "@/types/userType";
 import { degreeToPersian, Degree } from "@/types/userType";
-// import { render } from "react-dom";
+import { Checkbox } from "../ui/checkbox";
+import { getselectsuborganization } from "@/functions/services/organization";
+import { getprojectList } from "@/functions/services/project";
+
 const AdminTableWithModal: React.FC = () => {
   const queryClient = useQueryClient();
 
@@ -43,14 +47,37 @@ const AdminTableWithModal: React.FC = () => {
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [searchText, setSearchText] = useState<string>("");
-  const [open,setOpen] =useState(false)
+  const [open, setOpen] = useState(false);
+  const [userProjects, setUserProjects] = useState<number[]>([]);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  const [crudProject, setCrudProject] = useState<boolean>(false);
+  const [userSuborganizations, setUserSuborganizations] = useState<
+    number | null
+  >(null);
 
   // Handle editing a user
   const handleEdit = (record: User) => {
     setCurrentUser(record);
     setIsEditModalVisible(true);
   };
+  useEffect(() => {
+    if (currentUser?.crud_project) {
+      setCrudProject(currentUser?.crud_project);
+    }
+  }, [currentUser]);
 
+  const { data: select, isPending } = useQuery({
+    queryKey: ["selectListsubOrganization"],
+    queryFn: getselectsuborganization,
+  });
+  // console.log("🚀 ~ select:", select)
+
+  const { data: ProjectList, isPending: pPending } = useQuery({
+    queryKey: ["projectList"],
+    queryFn: getprojectList,
+  });
+  console.log("🚀 ~ ProjectList:", ProjectList)
+// console.log(first)
   const updateUserMutation = useMutation({
     mutationFn: (updatedUser: User) => updateUser(updatedUser),
     onSuccess: () => {
@@ -64,7 +91,15 @@ const AdminTableWithModal: React.FC = () => {
   });
 
   const onEditFinish = (values: any) => {
-    const updatedUser = { ...currentUser, ...values };
+    const updatedUser = {
+      ...currentUser,
+      ...values,
+      education_level: currentUser?.education_level,
+      subOrganizations: userSuborganizations,
+      projects: userProjects,
+      crud_project: crudProject,
+      admin: isAdmin,
+    };
     updateUserMutation.mutate(updatedUser as User);
   };
 
@@ -94,9 +129,8 @@ const AdminTableWithModal: React.FC = () => {
     );
     setFilteredData(filtered!);
   };
-
+  console.log("mmd",currentUser)
   const columns: ColumnsType<User> = [
-    // ... (same columns as before)
     {
       title: "نام کاربری",
       dataIndex: "username",
@@ -121,7 +155,6 @@ const AdminTableWithModal: React.FC = () => {
       key: "nickname",
       className: "text-right",
     },
-
     {
       title: "کد ملی",
       dataIndex: "social_id_number",
@@ -192,9 +225,9 @@ const AdminTableWithModal: React.FC = () => {
     <div className="p-6 pt-1 bg-white rounded-lg w-[75vw] h-[80vh]">
       {/* Add User Button */}
       <div className="flex justify-between items-center mb-6">
-        <div className="flex flex-row gap-4">
+        <div className="flex flex-row gap-4 ">
           <h1 className="text-lg font-semibold">مدیریت کاربران</h1>
-          <Dialog open={open} onOpenChange={setOpen} >
+          <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
               <Button className="flex items-center gap-2 bg-indigo-500 text-white">
                 افزودن کاربر جدید
@@ -258,10 +291,8 @@ const AdminTableWithModal: React.FC = () => {
                 const values = Object.fromEntries(formData.entries());
                 onEditFinish(values);
               }}
-              className="grid grid-cols-1 md:grid-cols-2 gap-4"
+              className="grid grid-cols-1 md:grid-cols-2 gap-4 gap-y-1"
             >
-              {/* Pre-filled form fields for editing */}
-              {/* ... (same form fields as before) */}
               <div>
                 <Label className=" mr-2" htmlFor="username">
                   نام کاربری
@@ -282,7 +313,6 @@ const AdminTableWithModal: React.FC = () => {
                   className="mt-2 w-full"
                   name="password"
                   id="password"
-                  // required
                   type="password"
                   defaultValue={undefined}
                 />
@@ -341,44 +371,38 @@ const AdminTableWithModal: React.FC = () => {
                   شماره پرسنلی
                 </Label>
                 <Input
-                  name="personal_number"
-                  id="personal_number"
+                  name="personal_id_number"
+                  id="personal_id_number"
                   required
                   defaultValue={currentUser.personal_id_number}
                   className="mt-2 w-full"
                 />
               </div>
               <div>
-                <Label className="mr-2" htmlFor="user_permissions">
-                  نقش
-                </Label>
-                <select
-                  name="user_permissions"
-                  id="user_permissions"
-                  required
-                  defaultValue={currentUser.user_permissions.id}
-                  className="mt-2 flex h-10 w-full rounded-md border bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  <option value="1">سوپرادمین</option>
-                  <option value="2">کاربر</option>
-                </select>
-              </div>
-              <div>
                 <Label className="mr-2" htmlFor="education_level">
                   سطح تحصیلات
                 </Label>
-                <select
-                  name="education_level"
-                  id="education_level"
-                  required
-                  defaultValue={currentUser.education_level}
-                  className="mt-2 flex h-10 w-full rounded-md border bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  <option value="BSc">کارشناسی</option>
-                  <option value="Ms">کارشناسی ارشد</option>
-                  <option value="PhD">دکترا</option>
-                  <option value="Prof">پروفسور</option>
-                </select>
+                <Select
+                  options={[
+                    { value: "BSc", label: "کارشناسی" },
+                    { value: "Ms", label: "کارشناسی ارشد" },
+                    { value: "PhD", label: "دکترا" },
+                    { value: "Prof", label: "پروفسور" },
+                  ]}
+                  menuPlacement="top"
+                  defaultValue={{
+                    value: currentUser.education_level,
+                    label: degreeToPersian(currentUser.education_level),
+                  }}
+                  placeholder="سطح تحصیلات"
+                  onChange={(option) =>
+                    setCurrentUser((prev) => ({
+                      ...prev!,
+                      education_level: option?.value,
+                    }))
+                  }
+                  className="mt-2 w-full"
+                />
               </div>
               <div>
                 <Label className="mr-2" htmlFor="phone_number">
@@ -399,13 +423,105 @@ const AdminTableWithModal: React.FC = () => {
                 </Label>
                 <Input
                   dir="ltr"
-                  name="mobile_number"
-                  id="mobile_number"
+                  name="mobile_phone_number"
+                  id="mobile_phone_number"
                   required
+                  prefix="+98"
                   defaultValue={currentUser.mobile_phone_number}
                   className="mt-2 w-full text-right"
                 />
               </div>
+              <div className="flex justify-end mr-2 items-center  flex-row-reverse gap-4 mt-6">
+                <div className="flex flex-row-reverse gap-2">
+                  <Checkbox
+                    id="admin"
+                    checked={currentUser.admin}
+                    onCheckedChange={(checked) => setIsAdmin(checked === true)}
+                  />
+                  <label
+                    htmlFor="admin"
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    ادمین
+                  </label>
+                </div>
+                <div className="flex flex-row-reverse gap-2">
+                  <Checkbox
+                    id="crud_project"
+                    checked={currentUser.crud_project}
+                    onCheckedChange={(checked) =>
+                      setCrudProject(checked === true)
+                    }
+                  />
+                  <label
+                    htmlFor="crud_project"
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    کراد پروژه
+                  </label>
+                </div>
+              </div>
+              <div>
+                <Label className="mr-2" htmlFor="subOrganizations">
+                  زیرسازمان‌ها
+                </Label>
+                <Select
+                  options={
+                    select?.map((item) => ({
+                      value: item.id,
+                      label: item.nickname,
+                    })) || []
+                  }
+                  defaultValue={{
+                    value: currentUser?.subOrganizations?.id,
+                    label:
+                      select?.find(
+                        (item) => item.id === currentUser?.subOrganizations?.id
+                      )?.nickname || "",
+                  }}
+                  menuPlacement="top"
+                  isLoading={isPending}
+                  placeholder="انتخاب زیرسازمان"
+                  noOptionsMessage={() => "زیرسازمانی موجود نیست"}
+                  onChange={(option) =>
+                    setUserSuborganizations(option?.value || null)
+                  }
+                  className="mt-2 w-full"
+                />
+              </div>
+              {crudProject && (
+                <div>
+                  <Label className="mr-2" htmlFor="projects">
+                    پروژه‌ها
+                  </Label>
+                  <Select
+                    options={
+                      ProjectList?.map((item) => ({
+                        value: item.id,
+                        label: item.name,
+                      })) || []
+                    }
+                    // defaultValue={currentUser.project}
+                    menuPlacement="top"
+                    isLoading={pPending}
+                    isMulti
+                    defaultValue={
+                      currentUser.projects?.map((project) => ({
+                        value: project.id,
+                        label:
+                          ProjectList?.find((item) => item.id == project.id)
+                            ?.name || "",
+                      })) || []
+                    }
+                    placeholder="انتخاب پروژه"
+                    noOptionsMessage={() => "پروژه‌ای موجود نیست"}
+                    onChange={(options) =>
+                      setUserProjects(options?.map((opt) => opt.value) || [])
+                    }
+                    className="mt-2 w-full"
+                  />
+                </div>
+              )}
               <div className="md:col-span-2 flex justify-end">
                 <Button
                   dir="ltr"
