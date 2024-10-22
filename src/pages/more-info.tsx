@@ -19,8 +19,8 @@ export default function MoreInfo() {
   const professors: Professor[] = convertProfessorData(
     professorsData.professors
   );
-  const {id}=useParams()
-  console.log("🚀 ~ MoreInfo ~ id:", id)
+  const { id } = useParams();
+  // console.log("🚀 ~ MoreInfo ~ id:", id)
 
   const {
     data,
@@ -29,7 +29,8 @@ export default function MoreInfo() {
     // error,
   } = useQuery({
     queryKey: [`Project${id}`],
-    queryFn: () => getProject(id),  });
+    queryFn: () => getProject(id),
+  });
   return (
     <>
       <ProjectpageSidebar data={data} sideBarLoading={isPending} />
@@ -41,7 +42,7 @@ export default function MoreInfo() {
           className=" flex-1 flex  flex-row-reverse items-start justify-start gap-10 flex-wrap overflow-y-auto h-[78vh] rounded-lg   border-dashed shadow-sm"
           x-chunk="dashboard-02-chunk-1"
         >
-          <ProfessorInfo></ProfessorInfo>
+          <ProfessorInfo ProjectData={data}></ProfessorInfo>
 
           <MoreInfoCards></MoreInfoCards>
         </div>

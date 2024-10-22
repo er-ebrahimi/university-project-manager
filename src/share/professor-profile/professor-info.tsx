@@ -25,9 +25,11 @@ import persian from "react-date-object/calendars/persian"; // Jalali calendar su
 import persian_fa from "react-date-object/locales/persian_fa";
 import queryClient from "@/functions/QueryClient";
 import { UserContext } from "@/functions/Usercontext";
+import { Project } from "@/functions/services/project";
 
 // Professor Info Component with PieChart and Modal to adjust percentages
-function ProfessorInfo() {
+function ProfessorInfo({ ProjectData }: { ProjectData: Project | undefined }) {
+  console.log("🚀 ~ ProfessorInfo ~ ProjectData:", ProjectData);
   const { id } = useParams();
 
   const { data: pieData, isPending } = useQuery({
@@ -93,7 +95,16 @@ function ProfessorInfo() {
         }
       });
     }
-    
+    if(ProjectData?.owner.id && user?.user?.id){
+
+      if (ProjectData?.owner.id === user?.user?.id) {
+        
+        console.log("bitch")
+        console.log("bitch",ProjectData?.owner.id)
+        console.log("bitch",user?.user?.id)
+        setCanEdit(true);
+      }
+    }
 
     // setCanEdit(true)
   }, [user]);
@@ -195,7 +206,7 @@ function ProfessorInfo() {
                 cx="50%"
                 cy="50%"
                 display={"flex"}
-                outerRadius={120}
+                outerRadius={100}
                 fill="#8884d8"
                 label={({ name, percent }) =>
                   `${name}${
