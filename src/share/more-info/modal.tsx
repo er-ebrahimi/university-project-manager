@@ -30,6 +30,7 @@ import { Input } from "@/components/ui/input";
 import { IoMdClose } from "react-icons/io";
 import { SiSpinnaker } from "react-icons/si";
 import { ClipLoader } from "react-spinners";
+import { loadPersian } from "moment-jalaali";
 // Make sure to bind modal to your appElement (https://reactcommunity.org/react-modal/accessibility/)
 
 function ModalObj({
@@ -95,7 +96,7 @@ function ModalObj({
                   setOpenPopover((x) => !x);
                 }}
               >
-                <CalendarIcon />
+                {/* <CalendarIcon /> */}
                 {date ? format(date, "PPP") : <span>انتخاب زمان </span>}
               </Button>
             </PopoverTrigger>
@@ -103,12 +104,7 @@ function ModalObj({
               className="w-auto p-0 z-50"
               onClick={(event) => event.stopPropagation()}
             >
-              <Calendar
-                mode="single"
-                selected={date}
-                onSelect={setDate}
-                initialFocus
-              />
+              
             </PopoverContent>
           </Popover>
           <Input placeholder="ورودی اول"></Input>
@@ -132,6 +128,7 @@ function ModalObj({
                           <MdDeleteOutline size={20}></MdDeleteOutline>
                         </Button>
                       </div>
+                      
                     </div>
                   );
                 })

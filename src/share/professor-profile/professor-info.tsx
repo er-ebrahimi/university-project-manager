@@ -99,9 +99,7 @@ function ProfessorInfo({ ProjectData }: { ProjectData: Project | undefined }) {
 
       if (ProjectData?.owner.id === user?.user?.id) {
         
-        console.log("bitch")
-        console.log("bitch",ProjectData?.owner.id)
-        console.log("bitch",user?.user?.id)
+
         setCanEdit(true);
       }
     }

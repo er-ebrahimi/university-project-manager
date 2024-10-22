@@ -116,7 +116,7 @@ export function LineChart({
   isLoading,
 }: {
   // setValue: any;
-  chartData: { year: number; count: number; cumulativeCount: number }[];
+  chartData: { year: string; count: number; cumulativeCount: number }[];
   isLoading: boolean;
   label: string[];
 }) {
