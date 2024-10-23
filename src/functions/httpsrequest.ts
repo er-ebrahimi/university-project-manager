@@ -111,6 +111,10 @@ export const httpRequest = async <T>(
       toast.error("شما دسترسی مورد نظر را ندارید");
       window.location.href = "/app";
     }
+    if (error.response?.status === 404) {
+      // toast.error("");
+      window.location.href = "/404";
+    }
 
     // Handle other errors
     throw error;

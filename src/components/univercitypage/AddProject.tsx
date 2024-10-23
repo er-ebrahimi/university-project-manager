@@ -13,6 +13,7 @@ import DatePicker from "react-multi-date-picker"; // Import the date picker
 import persian from "react-date-object/calendars/persian"; // Jalali calendar support
 import persian_fa from "react-date-object/locales/persian_fa"; // Persian language
 import DateObject from "react-date-object";
+import toast from "react-hot-toast";
 
 export interface AddProjectData {
   name: string;
@@ -97,6 +98,7 @@ const AddProject = ({
     };
     mutation.mutate(formattedData, {
       onSuccess: () => {
+        toast.success("پروژه با موفقیت اضافه شد")
         // Optionally handle success (e.g., close dialog, show notification)
       },
       onError: (error: any) => {

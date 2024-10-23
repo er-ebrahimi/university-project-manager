@@ -216,9 +216,9 @@ const ProjectpageSidebar = ({
               <DialogTrigger>
                 <IoDocumentAttach className="absolute left-0 top-0 ml-4 mt-4 w-8 h-8 rounded cursor-pointer text-primary-dark border p-1 border-primary" />
               </DialogTrigger>
-              <DialogContent className="my-4 h-[650px] w-full overflow-y-auto scrollbar-thin scrollbar-thumb-purple-500 scrollbar-track-gray-200">
+              <DialogContent className="my-4 w-full overflow-y-auto scrollbar-thin scrollbar-thumb-purple-500 scrollbar-track-gray-200">
                 {/* <DialogHeader dir="rtl" className="text-right! mb-0">فایل های ضمیمه</DialogHeader> */}
-                <ProjectSidebarAttachment />
+                <ProjectSidebarAttachment canEdit={canEdit} />
               </DialogContent>
             </Dialog>
             <div className="mb-2">

@@ -257,7 +257,7 @@ function ProfessorInfo({ ProjectData }: { ProjectData: Project | undefined }) {
                 <Input
                   name="pending_percentage"
                   type="number"
-                  placeholder="درصد دستیار استاد"
+                  // placeholder="درصد دستیار استاد"
                   value={inputValues.pending_percentage}
                   onChange={handleInputChange}
                   className="w-full border-gray-300 focus:ring-primary"
@@ -273,7 +273,7 @@ function ProfessorInfo({ ProjectData }: { ProjectData: Project | undefined }) {
                 <Input
                   name="doing_percentage"
                   type="number"
-                  placeholder="درصد استادیار"
+                  // placeholder="درصد استادیار"
                   value={inputValues.doing_percentage}
                   onChange={handleInputChange}
                   className="w-full border-gray-300 focus:ring-primary"
@@ -289,7 +289,7 @@ function ProfessorInfo({ ProjectData }: { ProjectData: Project | undefined }) {
                 <Input
                   name="finished_percentage"
                   type="number"
-                  placeholder="درصد کارمند"
+                  // placeholder="درصد کارمند"
                   value={inputValues.finished_percentage}
                   onChange={handleInputChange}
                   className="w-full border-gray-300 focus:ring-primary"

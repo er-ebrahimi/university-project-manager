@@ -60,7 +60,6 @@ export const options: () => ChartOptions<"line"> = () => {
           font: {
             size: 8,
           },
-          // color: "rgb(255,255,255)",
         },
         border: { display: true },
       },
@@ -70,7 +69,6 @@ export const options: () => ChartOptions<"line"> = () => {
           font: {
             size: 10,
           },
-          // color: "rgb(255,255,255)",
         },
         border: { display: true },
       },
@@ -83,7 +81,6 @@ export const options: () => ChartOptions<"line"> = () => {
           font: {
             size: 10,
           },
-          // color: "rgb(255,255,255)",
         },
       },
       title: {
@@ -92,7 +89,6 @@ export const options: () => ChartOptions<"line"> = () => {
         font: {
           size: 10,
         },
-        // color: "rgb(255,255,255)",
       },
       tooltip: {
         callbacks: {},
@@ -148,7 +144,7 @@ export function LineChart({
       {
         label: label[1],
         data: chartData.map((x) => x.cumulativeCount),
-        borderColor: colors.primary,
+        borderColor: "green",
         backgroundColor: "purple",
       },
     ],

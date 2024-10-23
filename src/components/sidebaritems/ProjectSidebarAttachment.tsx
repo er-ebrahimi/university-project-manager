@@ -12,19 +12,20 @@ import { useNavigate, useParams } from "react-router-dom";
 import { deleteProject } from "@/functions/services/project";
 import toast from "react-hot-toast";
 import routes from "@/global/routes";
+import { ClipLoader } from "react-spinners";
 
-const ProjectSidebarAttachment: React.FC = () => {
+const ProjectSidebarAttachment = ({canEdit}:{canEdit:boolean}) => {
   const [file, setFile] = useState<File | null>(null);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const queryClient = useQueryClient();
   const { id } = useParams();
   // console.log("🚀 ~ id:", id)
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   // Fetching files by project ID
   const {
     data: files,
-    isLoading,
+    isPending,
     error,
   } = useQuery<File[]>({
     queryKey: ["files", id],
@@ -71,7 +72,7 @@ const ProjectSidebarAttachment: React.FC = () => {
     <div className="py-3 px-3 w-full h-fit">
       {/* File Upload Section */}
       <h1 className="font-bold mb-2 mr-2">فایل های ضمیمه</h1>
-      <div className="flex flex-col justify-between mb-4 border-2 rounded-sm p-4">
+      {canEdit && <div className="flex flex-col justify-between mb-4 border-2 rounded-sm p-4">
         {/* Name Input */}
         <div className="mb-4 flex flex-row-reverse justify-between items-end">
           <div className="flex items-center">
@@ -134,11 +135,11 @@ const ProjectSidebarAttachment: React.FC = () => {
           ارسال
         </button>
       </div>
-
+}
       {/* File List Section */}
       <div className="space-y-3 border-primary-dark w-full border p-3 scrollbar-thin rounded-md overflow-auto h-[280px]">
-        {isLoading ? (
-          <p>Loading...</p>
+        {isPending ? (
+          <div className="flex justify-center items-center"> <ClipLoader/></div>
         ) : error ? (
           <p>Error fetching files</p>
         ) : (
