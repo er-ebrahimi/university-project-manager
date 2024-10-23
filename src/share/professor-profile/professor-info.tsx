@@ -95,11 +95,8 @@ function ProfessorInfo({ ProjectData }: { ProjectData: Project | undefined }) {
         }
       });
     }
-    if(ProjectData?.owner.id && user?.user?.id){
-
+    if (ProjectData?.owner.id && user?.user?.id) {
       if (ProjectData?.owner.id === user?.user?.id) {
-        
-
         setCanEdit(true);
       }
     }
@@ -324,12 +321,12 @@ function ProfessorInfo({ ProjectData }: { ProjectData: Project | undefined }) {
               <Button onClick={handleSubmit} className="bg-primary text-white">
                 ثبت
               </Button>
-              <Button
+              {/* <Button
                 onClick={() => setIsModalOpen(false)}
                 variant="destructive"
               >
                 پاک کردن داده‌ها
-              </Button>
+              </Button> */}
             </DialogFooter>
           </DialogContent>
         </Dialog>

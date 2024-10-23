@@ -150,6 +150,7 @@ const ProjectpageSidebar = ({
         error.response?.data || error
       );
       toast.error("ویرایش با خطا مواجه شد");
+      toast.error(error.response?.data?.detail)
     },
   });
 
@@ -370,6 +371,8 @@ const ProjectpageSidebar = ({
                   onValueChange={(value) =>
                     setProjectData({ ...projectData, owner: Number(value) })
                   }
+                  defaultValue={String(data.owner.id)}
+
                 >
                   <SelectTrigger className="mt-2">
                     <SelectValue placeholder="انتخاب صاحب سازمان" />

@@ -13,7 +13,7 @@ import {
   postTimeScales,
 } from "@/functions/services/charts";
 import { LineChart } from "./line-chart";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Dialog,
   DialogTrigger,
@@ -33,8 +33,10 @@ import toast from "react-hot-toast";
 import queryClient from "@/functions/QueryClient";
 import { MdDeleteOutline } from "react-icons/md";
 import moment from "moment-jalaali";
+import { UserContext } from "@/functions/Usercontext";
+import { Project } from "@/functions/services/project";
 
-function MoreInfoCards() {
+function MoreInfoCards({ProjectData}:{ProjectData:Project|undefined}) {
   const { id } = useParams();
   const { data, isPending } = useQuery({
     queryKey: [`getTimeScalesByProj${id}`],
@@ -44,7 +46,26 @@ function MoreInfoCards() {
     queryKey: [`getRealScalesByProj${id}`],
     queryFn: () => getRealScalesByProj(id),
   });
+  const user = useContext(UserContext);
 
+  const [canEdit, setCanEdit] = useState(false);
+
+  useEffect(() => {
+    if (user && user.user?.projects && user.user?.crud_project) {
+      user.user?.projects.map((obj) => {
+        if (obj.id === Number(id)) {
+          setCanEdit(true);
+        }
+      });
+    }
+    if (ProjectData?.owner.id && user?.user?.id) {
+      if (ProjectData?.owner.id === user?.user?.id) {
+        setCanEdit(true);
+      }
+    }
+
+    // setCanEdit(true)
+  }, [user]);
   const [addFormData, setAddFormData] = useState<addtimeCulchart>({
     project: id,
     program_progress_percentage: 0,
@@ -198,7 +219,9 @@ function MoreInfoCards() {
             <CardTitle className="my-auto text-lg">آمار زمانی </CardTitle>
             <Dialog open={timeOpen} onOpenChange={setTimeOpen}>
               <DialogTrigger asChild>
-                <HiOutlinePencil className=" cursor-pointer z-50 top-2 w-6 h-6 px-0 py-1 rounded-full bg-primary text-white shadow-md" />
+              {(user?.user?.is_superuser || user?.user?.admin || canEdit) && (
+                  <HiOutlinePencil className=" cursor-pointer z-50 top-2 w-6 h-6 px-0 py-1 rounded-full bg-primary text-white shadow-md" />
+                )}
               </DialogTrigger>
               <DialogContent dir="rtl" className="font-IranSans w-[400px]">
                 <DialogHeader>
@@ -272,8 +295,9 @@ function MoreInfoCards() {
             <CardTitle className="my-auto text-lg">آمار واقعی</CardTitle>
             <Dialog open={RealOpen} onOpenChange={setRealOpen}>
               <DialogTrigger asChild>
-                <HiOutlinePencil className=" cursor-pointer z-50 top-2 w-6 h-6 px-0 py-1 rounded-full bg-primary text-white shadow-md" />
-              </DialogTrigger>
+              {(user?.user?.is_superuser || user?.user?.admin || canEdit) && (
+                  <HiOutlinePencil className=" cursor-pointer z-50 top-2 w-6 h-6 px-0 py-1 rounded-full bg-primary text-white shadow-md" />
+                )}              </DialogTrigger>
               <DialogContent dir="rtl" className="font-IranSans w-[400px]">
                 <DialogHeader>
                   <DialogTitle className="text-right">

@@ -44,7 +44,7 @@ export default function MoreInfo() {
         >
           <ProfessorInfo ProjectData={data}></ProfessorInfo>
 
-          <MoreInfoCards></MoreInfoCards>
+          <MoreInfoCards ProjectData={data}></MoreInfoCards>
         </div>
       </div>
     </>
