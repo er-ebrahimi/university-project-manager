@@ -85,7 +85,7 @@ const AdminTableWithModal: React.FC = () => {
       setIsEditModalVisible(false);
     },
     onError: (error:any) => {
-      console.log("🚀 ~ error:", error)
+      // console.log("🚀 ~ error:", error)
       toast.error(error.response?.data?.detail);
     },
   });
