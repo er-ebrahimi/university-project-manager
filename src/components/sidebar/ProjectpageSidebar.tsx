@@ -1,16 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import DatePicker from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
 import { IoDocumentAttach } from "react-icons/io5";
-import { Dialog, DialogContent, DialogHeader, DialogTrigger } from "@/components/ui/dialog";
-import ProjectSidebarAttachment from "../sidebaritems/ProjectSidebarAttachment";
-import { Project, putproject } from "@/functions/services/project";
-import ClipLoader from "react-spinners/ClipLoader";
 import {
-  getUsersSelect,
-  userSelect,
-} from "@/functions/services/users";
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import ProjectSidebarAttachment from "../sidebaritems/ProjectSidebarAttachment";
+import {
+  Project,
+  deleteProject,
+  putproject,
+} from "@/functions/services/project";
+import ClipLoader from "react-spinners/ClipLoader";
+import { getUsersSelect, userSelect } from "@/functions/services/users";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   Select,
@@ -21,7 +27,9 @@ import {
 } from "../ui/select";
 import queryClient from "@/functions/QueryClient";
 import toast from "react-hot-toast";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import routes from "@/global/routes";
+import { UserContext } from "@/functions/Usercontext";
 
 type ProjectpageSidebarProps = {
   data: Project | undefined;
@@ -44,7 +52,7 @@ const ProjectpageSidebar = ({
   data,
   sideBarLoading,
 }: ProjectpageSidebarProps) => {
-  const {id} = useParams()
+  const { id } = useParams();
   // Define state for managing field values and edit mode
   const [isEditing, setIsEditing] = useState(false);
   const [projectData, setProjectData] = useState<AddProjectData>(
@@ -58,7 +66,7 @@ const ProjectpageSidebar = ({
           real_end_date: data.real_end_date,
           external_members: data.external_members,
           owner: data.owner.id,
-          subOrganization:data.subOrganization.id,
+          subOrganization: data.subOrganization.id,
         }
       : {
           name: "",
@@ -69,7 +77,7 @@ const ProjectpageSidebar = ({
           real_end_date: "",
           external_members: "",
           owner: 0, // or any default number value
-          subOrganization:0,
+          subOrganization: 0,
         }
   );
 
@@ -85,8 +93,7 @@ const ProjectpageSidebar = ({
             real_end_date: data.real_end_date,
             external_members: data.external_members,
             owner: data.owner.id,
-            subOrganization:data.subOrganization.id,
-
+            subOrganization: data.subOrganization.id,
           }
         : {
             name: "",
@@ -97,11 +104,25 @@ const ProjectpageSidebar = ({
             real_end_date: "",
             external_members: "",
             owner: 0,
-            subOrganization:0, // or any default number value
+            subOrganization: 0, // or any default number value
           }
     );
   }, [data]);
-
+  const navigate = useNavigate();
+  const deleteMutation = useMutation({
+    mutationFn: () => deleteProject(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["suborganizations"],
+      });
+      toast.success("پروژه با موفقیت حذف شد");
+      navigate(routes.dashboard);
+    },
+    onError: (error: any) => {
+      // console.log(error?.response?.data?.detail);
+      toast.error(error?.response?.data?.detail);
+    },
+  });
   // Updated handleDateChange function
   const handleDateChange = (name: keyof AddProjectData, date: any) => {
     if (date && date.isValid) {
@@ -118,7 +139,24 @@ const ProjectpageSidebar = ({
       });
     }
   };
+  const [canEdit, setCanEdit] = useState(false);
+  const user = useContext(UserContext);
+  useEffect(() => {
+    if (user && user.user?.projects && user.user?.crud_project) {
+      user.user?.projects.map((obj) => {
+        if (obj.id === Number(id)) {
+          setCanEdit(true);
+        }
+      });
+    }
+    if (data?.owner.id && user?.user?.id) {
+      if (data?.owner.id === user?.user?.id) {
+        setCanEdit(true);
+      }
+    }
 
+    // setCanEdit(true)
+  }, [user]);
   // Handle input changes
 
   const handleInputChange = (field: keyof AddProjectData, value: any) => {
@@ -134,7 +172,7 @@ const ProjectpageSidebar = ({
   });
 
   const UpdateMutation = useMutation({
-    mutationFn: (updatedData: any) => putproject(updatedData,id),
+    mutationFn: (updatedData: any) => putproject(updatedData, id),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [`Project${id}`],
@@ -150,7 +188,7 @@ const ProjectpageSidebar = ({
         error.response?.data || error
       );
       toast.error("ویرایش با خطا مواجه شد");
-      toast.error(error.response?.data?.detail)
+      toast.error(error.response?.data?.detail);
     },
   });
 
@@ -179,7 +217,7 @@ const ProjectpageSidebar = ({
                 <IoDocumentAttach className="absolute left-0 top-0 ml-4 mt-4 w-8 h-8 rounded cursor-pointer text-primary-dark border p-1 border-primary" />
               </DialogTrigger>
               <DialogContent className="my-4 h-[650px] w-full overflow-y-auto scrollbar-thin scrollbar-thumb-purple-500 scrollbar-track-gray-200">
-              {/* <DialogHeader dir="rtl" className="text-right! mb-0">فایل های ضمیمه</DialogHeader> */}
+                {/* <DialogHeader dir="rtl" className="text-right! mb-0">فایل های ضمیمه</DialogHeader> */}
                 <ProjectSidebarAttachment />
               </DialogContent>
             </Dialog>
@@ -231,9 +269,7 @@ const ProjectpageSidebar = ({
                         ? new Date(projectData.start_date)
                         : null
                     }
-                    onChange={(date) =>
-                      handleDateChange("start_date", date)
-                    }
+                    onChange={(date) => handleDateChange("start_date", date)}
                     calendar={persian}
                     locale={persian_fa}
                     inputClass="border p-1 rounded w-full"
@@ -260,9 +296,7 @@ const ProjectpageSidebar = ({
                         ? new Date(projectData.end_date)
                         : null
                     }
-                    onChange={(date) =>
-                      handleDateChange("end_date", date)
-                    }
+                    onChange={(date) => handleDateChange("end_date", date)}
                     calendar={persian}
                     locale={persian_fa}
                     inputClass="border p-1 rounded w-full"
@@ -320,9 +354,7 @@ const ProjectpageSidebar = ({
                         ? new Date(projectData.real_end_date)
                         : null
                     }
-                    onChange={(date) =>
-                      handleDateChange("real_end_date", date)
-                    }
+                    onChange={(date) => handleDateChange("real_end_date", date)}
                     calendar={persian}
                     locale={persian_fa}
                     inputClass="border p-1 rounded w-full"
@@ -330,9 +362,9 @@ const ProjectpageSidebar = ({
                 ) : (
                   <p className="text-gray-600 mt-1 text-center">
                     {projectData.real_end_date
-                      ? new Date(
-                          projectData.real_end_date
-                        ).toLocaleDateString("fa-IR")
+                      ? new Date(projectData.real_end_date).toLocaleDateString(
+                          "fa-IR"
+                        )
                       : ""}
                   </p>
                 )}
@@ -372,7 +404,6 @@ const ProjectpageSidebar = ({
                     setProjectData({ ...projectData, owner: Number(value) })
                   }
                   defaultValue={String(data.owner.id)}
-
                 >
                   <SelectTrigger className="mt-2">
                     <SelectValue placeholder="انتخاب صاحب سازمان" />
@@ -392,41 +423,43 @@ const ProjectpageSidebar = ({
                   </SelectContent>
                 </Select>
               ) : (
-                <p className="text-gray-600 mt-1">
-                  {data?.owner?.username}
-                </p>
+                <p className="text-gray-600 mt-1">{data?.owner?.username}</p>
               )}
             </div>
           </div>
 
-          <div className="flex justify-between mt-auto">
-            {isEditing ? (
+          {(user?.user?.is_superuser || user?.user?.admin || canEdit) && (
+            <div className="flex justify-between mt-auto">
+              {isEditing ? (
+                <button
+                  className="bg-green-500 text-white py-1 px-3 rounded"
+                  onClick={() => {
+                    setIsEditing(false);
+                    console.log("Updated Project Data:", projectData);
+                    // Add your save logic here
+                    UpdateMutation.mutate(projectData);
+                  }}
+                >
+                  ذخیره
+                </button>
+              ) : (
+                <button
+                  className="bg-purple-500 text-white py-1 px-3 rounded"
+                  onClick={() => setIsEditing(true)}
+                >
+                  ویرایش
+                </button>
+              )}
               <button
-                className="bg-green-500 text-white py-1 px-3 rounded"
+                className="bg-red-500 text-white py-1 px-3 rounded disabled:opacity-50"
                 onClick={() => {
-                  setIsEditing(false);
-                  console.log("Updated Project Data:", projectData);
-                  // Add your save logic here
-                  UpdateMutation.mutate(projectData)
+                  deleteMutation.mutate();
                 }}
               >
-                ذخیره
+                حذف
               </button>
-            ) : (
-              <button
-                className="bg-purple-500 text-white py-1 px-3 rounded"
-                onClick={() => setIsEditing(true)}
-              >
-                ویرایش
-              </button>
-            )}
-            <button
-              disabled
-              className="bg-red-500 text-white py-1 px-3 rounded disabled:opacity-50 cursor-not-allowed"
-            >
-              حذف
-            </button>
-          </div>
+            </div>
+          )}
         </div>
       )}
     </>

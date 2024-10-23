@@ -25,7 +25,7 @@ export type CreateUserVariables = {
   mobile_phone_number: string;
   // user_permissions: number;
   password: string;
-  subOrganizations: number|null;
+  subOrganizations: number | null;
   projects: number[];
   admin: boolean;
   crud_project: boolean;
@@ -52,7 +52,7 @@ const AddUser = ({
     onSuccess: () => {
       toast.success("کاربر با موفقیت اضافه شد");
       setOpen(false);
-      queryClient.invalidateQueries({ queryKey: ["UserData"] })
+      queryClient.invalidateQueries({ queryKey: ["UserData"] });
     },
     onError: (error: any) => {
       toast.error("ساخت کاربر با خطا مواجه شد");
@@ -108,7 +108,6 @@ const AddUser = ({
           crud_project: crudProject,
         };
 
-        console.log("🚀 ~ AddUser ~ values:", values);
         mutate(values); // Send form data to API via mutation
       }}
       className="grid grid-cols-1 md:grid-cols-2 gap-4 gap-y-1"
@@ -237,7 +236,11 @@ const AddUser = ({
 
       <div className="flex justify-end mr-2 items-center  flex-row-reverse gap-4 mt-6">
         <div className="flex flex-row-reverse gap-2">
-          <Checkbox id="admin" checked={isAdmin} onCheckedChange={(checked) => setIsAdmin(checked === true)} />
+          <Checkbox
+            id="admin"
+            checked={isAdmin}
+            onCheckedChange={(checked) => setIsAdmin(checked === true)}
+          />
           <label
             htmlFor="admin"
             className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -280,27 +283,30 @@ const AddUser = ({
         />
       </div>
 
-      {crudProject && <div>
-        <Label className="mr-2" htmlFor="projects">
-          پروژه‌ها
-        </Label>
-        <Select
-          options={
-            ProjectList?.map((item) => ({
-              value: item.id,
-              label: item.name,
-            })) || []
-          }
-          menuPlacement="top"
-
-          isLoading={pPending}
-          isMulti
-          placeholder="انتخاب پروژه"
-          noOptionsMessage={() => "پروژه‌ای موجود نیست"}
-          onChange={(options) => setUserProjects(options?.map((opt) => opt.value) || [])}
-          className="mt-2 w-full"
-        />
-      </div>}
+      {crudProject && (
+        <div>
+          <Label className="mr-2" htmlFor="projects">
+            پروژه‌ها
+          </Label>
+          <Select
+            options={
+              ProjectList?.map((item) => ({
+                value: item.id,
+                label: item.name,
+              })) || []
+            }
+            menuPlacement="top"
+            isLoading={pPending}
+            isMulti
+            placeholder="انتخاب پروژه"
+            noOptionsMessage={() => "پروژه‌ای موجود نیست"}
+            onChange={(options) =>
+              setUserProjects(options?.map((opt) => opt.value) || [])
+            }
+            className="mt-2 w-full"
+          />
+        </div>
+      )}
 
       <div dir="ltr" className="mt-2 md:col-span-2 ml-2">
         <Button

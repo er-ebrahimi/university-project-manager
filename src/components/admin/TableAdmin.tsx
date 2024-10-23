@@ -76,8 +76,7 @@ const AdminTableWithModal: React.FC = () => {
     queryKey: ["projectList"],
     queryFn: getprojectList,
   });
-  console.log("🚀 ~ ProjectList:", ProjectList)
-// console.log(first)
+  // console.log(first)
   const updateUserMutation = useMutation({
     mutationFn: (updatedUser: User) => updateUser(updatedUser),
     onSuccess: () => {
@@ -129,7 +128,6 @@ const AdminTableWithModal: React.FC = () => {
     );
     setFilteredData(filtered!);
   };
-  console.log("mmd",currentUser)
   const columns: ColumnsType<User> = [
     {
       title: "نام کاربری",

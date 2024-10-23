@@ -29,7 +29,7 @@ interface UniversityData {
 const UniversitySidebar: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [users, setUsers] = useState<userSelect[]>();
-  const [ownerName ,setOwnerName] =useState<string>()
+  const [ownerName, setOwnerName] = useState<string>();
   const [universityData, setUniversityData] = useState<UniversityData>({
     name: "",
     phone_number: "",
@@ -39,7 +39,7 @@ const UniversitySidebar: React.FC = () => {
     owner: "", // or owner_id: 0
   });
 
-  const userData = useContext(UserContext)
+  const userData = useContext(UserContext);
   // console.log("🚀 ~ a:", a)
   // Fetch organization data
   const { data, isLoading, isError } = useQuery({
@@ -82,7 +82,7 @@ const UniversitySidebar: React.FC = () => {
       toast.error("ویرایش با خطا مواجه شد");
     },
   });
-  const { data: userlist ,isPending:userLoading} = useQuery({
+  const { data: userlist, isPending: userLoading } = useQuery({
     queryKey: ["UserSelect"],
     queryFn: getUsersSelect,
     // enabled: isEditing, // Only fetch when editing mode is enabled
@@ -95,10 +95,7 @@ const UniversitySidebar: React.FC = () => {
       setUsers(userlist);
     }
   }, [userlist]);
-  
-  
 
-  console.log("🚀 ~ userlist:", userlist)
   // Update the state when data is fetched
   useEffect(() => {
     if (data && !isLoading && !isError) {
@@ -114,7 +111,7 @@ const UniversitySidebar: React.FC = () => {
         // console.log("hi")
         const ownerUser = userlist.find((user) => user.id === data.owner);
         if (ownerUser) {
-        // console.log("hi")
+          // console.log("hi")
 
           setOwnerName(ownerUser.username); // Set ownerName to the matched username
         }
@@ -248,25 +245,29 @@ const UniversitySidebar: React.FC = () => {
             //   className="border p-1 rounded w-full"
             // />
             <Select
-            dir="rtl"
-            defaultValue={String(data.owner)}
-            onValueChange={(value) =>
-              setUniversityData({ ...universityData, owner: value })
-            }
-          >
-            <SelectTrigger className="mt-2">
-              <SelectValue placeholder="انتخاب صاحب سازمان"  />
-            </SelectTrigger>
-            <SelectContent >
-              {!userLoading&& users?.map((item) => (
-                <SelectItem key={item.id} value={String(item.id)}>
-                  {item.username}
-                </SelectItem>
-              ))}
-              {userLoading&& <div className="flex justify-center py-2">
-                <ClipLoader /></div>}
-            </SelectContent>
-          </Select>
+              dir="rtl"
+              defaultValue={String(data.owner)}
+              onValueChange={(value) =>
+                setUniversityData({ ...universityData, owner: value })
+              }
+            >
+              <SelectTrigger className="mt-2">
+                <SelectValue placeholder="انتخاب صاحب سازمان" />
+              </SelectTrigger>
+              <SelectContent>
+                {!userLoading &&
+                  users?.map((item) => (
+                    <SelectItem key={item.id} value={String(item.id)}>
+                      {item.username}
+                    </SelectItem>
+                  ))}
+                {userLoading && (
+                  <div className="flex justify-center py-2">
+                    <ClipLoader />
+                  </div>
+                )}
+              </SelectContent>
+            </Select>
           ) : (
             <p className="text-gray-600 mt-1">{ownerName}</p>
           )}

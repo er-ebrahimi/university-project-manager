@@ -26,7 +26,15 @@ export interface AddProjectData {
   subOrganization: string;
 }
 
-const AddProject = ({ ownerId, open, setOpen }: { ownerId: string, open: boolean, setOpen: Dispatch<SetStateAction<boolean>> }) => {
+const AddProject = ({
+  ownerId,
+  open,
+  setOpen,
+}: {
+  ownerId: string;
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+}) => {
   const { id: organizationId } = useParams(); // Extract organizationId from URL
   const [addFormData, setAddFormData] = useState<AddProjectData>({
     name: "",
@@ -63,16 +71,14 @@ const AddProject = ({ ownerId, open, setOpen }: { ownerId: string, open: boolean
       });
     }
   };
-  
+
   // Mutation for adding a new project
   const mutation = useMutation({
-    mutationFn: (addFormData: AddProjectData) =>
-      postAddProject(addFormData),
+    mutationFn: (addFormData: AddProjectData) => postAddProject(addFormData),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [`suboorganization${organizationId}`]
+        queryKey: [`suboorganization${organizationId}`],
       }); // Ensure organization data is refreshed
-      console.log("Project added successfully");
       setOpen(false);
     },
     onError: (error: any) => {
@@ -89,10 +95,8 @@ const AddProject = ({ ownerId, open, setOpen }: { ownerId: string, open: boolean
       real_start_date: new Date(addFormData.real_start_date).toISOString(),
       real_end_date: new Date(addFormData.real_end_date).toISOString(),
     };
-    console.log("data: ",formattedData)
     mutation.mutate(formattedData, {
       onSuccess: () => {
-        console.log("Project added successfully");
         // Optionally handle success (e.g., close dialog, show notification)
       },
       onError: (error: any) => {
@@ -101,7 +105,6 @@ const AddProject = ({ ownerId, open, setOpen }: { ownerId: string, open: boolean
       },
     });
   };
-  
 
   return (
     <DialogContent className="p-8 bg-white rounded-lg shadow-lg h-[670px] w-[750px]">
@@ -147,7 +150,7 @@ const AddProject = ({ ownerId, open, setOpen }: { ownerId: string, open: boolean
               className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
               calendar={persian}
               locale={persian_fa}
-            //   value={addFormData.start_date}
+              //   value={addFormData.start_date}
 
               onChange={(date) => handleDateChange("start_date", date)}
               inputClass="w-full p-2 border border-gray-300 rounded-lg focus:outline-none"
@@ -163,7 +166,7 @@ const AddProject = ({ ownerId, open, setOpen }: { ownerId: string, open: boolean
               className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
               calendar={persian}
               locale={persian_fa}
-            //   value={addFormData.end_date}
+              //   value={addFormData.end_date}
               onChange={(date) => handleDateChange("end_date", date)}
               inputClass="w-full p-2 border border-gray-300 rounded-lg focus:outline-none"
             />
@@ -178,7 +181,7 @@ const AddProject = ({ ownerId, open, setOpen }: { ownerId: string, open: boolean
               className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
               calendar={persian}
               locale={persian_fa}
-            //   value={addFormData.real_start_date}
+              //   value={addFormData.real_start_date}
               onChange={(date) => handleDateChange("real_start_date", date)}
               inputClass="w-full p-2 border border-gray-300 rounded-lg focus:outline-none"
             />
@@ -193,7 +196,7 @@ const AddProject = ({ ownerId, open, setOpen }: { ownerId: string, open: boolean
               className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
               calendar={persian}
               locale={persian_fa}
-            //   value={addFormData.real_end_date}
+              //   value={addFormData.real_end_date}
               onChange={(date) => handleDateChange("real_end_date", date)}
               inputClass="w-full p-2 border border-gray-300 rounded-lg focus:outline-none"
             />

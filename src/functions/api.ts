@@ -1,20 +1,26 @@
 // api.ts
-import { httpRequest } from './httpsrequest';
+import { httpRequest } from "./httpsrequest";
 // Helper functions for different HTTP methods
 
 export const apiGet = <T>(
   endpoint: string,
   includeHeaders: boolean = true
 ): Promise<T> => {
-  return httpRequest<T>(endpoint, { method: 'GET', includeHeaders });
+  return httpRequest<T>(endpoint, { method: "GET", includeHeaders });
 };
 
 export const apiPost = <T>(
   endpoint: string,
   data: any,
-  includeHeaders: boolean = true
+  includeHeaders: boolean = true,
+  includeFormDataHeaders: boolean = false
 ): Promise<T> => {
-  return httpRequest<T>(endpoint, { method: 'POST', data, includeHeaders });
+  return httpRequest<T>(endpoint, {
+    method: "POST",
+    data,
+    includeHeaders,
+    includeFormDataHeaders,
+  });
 };
 
 export const apiPut = <T>(
@@ -22,12 +28,12 @@ export const apiPut = <T>(
   data: any,
   includeHeaders: boolean = true
 ): Promise<T> => {
-  return httpRequest<T>(endpoint, { method: 'PUT', data, includeHeaders });
+  return httpRequest<T>(endpoint, { method: "PUT", data, includeHeaders });
 };
 
 export const apiDelete = <T>(
   endpoint: string,
   includeHeaders: boolean = true
 ): Promise<T> => {
-  return httpRequest<T>(endpoint, { method: 'DELETE', includeHeaders });
+  return httpRequest<T>(endpoint, { method: "DELETE", includeHeaders });
 };

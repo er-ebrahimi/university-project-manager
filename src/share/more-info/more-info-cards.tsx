@@ -36,7 +36,7 @@ import moment from "moment-jalaali";
 import { UserContext } from "@/functions/Usercontext";
 import { Project } from "@/functions/services/project";
 
-function MoreInfoCards({ProjectData}:{ProjectData:Project|undefined}) {
+function MoreInfoCards({ ProjectData }: { ProjectData: Project | undefined }) {
   const { id } = useParams();
   const { data, isPending } = useQuery({
     queryKey: [`getTimeScalesByProj${id}`],
@@ -75,17 +75,17 @@ function MoreInfoCards({ProjectData}:{ProjectData:Project|undefined}) {
   const [RealaddFormData, setRealAddFormData] = useState<addRealCulchart>({
     project: id,
     program_progress_percentage: 0,
-    Real_program_progress_percentage: 0,
+    real_program_progress_percentage: 0,
     date: "",
   });
-  const [timeOpen,setTimeOpen]=useState(false)
-  const [RealOpen,setRealOpen]=useState(false)
+  const [timeOpen, setTimeOpen] = useState(false);
+  const [RealOpen, setRealOpen] = useState(false);
 
   const timeMutation = useMutation({
     mutationFn: (data: addtimeCulchart) => postTimeScales(data),
     onSuccess: () => {
       toast.success("با موفقیت اضافه شد");
-      setTimeOpen(false)
+      setTimeOpen(false);
       queryClient.invalidateQueries({
         queryKey: [`getTimeScalesByProj${id}`],
       });
@@ -95,7 +95,7 @@ function MoreInfoCards({ProjectData}:{ProjectData:Project|undefined}) {
     mutationFn: (data: addRealCulchart) => postRealScales(data),
     onSuccess: () => {
       toast.success("با موفقیت اضافه شد");
-      setRealOpen(false)
+      setRealOpen(false);
       queryClient.invalidateQueries({
         queryKey: [`getRealScalesByProj${id}`],
       });
@@ -157,14 +157,18 @@ function MoreInfoCards({ProjectData}:{ProjectData:Project|undefined}) {
     if (!rawData) {
       return [];
     }
+    console.log("🚀 ~ transformData ~ rawData:", rawData);
     const transformedData = rawData.map((item) => ({
-      // year: new Date(item.date).getFullYear(),
-      year: moment(item.date).format("jYYYY"),
-
+      date: new Date(item.date), // Convert string to Date object
+      year: moment(item.date).format("jYYYY/jMM/jDD"), // Keep formatted date for display
+      // year: new Date(item.date).getFullYear(), // Extract year from date for logical sorting if needed
       count: parseFloat(item.program_progress_percentage) || 0,
       cumulativeCount: parseFloat(item.real_program_progress_percentage) || 0,
     }));
-    transformedData.sort((a:any, b:any) => a.year - b.year);
+
+    // Sort by date object
+    transformedData.sort((a: any, b: any) => a.date - b.date);
+
     return transformedData;
   };
 
@@ -174,16 +178,20 @@ function MoreInfoCards({ProjectData}:{ProjectData:Project|undefined}) {
     }
     // rawData.sort((a:any,b:any)=>b.date - a.year)
     const transformedData = rawData.map((item) => ({
-      // year: moment(new Date(item.date).getFullYear()).format("jyyyy"),
-      year: moment(item.date).format("jYYYY"),
+      date: new Date(item.date), // Convert string to Date object
+      year: moment(item.date).format("jYYYY/jMM/jDD"), // Keep formatted date for display
+      // year: new Date(item.date).getFullYear(), // Extract year from date for logical sorting if needed
       count: parseFloat(item.program_progress_percentage) || 0,
       cumulativeCount: parseFloat(item.time_program_progress_percentage) || 0,
     }));
-    transformedData.sort((a:any, b:any) => a.year - b.year);
+
+    // Sort by date object
+    transformedData.sort((a: any, b: any) => a.date - b.date);
+
     return transformedData;
   };
   const deleteTimeMutation = useMutation({
-    mutationFn: (timeid:number) => deletetimescaleData(timeid),
+    mutationFn: (timeid: number) => deletetimescaleData(timeid),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [`getTimeScalesByProj${id}`],
@@ -197,7 +205,7 @@ function MoreInfoCards({ProjectData}:{ProjectData:Project|undefined}) {
     },
   });
   const deleteRealMutation = useMutation({
-    mutationFn: (Realid:number) => deleterealscaleData(Realid),
+    mutationFn: (Realid: number) => deleterealscaleData(Realid),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [`getRealScalesByProj${id}`],
@@ -219,7 +227,7 @@ function MoreInfoCards({ProjectData}:{ProjectData:Project|undefined}) {
             <CardTitle className="my-auto text-lg">آمار زمانی </CardTitle>
             <Dialog open={timeOpen} onOpenChange={setTimeOpen}>
               <DialogTrigger asChild>
-              {(user?.user?.is_superuser || user?.user?.admin || canEdit) && (
+                {(user?.user?.is_superuser || user?.user?.admin || canEdit) && (
                   <HiOutlinePencil className=" cursor-pointer z-50 top-2 w-6 h-6 px-0 py-1 rounded-full bg-primary text-white shadow-md" />
                 )}
               </DialogTrigger>
@@ -260,23 +268,32 @@ function MoreInfoCards({ProjectData}:{ProjectData:Project|undefined}) {
                   <Button onClick={handleAddData}>اضافه یا ویرایش</Button>
                 </DialogFooter>
                 <div className=" h-60 overflow-auto border border-gray-200 rounded-md p-2 ">
-                  {data?.sort((a:any, b:any) => new Date(b.date).getTime() - new Date(a.date).getTime()).map((ele) => {
-                    const date = new Date(ele.date);
-                    return (
-                      <div className=" p-2 border-b flex justify-between content-center items-center">
-                        <div>
-                          {/* {`${date.getUTCFullYear()}/${date.getUTCMonth()}/${date.getUTCDay()}`} */}
-                          {moment(date.toISOString()).format("jYYYY/jMM/jDD")}
-
+                  {data
+                    ?.sort(
+                      (a: any, b: any) =>
+                        new Date(b.date).getTime() - new Date(a.date).getTime()
+                    )
+                    .map((ele) => {
+                      const date = new Date(ele.date);
+                      return (
+                        <div className=" p-2 border-b flex justify-between content-center items-center">
+                          <div>
+                            {/* {`${date.getUTCFullYear()}/${date.getUTCMonth()}/${date.getUTCDay()}`} */}
+                            {moment(date.toISOString()).format("jYYYY/jMM/jDD")}
+                          </div>
+                          <div>
+                            <Button
+                              onClick={() => {
+                                deleteTimeMutation.mutate(Number(ele.id));
+                              }}
+                              className="  rounded-full"
+                            >
+                              <MdDeleteOutline size={20}></MdDeleteOutline>
+                            </Button>
+                          </div>
                         </div>
-                        <div>
-                          <Button onClick={()=>{deleteTimeMutation.mutate(Number(ele.id))}} className="  rounded-full">
-                            <MdDeleteOutline  size={20}></MdDeleteOutline>
-                          </Button>
-                        </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
                 </div>
               </DialogContent>
             </Dialog>
@@ -294,10 +311,11 @@ function MoreInfoCards({ProjectData}:{ProjectData:Project|undefined}) {
           <CardHeader className="flex flex-row justify-between items-start pt-3 pb-0 px-6">
             <CardTitle className="my-auto text-lg">آمار واقعی</CardTitle>
             <Dialog open={RealOpen} onOpenChange={setRealOpen}>
-              <DialogTrigger asChild>
-              {(user?.user?.is_superuser || user?.user?.admin || canEdit) && (
+              <DialogTrigger>
+                {(user?.user?.is_superuser || user?.user?.admin || canEdit) && (
                   <HiOutlinePencil className=" cursor-pointer z-50 top-2 w-6 h-6 px-0 py-1 rounded-full bg-primary text-white shadow-md" />
-                )}              </DialogTrigger>
+                )}{" "}
+              </DialogTrigger>
               <DialogContent dir="rtl" className="font-IranSans w-[400px]">
                 <DialogHeader>
                   <DialogTitle className="text-right">
@@ -318,9 +336,9 @@ function MoreInfoCards({ProjectData}:{ProjectData:Project|undefined}) {
                   />
                   <Input
                     type="number"
-                    name="Real_program_progress_percentage"
+                    name="real_program_progress_percentage"
                     placeholder="دومین مقدار"
-                    value={RealaddFormData.Real_program_progress_percentage}
+                    value={RealaddFormData.real_program_progress_percentage}
                     onChange={handleRealInputChange}
                   />
                   <DatePicker
@@ -335,22 +353,32 @@ function MoreInfoCards({ProjectData}:{ProjectData:Project|undefined}) {
                   <Button onClick={handleRealAddData}>اضافه یا ویرایش</Button>
                 </DialogFooter>
                 <div className=" h-60 overflow-auto border border-gray-200 rounded-md p-2 ">
-                  {realStateData?.sort((a:any, b:any) => new Date(b.date).getTime() - new Date(a.date).getTime()).map((ele) => {
-                    const date = new Date(ele.date);
-                    return (
-                      <div className=" p-2 border-b flex justify-between content-center items-center">
-                        <div>
-                          {/* {`${date.getUTCFullYear()}/${date.getUTCMonth()}/${date.getUTCDay()}`} */}
-                          {moment(date.toISOString()).format("jYYYY/jMM/jDD")}
+                  {realStateData
+                    ?.sort(
+                      (a: any, b: any) =>
+                        new Date(b.date).getTime() - new Date(a.date).getTime()
+                    )
+                    .map((ele) => {
+                      const date = new Date(ele.date);
+                      return (
+                        <div className=" p-2 border-b flex justify-between content-center items-center">
+                          <div>
+                            {/* {`${date.getUTCFullYear()}/${date.getUTCMonth()}/${date.getUTCDay()}`} */}
+                            {moment(date.toISOString()).format("jYYYY/jMM/jDD")}
+                          </div>
+                          <div>
+                            <Button
+                              onClick={() => {
+                                deleteRealMutation.mutate(Number(ele.id));
+                              }}
+                              className="  rounded-full"
+                            >
+                              <MdDeleteOutline size={20}></MdDeleteOutline>
+                            </Button>
+                          </div>
                         </div>
-                        <div>
-                          <Button onClick={()=>{deleteRealMutation.mutate(Number(ele.id))}} className="  rounded-full">
-                            <MdDeleteOutline  size={20}></MdDeleteOutline>
-                          </Button>
-                        </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
                 </div>
               </DialogContent>
             </Dialog>

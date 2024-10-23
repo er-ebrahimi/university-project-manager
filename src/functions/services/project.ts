@@ -1,5 +1,5 @@
 import { AddProjectData } from "@/components/univercitypage/AddProject";
-import { apiGet, apiPost, apiPut } from "../api";
+import { apiDelete, apiGet, apiPost, apiPut } from "../api";
 import { User } from "@/types/userType";
 import { DataItem, Suborganizationselect } from "./organization";
 
@@ -36,6 +36,9 @@ export const postAddProject = async (data: AddProjectData) => {
 export interface addProfessor {
   subOrganizations: string;
 }
+export const deleteProject = async (projectid: string | undefined) => {
+  apiDelete(`/project/delete/${projectid}/`, true);
+};
 
 export const PutAddProfessor = async (
   professorId: string,

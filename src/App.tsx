@@ -19,7 +19,6 @@ import InternalServerError from "./pages/500";
 import BadGateway from "./pages/502";
 function AppRoute() {
   // const userPermissionsName = useUserPermissionsName();
-  // console.log("🚀 ~ AppRoute ~ userPermissionsName:", userPermissionsName)
   return (
     <DirectionProvider dir="rtl">
       <Dashboard>

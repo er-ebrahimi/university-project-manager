@@ -15,12 +15,12 @@ import { UserContext } from "@/functions/Usercontext";
 
 interface UnivercityCardProps {
   data: {
-    id:string;
+    id: string;
     name: string;
     nickname: string;
     mobile_phone_number: number;
     education_level: Degree;
-    phone_number:number;
+    phone_number: number;
   };
 }
 
@@ -29,15 +29,12 @@ interface FormData {
   nickname: string;
   mobile_phone_number: number;
   education_level: Degree;
-  phone_number:number
+  phone_number: number;
 }
 
-
-
 const UnivercityCard: React.FC<UnivercityCardProps> = ({ data }) => {
-  console.log("🚀 ~ data:", data);
   // const [isEditing, setIsEditing] = useState(false);
-  const isEditing = false
+  const isEditing = false;
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   // State for the professor details form
@@ -47,7 +44,7 @@ const UnivercityCard: React.FC<UnivercityCardProps> = ({ data }) => {
     // major: data.major || "",
     education_level: data.education_level,
     mobile_phone_number: data.mobile_phone_number,
-    phone_number:data.phone_number,
+    phone_number: data.phone_number,
   });
 
   // State for the project form inside the modal
@@ -59,7 +56,7 @@ const UnivercityCard: React.FC<UnivercityCardProps> = ({ data }) => {
       nickname: data.nickname || "",
       education_level: data.education_level,
       mobile_phone_number: data.mobile_phone_number,
-      phone_number:data.phone_number,
+      phone_number: data.phone_number,
 
       // education_level: data.education_level\ || "",
       // mobile: data.BirthDate || "",
@@ -82,8 +79,6 @@ const UnivercityCard: React.FC<UnivercityCardProps> = ({ data }) => {
       [name]: value,
     });
   };
-
-  
 
   const handleOpenDialog = () => {
     setIsDialogOpen(true); // Open the dialog when clicked
@@ -166,7 +161,9 @@ const UnivercityCard: React.FC<UnivercityCardProps> = ({ data }) => {
             <strong className="text-primary-dark" dir="rtl">
               شماره موبایل:
             </strong>{" "}
-            <span dir="ltr" className="text-right">{formData.phone_number || "تعریف نشده"}</span>
+            <span dir="ltr" className="text-right">
+              {formData.phone_number || "تعریف نشده"}
+            </span>
           </div>
           {/* <div className="mb-2">
             <strong className="text-primary-dark" dir="rtl">تاریخ استخدام:</strong> <span>{formData.EmploymentDate || "N/A"}</span>
@@ -196,15 +193,16 @@ const UnivercityCard: React.FC<UnivercityCardProps> = ({ data }) => {
           </button>
         )} */}
 
-        {!isEditing && (userData?.user?.is_superuser || userData?.user?.admin) &&(
-          <button
-            onClick={handleOpenDialog} // Open the dialog when clicked
-            className="mt-4 flex flex-row items-center gap-2 h-9 text-sm p-1 bg-white text-orange-500 border-2 border-orange-500 rounded hover:bg-orange-500 hover:text-white"
-          >
-            <FaPlus className="w-6 h-6" />
-            <p className="w-full mt-1">افزودن پروژه</p>
-          </button>
-        )}
+        {!isEditing &&
+          (userData?.user?.is_superuser || userData?.user?.admin) && (
+            <button
+              onClick={handleOpenDialog} // Open the dialog when clicked
+              className="mt-4 flex flex-row items-center gap-2 h-9 text-sm p-1 bg-white text-orange-500 border-2 border-orange-500 rounded hover:bg-orange-500 hover:text-white"
+            >
+              <FaPlus className="w-6 h-6" />
+              <p className="w-full mt-1">افزودن پروژه</p>
+            </button>
+          )}
 
         {isEditing && (
           <button
@@ -218,7 +216,11 @@ const UnivercityCard: React.FC<UnivercityCardProps> = ({ data }) => {
 
       {/* Dialog for adding new project */}
       <Dialog open={isDialogOpen} onOpenChange={handleCloseDialog}>
-       <AddProject ownerId={data.id} open={isDialogOpen} setOpen={setIsDialogOpen}/>
+        <AddProject
+          ownerId={data.id}
+          open={isDialogOpen}
+          setOpen={setIsDialogOpen}
+        />
       </Dialog>
     </div>
   );

@@ -2,20 +2,31 @@ import React from "react";
 import { FiUpload } from "react-icons/fi";
 import FileItem from "./FileItem";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { File, getFilesByproj, postFile } from "@/functions/services/uploadFiles";
+import {
+  File,
+  getFilesByproj,
+  postFile,
+} from "@/functions/services/uploadFiles";
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { deleteProject } from "@/functions/services/project";
+import toast from "react-hot-toast";
+import routes from "@/global/routes";
 
 const ProjectSidebarAttachment: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const queryClient = useQueryClient();
-  const  {id}  = useParams();
+  const { id } = useParams();
   // console.log("🚀 ~ id:", id)
-
+  const navigate = useNavigate();
   // Fetching files by project ID
-  const { data: files, isLoading, error } = useQuery<File[]>({
+  const {
+    data: files,
+    isLoading,
+    error,
+  } = useQuery<File[]>({
     queryKey: ["files", id],
     queryFn: () => getFilesByproj(id),
   });
@@ -30,7 +41,8 @@ const ProjectSidebarAttachment: React.FC = () => {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      const selectedFile = e.target.files[0];
+      const selectedFile = e.target.files?.[0];
+      // const imageUrl = URL.createObjectURL(selectedFile);
       setFile({
         name: selectedFile.name,
         file: selectedFile,
@@ -70,7 +82,12 @@ const ProjectSidebarAttachment: React.FC = () => {
               <FiUpload className="ml-2 h-5 w-5" />
               آپلود فایل
             </label>
-            <input id="fileUpload" type="file" className="hidden" onChange={handleFileChange} />
+            <input
+              id="fileUpload"
+              type="file"
+              className="hidden"
+              onChange={handleFileChange}
+            />
           </div>
           <div className="w-64">
             <label
@@ -125,9 +142,7 @@ const ProjectSidebarAttachment: React.FC = () => {
         ) : error ? (
           <p>Error fetching files</p>
         ) : (
-          files?.map((file) => (
-            <FileItem data={file} />
-          ))
+          files?.map((file) => <FileItem data={file} />)
         )}
       </div>
     </div>

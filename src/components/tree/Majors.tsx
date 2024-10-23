@@ -9,7 +9,7 @@ import { DataItem, Organization } from "@/functions/services/organization";
 interface Node {
   id: string;
   group: number;
-  RealId:number;
+  RealId: number;
   x?: number;
   y?: number;
   fx?: number | null;
@@ -21,15 +21,24 @@ interface Link {
   target: string | Node;
 }
 
-function ForceGraph({ majors ,organ}: { majors: DataItem[] ,organ:Organization}) {
+function ForceGraph({
+  majors,
+  organ,
+}: {
+  majors: DataItem[];
+  organ: Organization;
+}) {
   const svgRef = useRef<SVGSVGElement>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const nodes: Node[] = [{ id: organ.nickname, group: 0,RealId:0 }].concat(
-      majors.map((major) => ({ id: major.nickname, group: 1,RealId:major.id }))
+    const nodes: Node[] = [{ id: organ.nickname, group: 0, RealId: 0 }].concat(
+      majors.map((major) => ({
+        id: major.nickname,
+        group: 1,
+        RealId: major.id,
+      }))
     );
-    console.log("nodes: ", nodes);
 
     const links: Link[] = majors.map((major) => ({
       source: organ.nickname,
@@ -77,8 +86,8 @@ function ForceGraph({ majors ,organ}: { majors: DataItem[] ,organ:Organization})
       .append("circle")
       .attr("r", 10)
       .on("click", (event, d) => {
-        if(!event){
-          console.log("")
+        if (!event) {
+          console.log("");
         }
         if (d.group === 1) {
           navigate(routes.Colleges(d.RealId));

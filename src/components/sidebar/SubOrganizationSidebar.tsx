@@ -153,21 +153,23 @@ const SubOrganizationSidebar: React.FC<SubOrganizationSidebarProps> = ({
       {!loading && (
         <div className="h-[530px] w-[230px] rounded-sm border border-dashed absolute right-0 bg-white mt-14 mr-6 p-4 flex flex-col">
           <div className="flex-grow">
-           {(userData?.user?.is_superuser || userData?.user?.admin) && <div className="absolute left-0">
-              {/* <button className="text-sm flex justify-center">
+            {(userData?.user?.is_superuser || userData?.user?.admin) && (
+              <div className="absolute left-0">
+                {/* <button className="text-sm flex justify-center">
                 <FaPlus className="w-5 h-5" />
                 افزودن استاد
               </button> */}
-              {!isEditing && (
-                <button
-                  disabled={id === undefined}
-                  className="bg-white hover:bg-red-500 hover:text-white border-2 border-red-500 text-red-500 rounded-sm py-1 px-1 ml-4 cursor-pointer"
-                  onClick={handleDelete}
-                >
-                  <MdDelete className="h-6 w-6" />
-                </button>
-              )}
-            </div>}
+                {!isEditing && (
+                  <button
+                    disabled={id === undefined}
+                    className="bg-white hover:bg-red-500 hover:text-white border-2 border-red-500 text-red-500 rounded-sm py-1 px-1 ml-4 cursor-pointer"
+                    onClick={handleDelete}
+                  >
+                    <MdDelete className="h-6 w-6" />
+                  </button>
+                )}
+              </div>
+            )}
             <div className="mb-4">
               <h3 className="text-sm font-bold text-primary-dark">
                 نام دانشکده
@@ -267,9 +269,7 @@ const SubOrganizationSidebar: React.FC<SubOrganizationSidebarProps> = ({
             </div>
 
             <div className="mb-4">
-              <h3 className="text-sm font-bold text-primary-dark">
-                رئیس دانشگاه
-              </h3>
+              <h3 className="text-sm font-bold text-primary-dark">صاحب مرکز</h3>
               {isEditing ? (
                 // <input
                 //   type="number"
@@ -307,37 +307,39 @@ const SubOrganizationSidebar: React.FC<SubOrganizationSidebarProps> = ({
             </div>
           </div>
 
-          {(userData?.user?.is_superuser || userData?.user?.admin) && <div className="flex justify-between mt-auto">
-            {isEditing ? (
-              <button
-                className="bg-green-500 text-white py-1 px-2 rounded-sm"
-                onClick={() => {
-                  UpdateMutation.mutate(universityData);
-                }}
-              >
-                ذخیره
-              </button>
-            ) : (
-              <button
-                className="bg-primary border-2 hover:border-primary text-white py-1 px-3 rounded-sm hover:bg-white hover:text-primary"
-                onClick={() => setIsEditing(true)}
-              >
-                ویرایش
-              </button>
-            )}
-            {isEditing && (
-              <button
-                className="bg-red-500 px-2 text-white  rounded-sm"
-                onClick={() => {
-                  // UpdateMutation.mutate(universityData);
-                  setIsEditing(false);
-                }}
-              >
-                <MdCancel />
-              </button>
-            )}
-            <AddProfessor />
-          </div>}
+          {(userData?.user?.is_superuser || userData?.user?.admin) && (
+            <div className="flex justify-between mt-auto">
+              {isEditing ? (
+                <button
+                  className="bg-green-500 text-white py-1 px-2 rounded-sm"
+                  onClick={() => {
+                    UpdateMutation.mutate(universityData);
+                  }}
+                >
+                  ذخیره
+                </button>
+              ) : (
+                <button
+                  className="bg-primary border-2 hover:border-primary text-white py-1 px-3 rounded-sm hover:bg-white hover:text-primary"
+                  onClick={() => setIsEditing(true)}
+                >
+                  ویرایش
+                </button>
+              )}
+              {isEditing && (
+                <button
+                  className="bg-red-500 px-2 text-white  rounded-sm"
+                  onClick={() => {
+                    // UpdateMutation.mutate(universityData);
+                    setIsEditing(false);
+                  }}
+                >
+                  <MdCancel />
+                </button>
+              )}
+              <AddProfessor />
+            </div>
+          )}
         </div>
       )}
       {loading && (

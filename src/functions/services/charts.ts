@@ -9,17 +9,17 @@ export interface pieScales {
   create_date: Date;
   project: number;
 }
-export interface addtimeCulchart{
+export interface addtimeCulchart {
   project: string | undefined;
   program_progress_percentage: number;
   time_program_progress_percentage: number;
   date: string;
   // create_date?: Date;
 }
-export interface addRealCulchart{
+export interface addRealCulchart {
   project: string | undefined;
   program_progress_percentage: number;
-  Real_program_progress_percentage: number;
+  real_program_progress_percentage: number;
   date: string;
   // create_date?: Date;
 }
@@ -36,7 +36,7 @@ export interface AddPieChart {
   pending_percentage: number;
   doing_percentage: number;
   finished_percentage: number;
-  date: string|undefined;
+  date: string | undefined;
 }
 
 export const getPieScales = async (projectId: string | undefined) => {
@@ -50,8 +50,12 @@ export const getTimeScalesByProj = async (projectId: string | undefined) => {
   );
 };
 
-export const createTimeScalesByProj = async ( data:any) => {
-  return apiPost<CulChart[]|[]>(`/timescale/showbyproject/${data.projectId}/`,data, true);
+export const createTimeScalesByProj = async (data: any) => {
+  return apiPost<CulChart[] | []>(
+    `/timescale/showbyproject/${data.projectId}/`,
+    data,
+    true
+  );
 };
 
 export const getRealScalesByProj = async (projectId: string | undefined) => {
@@ -62,16 +66,16 @@ export const postPieScales = async (data: AddPieChart) => {
   return apiPost<AddPieChart>(`/piescale/create/`, data, true);
 };
 
-export const postTimeScales = async(data:addtimeCulchart)=>{
-  return apiPost<addtimeCulchart>("/timescale/create/",data,true)
-}
-export const postRealScales = async(data:addRealCulchart)=>{
-  return apiPost<addRealCulchart>("/realscale/create/",data,true)
-}
+export const postTimeScales = async (data: addtimeCulchart) => {
+  return apiPost<addtimeCulchart>("/timescale/create/", data, true);
+};
+export const postRealScales = async (data: addRealCulchart) => {
+  return apiPost<addRealCulchart>("/realscale/create/", data, true);
+};
 
-export const deletetimescaleData = async (id:number)=>{
-  return apiDelete(`/timescale/delete/${id}/`)
-}
-export const deleterealscaleData = async (id:number)=>{
-  return apiDelete(`/realscale/delete/${id}/`)
-}
+export const deletetimescaleData = async (id: number) => {
+  return apiDelete(`/timescale/delete/${id}/`);
+};
+export const deleterealscaleData = async (id: number) => {
+  return apiDelete(`/realscale/delete/${id}/`);
+};

@@ -29,7 +29,6 @@ import { Project } from "@/functions/services/project";
 
 // Professor Info Component with PieChart and Modal to adjust percentages
 function ProfessorInfo({ ProjectData }: { ProjectData: Project | undefined }) {
-  console.log("🚀 ~ ProfessorInfo ~ ProjectData:", ProjectData);
   const { id } = useParams();
 
   const { data: pieData, isPending } = useQuery({
@@ -72,13 +71,11 @@ function ProfessorInfo({ ProjectData }: { ProjectData: Project | undefined }) {
   //   },
   // });
   const user = useContext(UserContext);
-  console.log("🚀 ~ ProfessorInfo ~ user:", user);
   // Set the default data, will be updated once pieData is available
   const [data, setData] = useState([
     { name: "داده‌ای  برای نمایش وجود ندارد", value: 100 },
   ]);
   const [canEdit, setCanEdit] = useState(false);
-  console.log("🚀 ~ ProfessorInfo ~ canEdit:", canEdit);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [inputValues, setInputValues] = useState({
     pending_percentage: pieData ? Number(pieData[0]?.pending_percentage) : 0,
