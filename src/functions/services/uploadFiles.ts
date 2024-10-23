@@ -6,6 +6,7 @@ export interface File {
   description: string;
   create_date: Date;
   project: string | undefined;
+  id?: string | undefined;
 }
 
 export const getFilesByproj = async (projectId: string | undefined) => {

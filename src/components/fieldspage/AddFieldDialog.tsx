@@ -122,11 +122,11 @@ const AddFieldDialog = () => {
           </button>
         </DialogTrigger>
 
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="font-IranSans sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle className="text-right">افزودن مرکز</DialogTitle>
             <DialogDescription className="mt-10">
-              برای افزودن زیر سازمان اطلاعات آن را وارد کنید
+              برای افزودن مرکز اطلاعات آن را وارد کنید
             </DialogDescription>
           </DialogHeader>
 
@@ -134,7 +134,7 @@ const AddFieldDialog = () => {
             <div className="grid gap-3">
               {/* College Name Input */}
               <div className="flex flex-col">
-                <Label htmlFor="collegeName">نام زیر‌‌سازمان</Label>
+                <Label htmlFor="collegeName">نام مرکز</Label>
                 <input
                   type="text"
                   id="collegeName"
@@ -171,7 +171,7 @@ const AddFieldDialog = () => {
 
               {/* Owner Input */}
               <div dir="rtl" className="flex flex-col">
-                <Label htmlFor="owner">شناسه مالک</Label>
+                <Label htmlFor="owner">مسئول مرکز</Label>
                 {/* <input
                   type="number"
                   id="owner"
@@ -182,7 +182,7 @@ const AddFieldDialog = () => {
                 /> */}
                 <Select dir="rtl" onValueChange={(value)=> setOwner(Number(value))}>
                   <SelectTrigger className="mt-2">
-                    <SelectValue placeholder="انتخاب صاحب سازمان" />
+                    <SelectValue placeholder="انتخاب رئیس سازمان" />
                   </SelectTrigger>
                   <SelectContent>
                     {!userLoading &&
@@ -204,7 +204,7 @@ const AddFieldDialog = () => {
                 </Select>
               </div>
               <div className="hidden flex-col">
-                <Label htmlFor="organization">شناسه سازمان</Label>
+                <Label htmlFor="organization"> سازمان</Label>
                 <input
                   type="number"
                   id="organization"

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { FiUpload } from "react-icons/fi";
 import FileItem from "./FileItem";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -13,8 +13,9 @@ import { deleteProject } from "@/functions/services/project";
 import toast from "react-hot-toast";
 import routes from "@/global/routes";
 import { ClipLoader } from "react-spinners";
+import { UserContext } from "@/functions/Usercontext";
 
-const ProjectSidebarAttachment = ({canEdit}:{canEdit:boolean}) => {
+const ProjectSidebarAttachment = ({ canEdit }: { canEdit: boolean }) => {
   const [file, setFile] = useState<File | null>(null);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -32,11 +33,19 @@ const ProjectSidebarAttachment = ({canEdit}:{canEdit:boolean}) => {
     queryFn: () => getFilesByproj(id),
   });
 
+  const user = useContext(UserContext);
   // Mutation for uploading file
   const mutation = useMutation<File, Error, FormData>({
     mutationFn: (formData: FormData) => postFile(formData),
     onSuccess: () => {
+      toast.success("فایل با موفقیت اضافه شد");
       queryClient.invalidateQueries({ queryKey: ["files", id] });
+      setFile(null);
+      setName(""); // Clear name field
+      setDescription(""); // Clear description field
+    },
+    onError: (error: any) => {
+      toast.error("درخواست با خطا مواجه شد", error?.response?.data?.detail);
     },
   });
 
@@ -56,7 +65,7 @@ const ProjectSidebarAttachment = ({canEdit}:{canEdit:boolean}) => {
 
   const handleSubmit = () => {
     if (!file || !name || !description) {
-      alert("Please fill all fields and select a file");
+      toast.error("لطفاً تمام فیلدها را پر کنید");
       return;
     }
     const formData = new FormData();
@@ -68,78 +77,85 @@ const ProjectSidebarAttachment = ({canEdit}:{canEdit:boolean}) => {
     mutation.mutate(formData);
   };
 
+  
+
   return (
-    <div className="py-3 px-3 w-full h-fit">
+    <div className="py-3 px-3 w-full h-fit font-IranSans">
       {/* File Upload Section */}
       <h1 className="font-bold mb-2 mr-2">فایل های ضمیمه</h1>
-      {canEdit && <div className="flex flex-col justify-between mb-4 border-2 rounded-sm p-4">
-        {/* Name Input */}
-        <div className="mb-4 flex flex-row-reverse justify-between items-end">
-          <div className="flex items-center">
-            <label
-              htmlFor="fileUpload"
-              className="flex items-center cursor-pointer bg-purple-500 text-white px-3 py-2 rounded-lg"
-            >
-              <FiUpload className="ml-2 h-5 w-5" />
-              آپلود فایل
-            </label>
-            <input
-              id="fileUpload"
-              type="file"
-              className="hidden"
-              onChange={handleFileChange}
-            />
+      {(user?.user?.is_superuser || user?.user?.admin || canEdit) && (
+        <div className="flex flex-col justify-between mb-4 border-2 rounded-sm p-4">
+          {/* Name Input */}
+          <div className="mb-4 flex flex-row-reverse justify-between items-end">
+            <div className="flex items-center">
+              <label
+                htmlFor="fileUpload"
+                className="flex items-center cursor-pointer bg-purple-500 text-white px-3 py-2 rounded-lg"
+              >
+                <FiUpload className="ml-2 h-5 w-5" />
+                آپلود فایل
+              </label>
+              <input
+                id="fileUpload"
+                type="file"
+                className="hidden"
+                onChange={handleFileChange}
+              />
+            </div>
+            <div className="w-64">
+              <label
+                htmlFor="name"
+                className="block mb-1 text-sm font-medium text-gray-700"
+              >
+                نام:
+              </label>
+              <input
+                id="name"
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="نام را وارد کنید"
+                className="w-full p-2 border rounded-sm focus:outline-none focus:ring focus:border-blue-300"
+              />
+            </div>
           </div>
-          <div className="w-64">
+
+          {/* Description Input */}
+          <div className="mb-4">
             <label
-              htmlFor="name"
+              htmlFor="description"
               className="block mb-1 text-sm font-medium text-gray-700"
             >
-              نام:
+              توضیحات:
             </label>
             <input
-              id="name"
+              id="description"
               type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="نام را وارد کنید"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="توضیحات را وارد کنید"
               className="w-full p-2 border rounded-sm focus:outline-none focus:ring focus:border-blue-300"
             />
           </div>
-        </div>
 
-        {/* Description Input */}
-        <div className="mb-4">
-          <label
-            htmlFor="description"
-            className="block mb-1 text-sm font-medium text-gray-700"
+          {/* Submit Button */}
+          <button
+            disabled={mutation.isPending}
+            type="button"
+            onClick={handleSubmit}
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
           >
-            توضیحات:
-          </label>
-          <input
-            id="description"
-            type="text"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="توضیحات را وارد کنید"
-            className="w-full p-2 border rounded-sm focus:outline-none focus:ring focus:border-blue-300"
-          />
+            {mutation.isPending ? "درحال ارسال" : "ارسال"}
+          </button>
         </div>
-
-        {/* Submit Button */}
-        <button
-          type="button"
-          onClick={handleSubmit}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
-        >
-          ارسال
-        </button>
-      </div>
-}
+      )}
       {/* File List Section */}
       <div className="space-y-3 border-primary-dark w-full border p-3 scrollbar-thin rounded-md overflow-auto h-[280px]">
         {isPending ? (
-          <div className="flex justify-center items-center"> <ClipLoader/></div>
+          <div className="flex justify-center items-center">
+            {" "}
+            <ClipLoader />
+          </div>
         ) : error ? (
           <p>Error fetching files</p>
         ) : (

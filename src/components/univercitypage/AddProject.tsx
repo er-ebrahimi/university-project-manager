@@ -206,7 +206,7 @@ const AddProject = ({
 
           <div className="mb-4">
             <label className="block text-lg font-medium text-primary-dark mb-2">
-              اعضای خارجی:
+              اعضای پروژه:
             </label>
             <input
               className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
@@ -219,7 +219,7 @@ const AddProject = ({
 
           <div className="mb-4">
             <label className="block text-lg font-medium text-primary-dark mb-2">
-              صاحب پروژه:
+              رئیس پروژه:
             </label>
             <input
               className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"

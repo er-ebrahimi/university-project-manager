@@ -245,7 +245,7 @@ const AddUser = ({
             htmlFor="admin"
             className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
           >
-            ادمین
+            مدیر
           </label>
         </div>
         <div className="flex flex-row-reverse gap-2">
@@ -258,7 +258,7 @@ const AddUser = ({
             htmlFor="crud_project"
             className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
           >
-            کراد پروژه
+            کنترل پروژه
           </label>
         </div>
       </div>

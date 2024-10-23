@@ -252,7 +252,7 @@ const UniversitySidebar: React.FC = () => {
               }
             >
               <SelectTrigger className="mt-2">
-                <SelectValue placeholder="انتخاب صاحب سازمان" />
+                <SelectValue placeholder="انتخاب رئیس سازمان" />
               </SelectTrigger>
               <SelectContent>
                 {!userLoading &&

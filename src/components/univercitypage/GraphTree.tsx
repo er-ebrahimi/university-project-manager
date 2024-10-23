@@ -234,21 +234,21 @@ export default function GraphTree({
                 </div>
                 <div className="mb-4">
                   <h3 className="font-bold text-lg text-primary-dark">
-                    اعضای خارجی
+                    اعضای پروژه
                   </h3>
                   <p className="text-gray-900 text-md font-bold border border-primary mt-2 bg-gray-100 p-3 rounded-lg shadow-inner">
                     {selectedNode.External_members ? (
                       selectedNode.External_members
                     ) : (
                       <p className="text-sm text-gray-500">
-                        اعضای خارجی وجود ندارد{" "}
+                        اعضای پروژه وجود ندارد{" "}
                       </p>
                     )}
                   </p>
                 </div>
                 <div className="mb-4">
                   <h3 className="font-bold text-lg text-primary-dark">
-                    صاحب پروژه
+                    رئیس پروژه
                   </h3>
                   <p className="text-gray-900 text-md font-bold border border-primary mt-2 bg-gray-100 p-3 rounded-lg shadow-inner">
                     {selectedNode.Owner}

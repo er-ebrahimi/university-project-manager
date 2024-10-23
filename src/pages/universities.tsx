@@ -66,7 +66,7 @@ export default function Universities() {
   return (
     <>
       <UnivercitySidebar />
-      <div className="flex items-center">
+      <div className="flex items-center ">
         <h1 className="text-lg font-semibold md:text-2xl">سازمان ها</h1>
       </div>
       <div className="flex flex-1 flex-col items-center justify-center rounded-lg border border-dashed shadow-sm">

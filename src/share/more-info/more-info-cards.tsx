@@ -224,7 +224,7 @@ function MoreInfoCards({ ProjectData }: { ProjectData: Project | undefined }) {
       <div className="flex w-[650px] flex-row flex-wrap justify-around">
         <Card className="chart-container w-[630px] mt-1">
           <CardHeader className="flex flex-row justify-between items-start pt-3 pb-0 px-6">
-            <CardTitle className="my-auto text-lg">آمار زمانی </CardTitle>
+            <CardTitle className="my-auto text-lg"> درصد پیشرفت زمانی</CardTitle>
             <Dialog open={timeOpen} onOpenChange={setTimeOpen}>
               <DialogTrigger asChild>
                 {(user?.user?.is_superuser || user?.user?.admin || canEdit) && (
@@ -234,10 +234,10 @@ function MoreInfoCards({ ProjectData }: { ProjectData: Project | undefined }) {
               <DialogContent dir="rtl" className="font-IranSans w-[400px]">
                 <DialogHeader>
                   <DialogTitle className="text-right">
-                    اضافه یا تغییر داده در آمار زمانی
+                    اضافه یا حذف داده در درصد پیشرفت زمانی
                   </DialogTitle>
                   <DialogDescription>
-                    برای اضافه کردن یا ویرایش داده‌ها ابتدا سال و سپس مقادیر
+                    برای اضافه کردن یا حذف کردن داده‌ها ابتدا سال و سپس مقادیر
                     مورد نظر را وارد کنید
                   </DialogDescription>
                 </DialogHeader>
@@ -265,7 +265,7 @@ function MoreInfoCards({ ProjectData }: { ProjectData: Project | undefined }) {
                   />
                 </div>
                 <DialogFooter>
-                  <Button onClick={handleAddData}>اضافه یا ویرایش</Button>
+                  <Button onClick={handleAddData}>ذخیره</Button>
                 </DialogFooter>
                 <div className=" h-60 overflow-auto border border-gray-200 rounded-md p-2 ">
                   {data
@@ -302,14 +302,14 @@ function MoreInfoCards({ ProjectData }: { ProjectData: Project | undefined }) {
             <LineChart
               chartData={transformData2(data)}
               isLoading={isPending}
-              label={["درصد پیشرفت کار", "پیشرفت اصلی کار"]}
+              label={["درصد پیشرفت برنامه ای", "درصد پیشرفت واقعی"]}
             ></LineChart>
           </CardContent>
         </Card>
 
         <Card className="chart-container w-[630px] mt-4">
           <CardHeader className="flex flex-row justify-between items-start pt-3 pb-0 px-6">
-            <CardTitle className="my-auto text-lg">آمار واقعی</CardTitle>
+            <CardTitle className="my-auto text-lg">درصد پیشرفت فیزیکی</CardTitle>
             <Dialog open={RealOpen} onOpenChange={setRealOpen}>
               <DialogTrigger>
                 {(user?.user?.is_superuser || user?.user?.admin || canEdit) && (
@@ -319,7 +319,7 @@ function MoreInfoCards({ ProjectData }: { ProjectData: Project | undefined }) {
               <DialogContent dir="rtl" className="font-IranSans w-[400px]">
                 <DialogHeader>
                   <DialogTitle className="text-right">
-                    اضافه یا تغییر داده در آمار واقعی
+                    اضافه یا حذف داده در درصد پیشرفت فیزیکی
                   </DialogTitle>
                   <DialogDescription>
                     برای اضافه کردن یا ویرایش داده‌ها ابتدا سال و سپس مقادیر
@@ -330,14 +330,14 @@ function MoreInfoCards({ ProjectData }: { ProjectData: Project | undefined }) {
                   <Input
                     type="number"
                     name="program_progress_percentage"
-                    placeholder="اولین مقدار"
+                    placeholder="درصد پیشرفت برنامه ای"
                     value={RealaddFormData.program_progress_percentage}
                     onChange={handleRealInputChange}
                   />
                   <Input
                     type="number"
                     name="real_program_progress_percentage"
-                    placeholder="دومین مقدار"
+                    placeholder="درصد پیشرفت واقعی"
                     value={RealaddFormData.real_program_progress_percentage}
                     onChange={handleRealInputChange}
                   />
@@ -387,7 +387,7 @@ function MoreInfoCards({ ProjectData }: { ProjectData: Project | undefined }) {
             <LineChart
               chartData={transformData(realStateData)}
               isLoading={RealStatePending}
-              label={["درصد پیشرفت کار", "پیشرفت اصلی کار"]}
+              label={["درصد پیشرفت برنامه ای", "درصد پیشرفت واقعی"]}
             ></LineChart>
           </CardContent>
         </Card>

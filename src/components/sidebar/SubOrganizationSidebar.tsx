@@ -269,7 +269,7 @@ const SubOrganizationSidebar: React.FC<SubOrganizationSidebarProps> = ({
             </div>
 
             <div className="mb-4">
-              <h3 className="text-sm font-bold text-primary-dark">صاحب مرکز</h3>
+              <h3 className="text-sm font-bold text-primary-dark">رئیس مرکز</h3>
               {isEditing ? (
                 // <input
                 //   type="number"
@@ -285,7 +285,7 @@ const SubOrganizationSidebar: React.FC<SubOrganizationSidebarProps> = ({
                   defaultValue={String(data.owner.id)}
                 >
                   <SelectTrigger className="mt-2">
-                    <SelectValue placeholder="انتخاب صاحب سازمان" />
+                    <SelectValue placeholder="انتخاب رئیس سازمان" />
                   </SelectTrigger>
                   <SelectContent>
                     {!userLoading &&

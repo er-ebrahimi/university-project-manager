@@ -210,7 +210,7 @@ const ProjectpageSidebar = ({
         </div>
       )}
       {!sideBarLoading && (
-        <div className="h-[550px] w-[250px] rounded-sm border border-dashed absolute right-0 bg-white mt-14 mr-6 p-4 flex flex-col">
+        <div className="h-[550px] w-[250px] rounded-sm border border-dashed absolute right-0 bg-white mt-14 mr-6 p-4 flex flex-col ">
           <div className="flex-grow">
             <Dialog>
               <DialogTrigger>
@@ -373,7 +373,7 @@ const ProjectpageSidebar = ({
 
             <div className="mb-2">
               <h3 className="text-sm font-bold text-primary-dark">
-                اعضای خارجی
+                اعضای پروژه
               </h3>
               {isEditing ? (
                 <input
@@ -395,7 +395,7 @@ const ProjectpageSidebar = ({
 
             <div className="mb-2">
               <h3 className="text-sm font-bold text-primary-dark">
-                صاحب پروژه
+                رئیس پروژه
               </h3>
               {isEditing ? (
                 <Select
@@ -406,7 +406,7 @@ const ProjectpageSidebar = ({
                   defaultValue={String(data.owner.id)}
                 >
                   <SelectTrigger className="mt-2">
-                    <SelectValue placeholder="انتخاب صاحب سازمان" />
+                    <SelectValue placeholder="انتخاب رئیس سازمان" />
                   </SelectTrigger>
                   <SelectContent>
                     {!userLoading &&

@@ -39,6 +39,9 @@ export interface addProfessor {
 export const deleteProject = async (projectid: string | undefined) => {
   apiDelete(`/project/delete/${projectid}/`, true);
 };
+export const deleteProjectFile = async (projectid: string | undefined) => {
+  apiDelete(`/projectfile/delete/${projectid}/`, true);
+};
 
 export const PutAddProfessor = async (
   professorId: string,
