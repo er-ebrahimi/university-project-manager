@@ -190,7 +190,7 @@ function ProfessorInfo({ ProjectData }: { ProjectData: Project | undefined }) {
             />
           )}
           <CardContent className="flex justify-start items-center h-[525px]">
-            <PieChart width={500} height={500}>
+            <PieChart width={525} height={525}>
               <Pie
                 dataKey="value"
                 isAnimationActive={true}
@@ -198,12 +198,12 @@ function ProfessorInfo({ ProjectData }: { ProjectData: Project | undefined }) {
                 cx="50%"
                 cy="50%"
                 display={"flex"}
-                outerRadius={100}
+                outerRadius={90}
                 fill="#8884d8"
                 label={({ name, percent }) =>
                   `${name}${
                     !(data[0].name == "داده‌ای  برای نمایش وجود ندارد")
-                      ? `:  ${"  %" + (percent * 100).toFixed(0)}`
+                      ? `:  ${"  %" + (percent * 100).toFixed(2)}`
                       : ``
                   }`
                 }
@@ -289,6 +289,7 @@ function ProfessorInfo({ ProjectData }: { ProjectData: Project | undefined }) {
                 <Input
                   name="finished_percentage"
                   type="number"
+                  step="any"
                   // placeholder="درصد کارمند"
                   value={inputValues.finished_percentage}
                   onChange={handleInputChange}

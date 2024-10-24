@@ -110,10 +110,11 @@ const UniversitySidebar: React.FC = () => {
       if (userlist) {
         // console.log("hi")
         const ownerUser = userlist.find((user) => user.id === data.owner);
+        console.log("🚀 ~ useEffect ~ ownerUser:", ownerUser)
         if (ownerUser) {
           // console.log("hi")
 
-          setOwnerName(ownerUser.username); // Set ownerName to the matched username
+          setOwnerName(ownerUser.nickname); // Set ownerName to the matched username
         }
       }
     }
@@ -258,7 +259,7 @@ const UniversitySidebar: React.FC = () => {
                 {!userLoading &&
                   users?.map((item) => (
                     <SelectItem key={item.id} value={String(item.id)}>
-                      {item.username}
+                      {item.nickname}
                     </SelectItem>
                   ))}
                 {userLoading && (

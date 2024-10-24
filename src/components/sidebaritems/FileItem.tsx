@@ -82,7 +82,7 @@ const FileItem = ({ data }: { data: File }) => {
         <AlertDialogContent dir="rtl">
           <AlertDialogHeader>
             <AlertDialogTitle dir="rtl" className="text-right">
-              برای حذف این مرکز اطمینان دارید
+              برای حذف این فایل اطمینان دارید
             </AlertDialogTitle>
             <AlertDialogDescription dir="rtl" className="text-right">
               در صورت اطمینان بر روی دکمه حذف کلیک کنید

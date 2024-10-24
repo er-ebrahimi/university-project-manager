@@ -192,7 +192,7 @@ const AddFieldDialog = () => {
                           key={item.id}
                           value={String(item.id)}
                         >
-                          {item.username}
+                          {item.nickname}
                         </SelectItem>
                       ))}
                     {userLoading && (

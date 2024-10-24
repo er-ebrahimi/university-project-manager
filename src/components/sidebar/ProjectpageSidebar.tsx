@@ -412,7 +412,7 @@ const ProjectpageSidebar = ({
                     {!userLoading &&
                       users?.map((item) => (
                         <SelectItem key={item.id} value={String(item.id)}>
-                          {item.username}
+                          {item.nickname}
                         </SelectItem>
                       ))}
                     {userLoading && (
@@ -423,7 +423,7 @@ const ProjectpageSidebar = ({
                   </SelectContent>
                 </Select>
               ) : (
-                <p className="text-gray-600 mt-1">{data?.owner?.username}</p>
+                <p className="text-gray-600 mt-1">{data?.owner?.nickname}</p>
               )}
             </div>
           </div>

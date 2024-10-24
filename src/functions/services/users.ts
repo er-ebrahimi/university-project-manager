@@ -3,7 +3,7 @@ import { apiGet, apiPost, apiPut, apiDelete } from "../api";
 import { UserPermissions } from "@/types/userType";
 export interface userSelect {
   id: number;
-  username: string;
+  nickname: string;
   user_permissions: UserPermissions;
 }
 export const CreateNewUser = async (data: any) => {
@@ -16,7 +16,7 @@ export const getUsers = async (): Promise<User[]> => {
   return apiGet<User[]>("/user/adminlist/", true);
 };
 export const getUsersSelect = async (): Promise<userSelect[]> => {
-  return apiGet<User[]>("/user/list/", true);
+  return apiGet<userSelect[]>("/user/list/", true);
 };
 
 // Update a user by ID

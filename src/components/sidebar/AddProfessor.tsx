@@ -97,7 +97,7 @@ const AddProfessor = () => {
               {!userLoading &&
                 users?.map((item) => (
                   <SelectItem key={item.id} value={String(item.id)}>
-                    {item.username}
+                    {item.nickname}
                   </SelectItem>
                 ))}
               {userLoading && (

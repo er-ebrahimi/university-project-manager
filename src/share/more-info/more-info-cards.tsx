@@ -104,17 +104,31 @@ function MoreInfoCards({ ProjectData }: { ProjectData: Project | undefined }) {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setAddFormData({
-      ...addFormData,
-      [name]: parseFloat(value),
-    });
+    const floatValue = parseFloat(value);
+
+    // Check if the value is within the range of 0 to 100
+    if (floatValue < 0 || floatValue > 100) {
+      toast.error("عدد وارد شده باید بین 0 تا 100 باشد");
+    } else {
+      setAddFormData({
+        ...addFormData,
+        [name]: floatValue,
+      });
+    }
   };
   const handleRealInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setRealAddFormData({
-      ...RealaddFormData,
-      [name]: parseFloat(value),
-    });
+    const floatValue = parseFloat(value);
+
+    // Check if the value is within the range of 0 to 100
+    if (floatValue < 0 || floatValue > 100) {
+      toast.error("عدد وارد شده باید بین 0 تا 100 باشد");
+    } else {
+      setRealAddFormData({
+        ...RealaddFormData,
+        [name]: parseFloat(value),
+      });
+    }
   };
 
   const handleDateChange = (name: string, date: any) => {
@@ -224,7 +238,10 @@ function MoreInfoCards({ ProjectData }: { ProjectData: Project | undefined }) {
       <div className="flex w-[650px] flex-row flex-wrap justify-around">
         <Card className="chart-container w-[630px] mt-1">
           <CardHeader className="flex flex-row justify-between items-start pt-3 pb-0 px-6">
-            <CardTitle className="my-auto text-lg"> درصد پیشرفت زمانی</CardTitle>
+            <CardTitle className="my-auto text-lg">
+              {" "}
+              درصد پیشرفت زمانی
+            </CardTitle>
             <Dialog open={timeOpen} onOpenChange={setTimeOpen}>
               <DialogTrigger asChild>
                 {(user?.user?.is_superuser || user?.user?.admin || canEdit) && (
@@ -246,6 +263,9 @@ function MoreInfoCards({ ProjectData }: { ProjectData: Project | undefined }) {
                     type="number"
                     name="program_progress_percentage"
                     placeholder="اولین مقدار"
+                    step="any"
+                    min={0}
+                    max={100}
                     value={addFormData.program_progress_percentage}
                     onChange={handleInputChange}
                   />
@@ -309,7 +329,9 @@ function MoreInfoCards({ ProjectData }: { ProjectData: Project | undefined }) {
 
         <Card className="chart-container w-[630px] mt-4">
           <CardHeader className="flex flex-row justify-between items-start pt-3 pb-0 px-6">
-            <CardTitle className="my-auto text-lg">درصد پیشرفت فیزیکی</CardTitle>
+            <CardTitle className="my-auto text-lg">
+              درصد پیشرفت فیزیکی
+            </CardTitle>
             <Dialog open={RealOpen} onOpenChange={setRealOpen}>
               <DialogTrigger>
                 {(user?.user?.is_superuser || user?.user?.admin || canEdit) && (

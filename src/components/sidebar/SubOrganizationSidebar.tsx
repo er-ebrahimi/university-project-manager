@@ -291,7 +291,7 @@ const SubOrganizationSidebar: React.FC<SubOrganizationSidebarProps> = ({
                     {!userLoading &&
                       users?.map((item) => (
                         <SelectItem key={item.id} value={String(item.id)}>
-                          {item.username}
+                          {item.nickname}
                         </SelectItem>
                       ))}
                     {userLoading && (
@@ -302,7 +302,7 @@ const SubOrganizationSidebar: React.FC<SubOrganizationSidebarProps> = ({
                   </SelectContent>
                 </Select>
               ) : (
-                <p className="text-gray-600 mt-1">{data.owner.username}</p>
+                <p className="text-gray-600 mt-1">{data.owner.nickname}</p>
               )}
             </div>
           </div>

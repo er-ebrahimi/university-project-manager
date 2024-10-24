@@ -49,8 +49,8 @@ const AdminTableWithModal: React.FC = () => {
   const [searchText, setSearchText] = useState<string>("");
   const [open, setOpen] = useState(false);
   const [userProjects, setUserProjects] = useState<number[]>([]);
-  const [isAdmin, setIsAdmin] = useState<boolean>(false);
-  const [crudProject, setCrudProject] = useState<boolean>(false);
+  const [isAdmin, setIsAdmin] = useState<boolean>(currentUser?.admin);
+  const [crudProject, setCrudProject] = useState<boolean>(currentUser?.crud_project);
   const [userSuborganizations, setUserSuborganizations] = useState<
     number | null
   >(null);
@@ -220,6 +220,7 @@ const AdminTableWithModal: React.FC = () => {
   if (isError) {
     return toast.error("لطفا از اتصال اینترنت خود اطمینان حاصل کنید");
   }
+  console.log("currentUser:", currentUser);
   return (
     <div className="p-6 pt-1 bg-white rounded-lg w-[75vw] h-[80vh]">
       {/* Add User Button */}
@@ -324,7 +325,6 @@ const AdminTableWithModal: React.FC = () => {
                   className="mt-2 w-full"
                   name="first_name"
                   id="first_name"
-                  required
                   defaultValue={currentUser.first_name}
                 />
               </div>
@@ -336,7 +336,6 @@ const AdminTableWithModal: React.FC = () => {
                   className="mt-2 w-full"
                   name="last_name"
                   id="last_name"
-                  required
                   defaultValue={currentUser.last_name}
                 />
               </div>
@@ -360,7 +359,6 @@ const AdminTableWithModal: React.FC = () => {
                   name="id_number"
                   id="id_number"
                   maxLength={10}
-                  required
                   defaultValue={currentUser.social_id_number}
                   className="mt-2 w-full"
                 />
@@ -372,7 +370,6 @@ const AdminTableWithModal: React.FC = () => {
                 <Input
                   name="personal_id_number"
                   id="personal_id_number"
-                  required
                   defaultValue={currentUser.personal_id_number}
                   className="mt-2 w-full"
                 />
@@ -411,7 +408,6 @@ const AdminTableWithModal: React.FC = () => {
                   dir="ltr"
                   name="phone_number"
                   id="phone_number"
-                  required
                   defaultValue={currentUser.phone_number}
                   className="mt-2 w-full text-right"
                 />
@@ -424,7 +420,6 @@ const AdminTableWithModal: React.FC = () => {
                   dir="ltr"
                   name="mobile_phone_number"
                   id="mobile_phone_number"
-                  required
                   prefix="+98"
                   defaultValue={currentUser.mobile_phone_number}
                   className="mt-2 w-full text-right"
@@ -434,7 +429,7 @@ const AdminTableWithModal: React.FC = () => {
                 <div className="flex flex-row-reverse gap-2">
                   <Checkbox
                     id="admin"
-                    checked={currentUser.admin}
+                    checked={isAdmin}
                     onCheckedChange={(checked) => setIsAdmin(checked === true)}
                   />
                   <label
@@ -447,7 +442,7 @@ const AdminTableWithModal: React.FC = () => {
                 <div className="flex flex-row-reverse gap-2">
                   <Checkbox
                     id="crud_project"
-                    checked={currentUser.crud_project}
+                    checked={crudProject}
                     onCheckedChange={(checked) =>
                       setCrudProject(checked === true)
                     }
