@@ -1,0 +1,34 @@
+node version : 20.10.0
+github link :https://github.com/er-ebrahimi/university-project-manager
+
+ایندا از لینک
+https://nodejs.org/en/download/package-manager
+نود ورژن 20 را دانلود کنید و نصب کنید
+
+
+سپس از لینک 
+https://github.com/er-ebrahimi/university-project-manager/archive/refs/heads/main.zip
+
+پروژه را دانلود و آن زیپ کنید
+
+
+
+سپس وارد پروژه شوید و کامند 
+npm i
+را ران کنید
+
+منتظر بمانید تا کتابخانه های مورد نیاز نصب شوید
+
+
+سپس کامند
+npm run dev
+ را ران کنید و منتظر بمانید پروژه اجرا شود
+
+سپس روی مرورگر
+localhost.com:3000
+بالا بیاورید
+
+
+
+
+

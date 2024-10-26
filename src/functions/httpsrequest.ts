@@ -15,7 +15,8 @@ interface RequestOptions {
   includeFormDataHeaders?: boolean;
 }
 
-const API_BASE_URL = "http://194.60.230.47:8000"; // Replace with your actual API base URL
+// const API_BASE_URL = "http://194.60.230.47:8000"; // Replace with your actual API base URL
+const API_BASE_URL = "127.0.0.1:8000"; // Replace with your actual API base URL
 
 export const httpRequest = async <T>(
   endpoint: string,
