@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -31,7 +31,7 @@ import { Project } from "@/functions/services/project";
 function ProfessorInfo({ ProjectData }: { ProjectData: Project | undefined }) {
   const { id } = useParams();
 
-  const { data: pieData, isPending } = useQuery({
+  const { data: pieData} = useQuery({
     queryKey: ["pieData"],
     queryFn: () => getPieScales(id),
   });
@@ -190,7 +190,7 @@ function ProfessorInfo({ ProjectData }: { ProjectData: Project | undefined }) {
             />
           )}
           <CardContent className="flex justify-start items-center h-[525px]">
-            <PieChart width={525} height={525}>
+            <PieChart width={525} height={525} >
               <Pie
                 dataKey="value"
                 isAnimationActive={true}

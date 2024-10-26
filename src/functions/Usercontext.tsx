@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { UserData, fetchUserData } from "./UserService";
-import { useLocation, useParams } from "react-router-dom";
-import toast from "react-hot-toast";
+import { useLocation } from "react-router-dom";
+// import toast from "react-hot-toast";
 // import { getAccessToken } from "./tokenService";
 
 interface UserContextType {

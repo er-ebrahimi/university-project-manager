@@ -1,4 +1,4 @@
-import React from "react";
+// import React from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -28,29 +28,29 @@ ChartJS.register(
 ChartJS.defaults.font.family = "Ubuntu";
 
 // Sample data formatting function
-const formatTimeWithDate = (dateString: string): string => {
-  const date = new Date(Date.parse(dateString));
-  return (
-    date.getHours() +
-    ":" +
-    date.getMinutes().toString().padStart(2, "0") +
-    ":" +
-    date.getSeconds() +
-    " " +
-    date.getFullYear() +
-    "/" +
-    (date.getMonth() + 1) + // Month is zero-indexed in JS
-    "/" +
-    date.getDate()
-  );
-};
+// const formatTimeWithDate = (dateString: string): string => {
+//   const date = new Date(Date.parse(dateString));
+//   return (
+//     date.getHours() +
+//     ":" +
+//     date.getMinutes().toString().padStart(2, "0") +
+//     ":" +
+//     date.getSeconds() +
+//     " " +
+//     date.getFullYear() +
+//     "/" +
+//     (date.getMonth() + 1) + // Month is zero-indexed in JS
+//     "/" +
+//     date.getDate()
+//   );
+// };
 
 // Chart options
 export const options: () => ChartOptions<"line"> = () => {
   return {
-    onClick: (data, value) => {
-      // setOpen((x) => !x);
-    },
+    // onClick: (data, value) => {
+    //   // setOpen((x) => !x);
+    // },
     responsive: true,
     maintainAspectRatio: false,
     scales: {
@@ -84,10 +84,12 @@ export const options: () => ChartOptions<"line"> = () => {
         },
       },
       title: {
+
         display: false,
         text: "زمان پروژه ها",
         font: {
           size: 10,
+          family:"IranSense, sans-serif"
         },
       },
       tooltip: {
@@ -98,9 +100,9 @@ export const options: () => ChartOptions<"line"> = () => {
 };
 
 // Define prop types
-interface LineChartProps {
-  did: string;
-}
+// interface LineChartProps {
+//   did: string;
+// }
 
 // Sample data structure for the chart
 
@@ -116,8 +118,8 @@ export function LineChart({
   isLoading: boolean;
   label: string[];
 }) {
-  const [error, setError] = React.useState(false);
-  const [loading, setLoading] = React.useState(true);
+  // const [error, setError] = React.useState(false);
+  const loading = isLoading
 
   // Simulate data loading
 
@@ -129,9 +131,9 @@ export function LineChart({
     );
   }
 
-  if (error) {
-    return <div>Error loading data</div>;
-  }
+  // if (error) {
+  //   return <div>Error loading data</div>;
+  // }
   const transformData: ChartData<"line"> = {
     labels: chartData.map((x) => x.year),
     datasets: [
@@ -140,6 +142,7 @@ export function LineChart({
         data: chartData.map((x) => x.count),
         borderColor: colors.primary,
         backgroundColor: "purple",
+        
       },
       {
         label: label[1],

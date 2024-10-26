@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import DatePicker from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
@@ -6,7 +6,6 @@ import { IoDocumentAttach } from "react-icons/io5";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import ProjectSidebarAttachment from "../sidebaritems/ProjectSidebarAttachment";
@@ -30,6 +29,16 @@ import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import routes from "@/global/routes";
 import { UserContext } from "@/functions/Usercontext";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "../ui/alert-dialog";
 
 type ProjectpageSidebarProps = {
   data: Project | undefined;
@@ -140,6 +149,8 @@ const ProjectpageSidebar = ({
     }
   };
   const [canEdit, setCanEdit] = useState(false);
+  const [alertDialog, setAlertDialog] = useState(false);
+
   const user = useContext(UserContext);
   useEffect(() => {
     if (user && user.user?.projects && user.user?.crud_project) {
@@ -201,7 +212,6 @@ const ProjectpageSidebar = ({
   if (sideBarLoading) {
     return <ClipLoader />;
   }
-
   return (
     <>
       {sideBarLoading && (
@@ -371,7 +381,7 @@ const ProjectpageSidebar = ({
               </div>
             </div>
 
-            <div className="mb-2">
+            <div className="mb-2 h-24">
               <h3 className="text-sm font-bold text-primary-dark">
                 اعضای پروژه
               </h3>
@@ -450,18 +460,39 @@ const ProjectpageSidebar = ({
                   ویرایش
                 </button>
               )}
-              <button
-                className="bg-red-500 text-white py-1 px-3 rounded disabled:opacity-50"
-                onClick={() => {
-                  deleteMutation.mutate();
-                }}
-              >
+              <button className="bg-red-500 text-white py-1 px-3 rounded disabled:opacity-50" onClick={()=>{
+                setAlertDialog(true)
+              }}>
                 حذف
               </button>
             </div>
           )}
         </div>
       )}
+      <AlertDialog open={alertDialog} onOpenChange={setAlertDialog}>
+        {/* <AlertDialogTrigger>Open</AlertDialogTrigger> */}
+        <AlertDialogContent dir="rtl">
+          <AlertDialogHeader>
+            <AlertDialogTitle dir="rtl" className="text-right">
+              برای حذف این پروژه اطمینان دارید
+            </AlertDialogTitle>
+            <AlertDialogDescription dir="rtl" className="text-right">
+              در صورت اطمینان بر روی دکمه حذف کلیک کنید
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="flex justify-start gap-2 items-end flex-row-reverse">
+            <AlertDialogCancel>لغو</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-red-500 hover:bg-white hover:text-red-500 border-2 hover:border-2 border-red-500"
+              onClick={() => {
+                deleteMutation.mutate();
+              }}
+            >
+              حذف
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 };

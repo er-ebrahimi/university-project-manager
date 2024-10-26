@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import {
   getOrganizationData,
@@ -15,7 +15,6 @@ import {
 } from "@/components/ui/select";
 import { getUsersSelect, userSelect } from "@/functions/services/users";
 import ClipLoader from "react-spinners/ClipLoader";
-import { UserContext } from "@/functions/Usercontext";
 
 interface UniversityData {
   name: string;
@@ -39,7 +38,7 @@ const UniversitySidebar: React.FC = () => {
     owner: "", // or owner_id: 0
   });
 
-  const userData = useContext(UserContext);
+  // const userData = useContext(UserContext);
   // console.log("🚀 ~ a:", a)
   // Fetch organization data
   const { data, isLoading, isError } = useQuery({
@@ -110,7 +109,7 @@ const UniversitySidebar: React.FC = () => {
       if (userlist) {
         // console.log("hi")
         const ownerUser = userlist.find((user) => user.id === data.owner);
-        console.log("🚀 ~ useEffect ~ ownerUser:", ownerUser)
+        // console.log("🚀 ~ useEffect ~ ownerUser:", ownerUser)
         if (ownerUser) {
           // console.log("hi")
 
@@ -118,7 +117,7 @@ const UniversitySidebar: React.FC = () => {
         }
       }
     }
-  }, [data, isLoading, isError]);
+  }, [data, isLoading, isError,userlist]);
 
   // Handle input changes
   const handleInputChange = (

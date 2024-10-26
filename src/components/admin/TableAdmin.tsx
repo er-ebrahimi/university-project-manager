@@ -27,11 +27,12 @@ import { degreeToPersian, Degree } from "@/types/userType";
 import { Checkbox } from "../ui/checkbox";
 import { getselectsuborganization } from "@/functions/services/organization";
 import { getprojectList } from "@/functions/services/project";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "../ui/alert-dialog";
 
 const AdminTableWithModal: React.FC = () => {
   const queryClient = useQueryClient();
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isPending:tPending, isError } = useQuery({
     queryKey: ["UserData"],
     queryFn: getUsers,
   });
@@ -54,6 +55,8 @@ const AdminTableWithModal: React.FC = () => {
   const [userSuborganizations, setUserSuborganizations] = useState<
     number | null
   >(null);
+  const [alertDialog,setAlertDialog] = useState(false)
+  const [deleteId,setDeleteId] =useState(0)
 
   // Handle editing a user
   const handleEdit = (record: User) => {
@@ -198,7 +201,10 @@ const AdminTableWithModal: React.FC = () => {
         <div className="flex flex-row-reverse space-x-2">
           <Button
             className="bg-red-500 text-white w-10 h-10 p-0 px-2"
-            onClick={() => handleDelete(record.id)}
+            onClick={() => {
+              setDeleteId(record.id)
+              setAlertDialog(true);
+            }}
           >
             <MdDeleteOutline className="text-center  w-full h-full" />
           </Button>
@@ -213,7 +219,7 @@ const AdminTableWithModal: React.FC = () => {
     },
   ];
 
-  if (isLoading) {
+  if (isPending) {
     return toast.loading("در حال بارگذاری...", { id: "1", duration: 1000 });
   }
 
@@ -257,8 +263,9 @@ const AdminTableWithModal: React.FC = () => {
       </div>
 
       {/* Ant Design Table */}
-      <Table
-        loading={isLoading}
+      {/* {!isPending && */}
+       <Table
+        loading={tPending}
         pagination={{
           pageSize: 5,
           showSizeChanger: false,
@@ -274,8 +281,9 @@ const AdminTableWithModal: React.FC = () => {
         }}
         columns={columns}
         dataSource={filteredData}
-        className="rtl-table"
+        className="rtl-table font-IranSans"
       />
+      {/* } */}
 
       {/* Edit User Modal */}
       {currentUser && (
@@ -290,8 +298,9 @@ const AdminTableWithModal: React.FC = () => {
                 const formData = new FormData(e.currentTarget);
                 const values = Object.fromEntries(formData.entries());
                 onEditFinish(values);
+                
               }}
-              className="grid grid-cols-1 md:grid-cols-2 gap-4 gap-y-1"
+              className="grid grid-cols-1 md:grid-cols-2 gap-4 gap-y-1 font-IranSans"
             >
               <div>
                 <Label className=" mr-2" htmlFor="username">
@@ -531,6 +540,31 @@ const AdminTableWithModal: React.FC = () => {
           </DialogContent>
         </Dialog>
       )}
+      <AlertDialog open={alertDialog} onOpenChange={setAlertDialog}>
+        {/* <AlertDialogTrigger>Open</AlertDialogTrigger> */}
+        <AlertDialogContent dir="rtl">
+          <AlertDialogHeader>
+            <AlertDialogTitle dir="rtl" className="text-right">
+              برای حذف این پروژه اطمینان دارید
+            </AlertDialogTitle>
+            <AlertDialogDescription dir="rtl" className="text-right">
+              در صورت اطمینان بر روی دکمه حذف کلیک کنید
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="flex justify-start gap-2 items-end flex-row-reverse">
+            <AlertDialogCancel>لغو</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-red-500 hover:bg-white hover:text-red-500 border-2 hover:border-2 border-red-500"
+              onClick={() => {
+                // deleteMutation.mutate();
+                handleDelete(deleteId)
+              }}
+            >
+              حذف
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };

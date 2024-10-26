@@ -1,13 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
-import { MdDelete, MdModeEdit } from "react-icons/md";
-import { TiTick, TiCancel } from "react-icons/ti";
+import { TiCancel } from "react-icons/ti";
 import { FaPlus } from "react-icons/fa";
 import {
   Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
+
 } from "@/components/ui/dialog";
 import { Degree, degreeToPersian } from "@/types/userType";
 import AddProject from "./AddProject";
@@ -33,6 +29,7 @@ interface FormData {
 }
 
 const UnivercityCard: React.FC<UnivercityCardProps> = ({ data }) => {
+  console.log("🚀 ~ data:", data)
   // const [isEditing, setIsEditing] = useState(false);
   const isEditing = false;
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -217,6 +214,7 @@ const UnivercityCard: React.FC<UnivercityCardProps> = ({ data }) => {
       {/* Dialog for adding new project */}
       <Dialog open={isDialogOpen} onOpenChange={handleCloseDialog}>
         <AddProject
+          ownerName ={data.nickname}
           ownerId={data.id}
           open={isDialogOpen}
           setOpen={setIsDialogOpen}

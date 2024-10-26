@@ -1,7 +1,7 @@
 import { AddProjectData } from "@/components/univercitypage/AddProject";
 import { apiDelete, apiGet, apiPost, apiPut } from "../api";
 import { User } from "@/types/userType";
-import { DataItem, Suborganizationselect } from "./organization";
+import { DataItem } from "./organization";
 
 export interface Project {
   id: number;

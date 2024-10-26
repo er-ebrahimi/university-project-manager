@@ -239,7 +239,6 @@ function MoreInfoCards({ ProjectData }: { ProjectData: Project | undefined }) {
         <Card className="chart-container w-[630px] mt-1">
           <CardHeader className="flex flex-row justify-between items-start pt-3 pb-0 px-6">
             <CardTitle className="my-auto text-lg">
-              {" "}
               درصد پیشرفت زمانی
             </CardTitle>
             <Dialog open={timeOpen} onOpenChange={setTimeOpen}>
@@ -318,7 +317,7 @@ function MoreInfoCards({ ProjectData }: { ProjectData: Project | undefined }) {
               </DialogContent>
             </Dialog>
           </CardHeader>
-          <CardContent dir="ltr" className="p-2">
+          <CardContent dir="ltr" className="p-2 font-IranSans ">
             <LineChart
               chartData={transformData2(data)}
               isLoading={isPending}
@@ -405,7 +404,7 @@ function MoreInfoCards({ ProjectData }: { ProjectData: Project | undefined }) {
               </DialogContent>
             </Dialog>
           </CardHeader>
-          <CardContent dir="ltr" className="p-2">
+          <CardContent dir="ltr" className="p-2 ">
             <LineChart
               chartData={transformData(realStateData)}
               isLoading={RealStatePending}

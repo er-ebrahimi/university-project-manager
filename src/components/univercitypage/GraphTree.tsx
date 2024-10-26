@@ -65,6 +65,7 @@ interface Professor {
   major: string;
   education_level: Degree;
   mobile_phone_number: number;
+  phone_number: number;
   children: Project[];
 }
 
@@ -182,19 +183,19 @@ export default function GraphTree({
           <DialogContent className="pl-6 pb-8 rounded-xl shadow-2xl h-[650px] w-[850px] font-IranSans ">
             <div className="p-6 bg-white rounded-lg">
               <div className="grid grid-cols-2 gap-8 text-right">
-                <div className="mb-4">
-                  <h3 className="font-bold text-primary-dark">نام پروژه</h3>
+                <div className="mb-2">
+                  <h3 className="font-bold text-lg text-primary-dark">نام پروژه</h3>
                   <p className="text-gray-900 text-md font-bold border border-primary mt-2 bg-gray-100 p-3 rounded-lg shadow-inner">
                     {selectedNode.name}
                   </p>
                 </div>
-                <div className="mb-4">
-                  <h3 className="font-bold text-primary-dark">نام مستعار</h3>
+                <div className="mb-2">
+                  <h3 className="font-bold text-primary-dark text-lg">نام مستعار</h3>
                   <p className="text-gray-900 text-md font-bold border border-primary mt-2 bg-gray-100 p-3 rounded-lg shadow-inner">
                     {selectedNode.Nickname}
                   </p>
                 </div>
-                <div className="mb-4">
+                <div className="mb-2">
                   <h3 className="font-bold text-lg text-primary-dark">
                     تاریخ شروع
                   </h3>
@@ -203,7 +204,7 @@ export default function GraphTree({
                     {moment(selectedNode.Start_date).format("jYYYY/jMM/jDD")}
                   </p>
                 </div>
-                <div className="mb-4">
+                <div className="mb-2">
                   <h3 className="font-bold text-lg text-primary-dark">
                     تاریخ پایان
                   </h3>
@@ -212,7 +213,7 @@ export default function GraphTree({
                     {moment(selectedNode.End_date).format("jYYYY/jMM/jDD")}
                   </p>
                 </div>
-                <div className="mb-4">
+                <div className="mb-2">
                   <h3 className="font-bold text-lg text-primary-dark">
                     تاریخ واقعی شروع
                   </h3>
@@ -223,7 +224,7 @@ export default function GraphTree({
                     )}
                   </p>
                 </div>
-                <div className="mb-4">
+                <div className="mb-2">
                   <h3 className="font-bold text-lg text-primary-dark">
                     تاریخ واقعی پایان
                   </h3>
@@ -232,11 +233,11 @@ export default function GraphTree({
                     {moment(selectedNode.Real_end_date).format("jYYYY/jMM/jDD")}
                   </p>
                 </div>
-                <div className="mb-4">
+                <div className="mb-2">
                   <h3 className="font-bold text-lg text-primary-dark">
                     اعضای پروژه
                   </h3>
-                  <p className="text-gray-900 text-md font-bold border border-primary mt-2 bg-gray-100 p-3 rounded-lg shadow-inner">
+                  <p className="h-24 text-gray-900 text-md font-bold border border-primary mt-2 bg-gray-100 p-3 rounded-lg shadow-inner">
                     {selectedNode.External_members ? (
                       selectedNode.External_members
                     ) : (
@@ -246,7 +247,7 @@ export default function GraphTree({
                     )}
                   </p>
                 </div>
-                <div className="mb-4">
+                <div className="mb-2">
                   <h3 className="font-bold text-lg text-primary-dark">
                     رئیس پروژه
                   </h3>
@@ -255,7 +256,7 @@ export default function GraphTree({
                   </p>
                 </div>
               </div>
-              <DialogFooter className="flex justify-end mt-6">
+              <DialogFooter className="flex justify-end mt-3">
                 <button
                   onClick={handleProfessorClick}
                   className="bg-primary hover:bg-primary-dark text-white font-semibold py-2 px-6 rounded-md transition duration-300 ease-in-out shadow-lg"

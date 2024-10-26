@@ -1,6 +1,6 @@
 import {
   Dialog,
-  DialogClose,
+  // DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -10,8 +10,8 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Label } from "../ui/label";
-import { Major } from "@/types/university";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+// import { Major } from "@/types/university";
+import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import {
   CreateOrganization,

@@ -8,10 +8,10 @@ import {
   postFile,
 } from "@/functions/services/uploadFiles";
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { deleteProject } from "@/functions/services/project";
+import {useParams } from "react-router-dom";
+// import { deleteProject } from "@/functions/services/project";
 import toast from "react-hot-toast";
-import routes from "@/global/routes";
+// import routes from "@/global/routes";
 import { ClipLoader } from "react-spinners";
 import { UserContext } from "@/functions/Usercontext";
 

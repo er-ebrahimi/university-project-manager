@@ -13,14 +13,13 @@ import Colleges from "./pages/colleges";
 import AdminUsers from "./pages/admin/users";
 import { Toaster } from "react-hot-toast";
 import { UserProvider } from "./functions/Usercontext";
-import RequirePermission from "./functions/Requrepermision";
 import NotFound from "./pages/notFound";
 import InternalServerError from "./pages/500";
 import BadGateway from "./pages/502";
 function AppRoute() {
   // const userPermissionsName = useUserPermissionsName();
   return (
-    <DirectionProvider dir="rtl">
+    <DirectionProvider dir="rtl" >
       <Dashboard>
         <Router.Routes>
           <Router.Route

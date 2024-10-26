@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { File } from "@/functions/services/uploadFiles";
 import moment from "moment-jalaali";
 import { FiDownload } from "react-icons/fi";
@@ -7,7 +7,7 @@ import { useMutation } from "@tanstack/react-query";
 import { deleteProjectFile } from "@/functions/services/project";
 import queryClient from "@/functions/QueryClient";
 import toast from "react-hot-toast";
-import { Router, useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   AlertDialogAction,
   AlertDialog,

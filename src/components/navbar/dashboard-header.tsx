@@ -1,27 +1,27 @@
 // DashboardHeader.tsx
 
-import React from 'react';
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+// import React from 'react';
+// import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import {
   CircleUser,
-  Home,
-  LineChart,
-  Menu,
-  Package,
-  Package2,
-  ShoppingCart,
-  Users,
+  // Home,
+  // LineChart,
+  // Menu,
+  // Package,
+  // Package2,
+  // ShoppingCart,
+  // Users,
 } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
+  // DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Badge } from "@/components/ui/badge";
+// import { Badge } from "@/components/ui/badge";
 // import { useUser } from '@/functions/UserContext'; // Import useUser
 import { useUser } from '@/functions/Usercontext';
 import { useNavigate } from 'react-router-dom';
