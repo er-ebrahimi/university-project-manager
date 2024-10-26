@@ -1,9 +1,20 @@
 import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
-import "./Cumulative.css"
+import "./Cumulative.css";
 
-const CumulativeLineChart = ({ data }) => {
-  const ref = useRef();
+interface DataPoint {
+  year: number;
+  count: number;
+  cumulativeCount: number;
+}
+
+interface CumulativeLineChartProps {
+  data: DataPoint[];
+}
+
+const CumulativeLineChart: React.FC<CumulativeLineChartProps> = ({ data }) => {
+  console.log("🚀 ~ dataaaaa:", data)
+  const ref = useRef<SVGSVGElement | null>(null);
   const margin = { top: 20, right: 50, bottom: 30, left: 50 };
   const width = 1500 - margin.left - margin.right;
   const height = 480 - margin.top - margin.bottom;
@@ -15,6 +26,8 @@ const CumulativeLineChart = ({ data }) => {
   }, [data]);
 
   const drawChart = () => {
+    if (!ref.current) return;
+
     // Clear any existing chart before drawing a new one
     d3.select(ref.current).selectAll("*").remove();
 
@@ -30,20 +43,27 @@ const CumulativeLineChart = ({ data }) => {
       .attr("transform", `translate(${margin.left},${margin.top})`);
 
     // X axis
+    const uniqueYears = Array.from(new Set(data.map((d) => d.year)));
+    // console.log("🚀 ~ drawChart ~ uniqueYears:", uniqueYears)
     const x = d3
       .scaleLinear()
-      .domain(d3.extent(data, (d) => d.year))
+      .domain(d3.extent(uniqueYears) as [number, number])
       .range([0, width]);
-
     svg
       .append("g")
-      .attr("transform", `translate(0,${height})`)
-      .call(d3.axisBottom(x).tickFormat(d3.format("d")).ticks(data.length)); // Control the number of ticks
+      .attr("transform", `translate(20,${height+2})`)
+      .call(d3.axisBottom(x).tickFormat(d3.format("d")).ticks(uniqueYears.length - 1));
 
     // Single Y axis for both cumulative count and count (left axis)
     const y = d3
       .scaleLinear()
-      .domain([0, Math.max(d3.max(data, (d) => d.cumulativeCount), d3.max(data, (d) => d.count))])
+      .domain([
+        0,
+        Math.max(
+          d3.max(data, (d) => d.cumulativeCount) || 0,
+          d3.max(data, (d) => d.count) || 0
+        ),
+      ])
       .range([height, 0]);
 
     svg.append("g").call(d3.axisLeft(y));
@@ -58,8 +78,10 @@ const CumulativeLineChart = ({ data }) => {
       .attr(
         "d",
         d3
-          .line()
-          .x((d) => x(d.year))
+          .line<DataPoint>()
+          .x((d) => {
+            // console.log(x)
+            return x(d.year)})
           .y((d) => y(d.cumulativeCount))
       );
 
@@ -73,7 +95,7 @@ const CumulativeLineChart = ({ data }) => {
       .attr(
         "d",
         d3
-          .line()
+          .line<DataPoint>()
           .x((d) => x(d.year))
           .y((d) => y(d.count))
       );
@@ -89,7 +111,7 @@ const CumulativeLineChart = ({ data }) => {
       ])
       .enter()
       .append("g")
-      .attr("transform", (d, i) => `translate(0,${i * 20})`);
+      .attr("transform", (_, i) => `translate(0,${i * 20})`);
 
     legends
       .append("rect")

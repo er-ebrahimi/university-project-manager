@@ -1,4 +1,5 @@
 .recharts-pie-labels tspan {
-  fill: black; 
-  
+  fill: black;
+  font-size: 18px;
+  text-align: right;
 }

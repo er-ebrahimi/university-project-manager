@@ -1,25 +1,24 @@
 import {
-  Bell,
+  // Bell,
   Home,
-  LineChart,
-  Package,
+  // LineChart,
+  // Package,
   Package2,
-  ShoppingCart,
+  // ShoppingCart,
   Users,
 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+// import { Badge } from "@/components/ui/badge";
+// import { Button } from "@/components/ui/button";
+
 import routes from "@/global/routes";
 import { useLocation } from "react-router-dom";
+import { UserContext } from "@/functions/Usercontext";
+import { useContext } from "react";
 export default function SidebarDashboard() {
   const pathname = useLocation().pathname;
+  // const userPermissionsName = useUserPermissionsName();
+
+  const userData = useContext(UserContext);
   const selectButton = (router: string) => {
     if (router === pathname)
       return "flex items-center gap-3 rounded-lg bg-muted px-3 py-2 text-primary transition-all hover:text-primary";
@@ -48,13 +47,15 @@ export default function SidebarDashboard() {
               <Home className="h-4 w-4" />
               میزکار
             </a>
-            <a
-              href="/app/admin/users"
-              className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-            >
-              <Users className="h-4 w-4" />
-              کاربران
-            </a>
+            {userData?.user?.is_superuser && (
+              <a
+                href="/app/admin/users"
+                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+              >
+                <Users className="h-4 w-4" />
+                کاربران
+              </a>
+            )}
           </nav>
         </div>
         {/* </nav> */}

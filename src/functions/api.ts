@@ -1,28 +1,39 @@
-// src/api.ts
-import axios, { AxiosResponse } from 'axios';
+// api.ts
+import { httpRequest } from "./httpsrequest";
+// Helper functions for different HTTP methods
 
-// Set up the base URL for your API
-const api = axios.create({
-  baseURL: 'http://194.60.230.47:8000', // Replace with your actual API base URL
-});
+export const apiGet = <T>(
+  endpoint: string,
+  includeHeaders: boolean = true
+): Promise<T> => {
+  return httpRequest<T>(endpoint, { method: "GET", includeHeaders });
+};
 
-// Define the request and response types
-interface LoginRequest {
-  username: string;
-  password: string;
-}
+export const apiPost = <T>(
+  endpoint: string,
+  data: any,
+  includeHeaders: boolean = true,
+  includeFormDataHeaders: boolean = false
+): Promise<T> => {
+  return httpRequest<T>(endpoint, {
+    method: "POST",
+    data,
+    includeHeaders,
+    includeFormDataHeaders,
+  });
+};
 
-interface LoginResponse {
-  token: string;
-  user: {
-    id: string;
-    name: string;
-    email: string;
-  };
-}
+export const apiPut = <T>(
+  endpoint: string,
+  data: any,
+  includeHeaders: boolean = true
+): Promise<T> => {
+  return httpRequest<T>(endpoint, { method: "PUT", data, includeHeaders });
+};
 
-// Function to handle login
-export const login = async (credentials: LoginRequest): Promise<LoginResponse> => {
-  const response: AxiosResponse<LoginResponse> = await api.post('/user/login/', credentials);
-  return response.data;
+export const apiDelete = <T>(
+  endpoint: string,
+  includeHeaders: boolean = true
+): Promise<T> => {
+  return httpRequest<T>(endpoint, { method: "DELETE", includeHeaders });
 };

@@ -1,4 +1,4 @@
-import React from "react";
+// import React from "react";
 
 import AdminTable from "@/components/admin/TableAdmin";
 
